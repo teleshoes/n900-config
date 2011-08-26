@@ -1,0 +1,5 @@
+deb http://repository.maemo.org/ fremantle/sdk free non-free
+deb-src http://repository.maemo.org/ fremantle/sdk free
+deb http://repository.maemo.org/ fremantle/tools free non-free
+deb-src http://repository.maemo.org/ fremantle/tools free
+deb http://repository.maemo.org/ fremantle/4bc37c7c77ebe90177c050b805a8dc79 nokia-binaries

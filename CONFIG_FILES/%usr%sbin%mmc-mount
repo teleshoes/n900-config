@@ -1,0 +1,12 @@
+#!/bin/sh
+mount -t vfat -o $3,noauto,nodev,noexec,nosuid,noatime,nodiratime,utf8,uid=29999,shortname=mixed,dmask=000,fmask=0133,rodir "$1" "$2" > /dev/null
+
+if [ $? -ne 0 ]
+then
+mount -t ext4 -o $3,noatime,nodiratime "$1" "$2" > /dev/null
+fi 
+
+if [ $? -ne 0 ]
+then
+mount -o $3,noatime,nodiratime "$1" "$2" > /dev/null
+fi 

@@ -1,0 +1,36 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $config_file = '/home/user/.desktop_cmd_exec';
+sub get_id_by_title($){
+  my $title = shift;
+  open FH, "< $config_file" or die "Couldnt open $config_file";
+  my @lines = <FH>;
+  close FH;
+  my $found=0;
+  for my $line(reverse @lines){
+    if($found and $line =~ /^\[desktop-cmd-exec\.desktop-(\d+)\]\n?$/){
+      return $1;
+    }
+    if($line =~ /^instanceTitle=$title\n?$/i){
+      $found=1;
+    }
+  }
+  return -1;
+}
+
+my $applets = '/apps/osso/hildon-desktop/applets';
+
+my $id = get_id_by_title "locator";
+if($id > 0){
+  my $dir = "$applets/desktop-cmd-exec.desktop-$id";
+  my $pos = `gconftool-2 -g $dir/position`;
+  chomp $pos;
+  my $view = `gconftool-2 -g $dir/view`;
+  chomp $view;
+  print "$view $pos\n";
+}else{
+  print "Couldn't find me!";
+}
+

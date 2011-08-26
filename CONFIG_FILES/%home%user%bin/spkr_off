@@ -1,0 +1,3 @@
+#!/bin/bash
+dbus-send --type=method_call --dest=com.nokia.osso_hp_ls_controller /com/nokia/osso_hp_ls_controller com.nokia.osso_hp_ls_controller.loudspeaker.force_loudspeaker_off
+

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Prosperity Randomizer
+GenericName=Dominion Randomizer
+Comment=Dominion Randomizer
+Exec=/home/user/bin/dominion p
+Icon=/home/user/dominion/prosperity_icon.jpg
+Terminal=false
+Type=Application

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Alchemy+Dominion Randomizer
+GenericName=Dominion Randomizer
+Comment=Dominion Randomizer
+Exec=/home/user/bin/dominion ad
+Icon=/home/user/dominion/alchemy_dominion_icon.jpg
+Terminal=false
+Type=Application

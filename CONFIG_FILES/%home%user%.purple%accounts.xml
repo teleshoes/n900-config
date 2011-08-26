@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<account version='1.0'>
+	<account>
+		<protocol>prpl-jabber</protocol>
+		<name>elliot.wolk@lillegroup.com/Google</name>
+		<password>forty242</password>
+		<statuses>
+			<status type='available' name='Available' active='true'>
+				<attributes/>
+			</status>
+			<status type='mood' name='Feeling' active='false'>
+				<attributes/>
+			</status>
+			<status type='freeforchat' name='Chatty' active='false'>
+				<attributes/>
+			</status>
+			<status type='away' name='Away' active='false'>
+				<attributes/>
+			</status>
+			<status type='extended_away' name='Extended away' active='false'>
+				<attributes/>
+			</status>
+			<status type='dnd' name='Do Not Disturb' active='false'>
+				<attributes/>
+			</status>
+			<status type='offline' name='Offline' active='false'>
+				<attributes/>
+			</status>
+		</statuses>
+		<userinfo>&lt;vCard xmlns=&apos;vcard-temp&apos;&gt;&lt;FN&gt;Elliot Wolk&lt;/FN&gt;&lt;/vCard&gt;</userinfo>
+		<settings>
+			<setting name='check-mail' type='bool'>0</setting>
+			<setting name='buddy_icon_timestamp' type='int'>0</setting>
+			<setting name='connect_server' type='string'>talk.google.com</setting>
+			<setting name='old_ssl' type='bool'>1</setting>
+			<setting name='use-global-buddyicon' type='bool'>1</setting>
+			<setting name='require_tls' type='bool'>0</setting>
+			<setting name='ft_proxies' type='string'>proxy.eu.jabber.org</setting>
+			<setting name='auth_plain_in_clear' type='bool'>0</setting>
+			<setting name='custom_smileys' type='bool'>1</setting>
+			<setting name='port' type='int'>5223</setting>
+			<setting name='connection_security' type='string'>old_ssl</setting>
+		</settings>
+		<settings ui='gtk-gaim'>
+			<setting name='auto-login' type='bool'>1</setting>
+		</settings>
+		<current_error/>
+	</account>
+	<account>
+		<protocol>prpl-aim</protocol>
+		<name>liberifataliviii</name>
+		<password>forty242</password>
+		<statuses>
+			<status type='available' name='Available' active='true'>
+				<attributes/>
+			</status>
+			<status type='free4chat' name='Free For Chat' active='false'>
+				<attributes/>
+			</status>
+			<status type='evil' name='Evil' active='false'>
+				<attributes/>
+			</status>
+			<status type='depression' name='Depression' active='false'>
+				<attributes/>
+			</status>
+			<status type='athome' name='At home' active='false'>
+				<attributes/>
+			</status>
+			<status type='atwork' name='At work' active='false'>
+				<attributes/>
+			</status>
+			<status type='lunch' name='Lunch' active='false'>
+				<attributes/>
+			</status>
+			<status type='away' name='Away' active='false'>
+				<attributes/>
+			</status>
+			<status type='invisible' name='Invisible' active='false'>
+				<attributes/>
+			</status>
+			<status type='occupied' name='Occupied' active='false'>
+				<attributes/>
+			</status>
+			<status type='dnd' name='Do Not Disturb' active='false'>
+				<attributes/>
+			</status>
+			<status type='na' name='Not Available' active='false'>
+				<attributes/>
+			</status>
+			<status type='offline' name='Offline' active='false'>
+				<attributes/>
+			</status>
+			<status type='mood' name='Feeling' active='false'>
+				<attributes/>
+			</status>
+		</statuses>
+		<settings>
+			<setting name='check-mail' type='bool'>0</setting>
+			<setting name='buddy_icon_timestamp' type='int'>0</setting>
+			<setting name='use_ssl' type='bool'>1</setting>
+			<setting name='always_use_rv_proxy' type='bool'>0</setting>
+			<setting name='use-global-buddyicon' type='bool'>1</setting>
+			<setting name='server' type='string'>login.messaging.aol.com</setting>
+			<setting name='port' type='int'>5190</setting>
+			<setting name='use_clientlogin' type='bool'>1</setting>
+			<setting name='allow_multiple_logins' type='bool'>1</setting>
+		</settings>
+		<settings ui='gtk-gaim'>
+			<setting name='auto-login' type='bool'>1</setting>
+		</settings>
+		<current_error/>
+	</account>
+</account>

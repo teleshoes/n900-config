@@ -1,0 +1,1 @@
+dbus-send --system --print-reply --dest=com.nokia.dsme /com/nokia/dsme com.nokia.dsme.request.req_reboot &

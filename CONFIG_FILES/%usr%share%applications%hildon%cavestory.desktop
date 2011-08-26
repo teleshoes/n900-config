@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Cave Story
+GenericName=Cave Story
+Comment=Cave Story
+Exec=/usr/bin/osso-xterm '/home/user/bin/udo cavestory'
+Icon=/home/user/MyDocs/.images/cavestory_icon.jpg
+Terminal=false
+Type=Application

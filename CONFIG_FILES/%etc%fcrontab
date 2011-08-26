@@ -1,0 +1,9 @@
+!nolog(true)
+
+# send sms hourly
+#0 * * * * udo send_sms 6314184821 'hourly text'
+
+!bootrun(true)
+
+# run backup daily at midnight, or on next boot
+0 0 * * * pseudo backup

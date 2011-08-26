@@ -1,0 +1,2 @@
+#!/bin/sh
+/sbin/ifconfig | grep wl -A 2 | grep ine | awk -F: '{print $2}' | awk '{print $1}';

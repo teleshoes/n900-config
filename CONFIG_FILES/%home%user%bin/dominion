@@ -1,0 +1,5 @@
+#!/bin/bash
+cd /home/user/dominion
+perl randomize.pl $@ > rand.html
+/home/user/bin/open-browser file:///home/user/dominion/rand.html
+

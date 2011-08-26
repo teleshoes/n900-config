@@ -1,0 +1,35 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $cmd = shift || '';
+
+if($cmd eq 'set' and @ARGV == 2){
+  system "kernel-config limits @ARGV";
+}elsif($cmd eq 'get' and @ARGV <= 1){
+  my $info = shift || 'format';
+  my $out = `kernel-config show`;
+  $out =~ /min\. frequency: ([0-9]+)/;
+  my $min = $1;
+  $out =~ /max\. frequency: ([0-9]+)/;
+  my $max = $1;
+  $out =~ /current frequency: ([0-9]+)/;
+  my $cur = $1;
+
+if($info eq 'min'){
+    print "min\n$min\n";
+  }elsif($info eq 'max'){
+    print "max\n$max\n";
+  }elsif($info eq 'cur' or $info eq 'current'){
+    print "cur\n$cur\n";
+  }elsif($info eq 'format'){
+    print "$cur ($min $max)\n";
+  }else{
+    die "Unknown item requested: $info";
+  }
+}else{
+  die "Usage:
+   $0 set min_MHz MAX_MHz
+   $0 get [min|max|cur|current|format]
+     (defaults to 'format' if arg is missing)";
+}

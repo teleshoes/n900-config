@@ -1,0 +1,80 @@
+<powerkeymenu path="/">
+ <title>powerup_application_title</title>
+ <po>osso-powerup-shutdown</po>
+
+ <menuitem priority="700" name="powerup_memainmenu_lockscreen">
+  <return>1</return>
+  <po>osso-powerup-shutdown</po>
+ </menuitem>
+
+ <menuitem priority="600" name="powerup_memain_endcurrenttask">
+  <return>10</return>
+  <po>osso-powerup-shutdown</po>
+ </menuitem>
+
+ <menuitem priority="350" name="powerup_memainmenu_normalmode" visible="flight">
+  <keyfile>/var/lib/mce/mode</keyfile>
+  <icon>statusarea_cell_level5</icon>
+  <return>2</return>
+  <po>osso-powerup-shutdown</po>
+ </menuitem>
+
+ <menuitem priority="350" name="powerup_memainmenu_flightmode" visible="normal">
+  <keyfile>/var/lib/mce/mode</keyfile>
+  <icon>statusarea_cell_off</icon>
+  <return>3</return>
+  <po>osso-powerup-shutdown</po>
+ </menuitem>
+
+ <menuitem priority="100" name="powerup_memainmenu_lockdevice" disabled="yes">
+  <keyfile>/var/run/mce/call</keyfile>
+  <return>4</return>
+  <po>osso-powerup-shutdown</po>
+  <disabled_reason name="powerup_ib_device_lock_not_available">
+   <po>osso-powerup-shutdown</po>
+  </disabled_reason>
+ </menuitem>
+
+ <menuitem priority="90" name="powerup_memainmenu_poweroff">
+  <return>5</return>
+  <po>osso-powerup-shutdown</po>
+ </menuitem>
+
+ <menuitem priority="300" name="powerup_memainmenu_silent" visible="general">
+  <keyfile>/home/user/.profiled/current</keyfile>
+  <icon>statusarea_silent</icon>
+  <return>8</return>
+  <po>osso-powerup-shutdown</po>
+  <callback service="com.nokia.profiled" path="/com/nokia/profiled" interface="com.nokia.profiled" method="set_profile" bus="session" autostart="true">
+    <argument type="string">silent</argument>
+  </callback>
+ </menuitem>
+
+ <menuitem priority="200" name="powerup_memainmenu_general" visible="silent">
+  <keyfile>/home/user/.profiled/current</keyfile>
+  <icon>general_profile</icon>
+  <return>9</return>
+  <po>osso-powerup-shutdown</po>
+  <callback service="com.nokia.profiled" path="/com/nokia/profiled" interface="com.nokia.profiled" method="set_profile" bus="session" autostart="true">
+    <argument type="string">general</argument>
+  </callback>
+ </menuitem>
+
+ <menuitem priority="20" name="Reboot">
+  <return>6</return>
+  <po>osso-powerup-shutdown</po>
+ </menuitem>
+<!--
+ <menuitem priority="10" name="Soft poweroff">
+  <return>7</return>
+  <po>osso-powerup-shutdown</po>
+ </menuitem>
+ <menuitem priority="5" name="Top in XTerm">
+  <callback service="com.nokia.xterm" path="/com/nokia/xterm" interface="com.nokia.xterm" method="run_command" bus="session" autostart="true">
+   <argument type="string">/usr/bin/top</argument>
+  </callback>
+ </menuitem>
+-->
+
+</powerkeymenu>
+

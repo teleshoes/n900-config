@@ -1,0 +1,65 @@
+#!/bin/sh
+ 
+run-standalone.sh dbus-send --type=method_call \
+  --dest=org.freedesktop.Notifications \
+  /org/freedesktop/Notifications \
+  org.freedesktop.Notifications.SystemNoteInfoprint \
+  string:"Making backup..."
+
+backup=/media/mmc1/Backup
+path=$backup/`date +%Y-%m-%d_%s`
+latest=$backup/Latest
+
+if [ ! -e "$backup" ]
+then
+  run-standalone.sh dbus-send --type=method_call \
+    --dest=org.freedesktop.Notifications /org/freedesktop/Notifications \
+    org.freedesktop.Notifications.SystemNoteDialog \
+    string:"Backup FAILED: dir '$backup' does not exist" \
+    uint32:0 string:"OK"
+  exit 1
+fi
+
+rm "$latest"
+ln -s "$path" "$latest"
+ 
+mkdir -p "$path"/snes
+mkdir -p "$path"/home/user
+mkdir -p "$path"/home/user/CaveStory
+mkdir    "$path"/home/user/.calendar
+mkdir    "$path"/home/user/.osso-abook
+mkdir    "$path"/home/user/.osso-abook-backup
+mkdir -p "$path"/var/lib/hildon-application-manager
+
+chmod 777 "$path"
+
+find /home/user/MyDocs/Games/CaveStory/n900/ -iname profile*.dat \
+  -exec cp {} "$path"/home/user/CaveStory \;
+
+cp     /home/user/MyDocs/Games/CaveStory/n900/profile*.dat   "$path"/home/user/CaveStory
+cp     /home/user/MyDocs/Games/snes/*.frz.gz                 "$path"/snes
+cp     /home/user/.calendar/calendardb                       "$path"/home/user/.calendar
+cp     /home/user/.lmarbles_profile                          "$path"/home/user
+cp     /home/user/.lmarbles_state                            "$path"/home/user
+cp -ar /home/user/.lgames                                    "$path"/home/user
+cp -ar /home/user/.osso-abook/db                             "$path"/home/user/.osso-abook
+cp -ar /home/user/.osso-abook-backup/db                      "$path"/home/user/.osso-abook-backup
+cp -ar /home/user/.rtcom-eventlogger                         "$path"/home/user
+cp     /home/user/.desktop_cmd_exec                          "$path"/home/user
+cp     /var/lib/hildon-application-manager/packages.backup   "$path"/var/lib/hildon-application-manager
+ 
+echo "osso-addressbook-backup -e "$path"/osso-addressbook-backup" | su - user
+
+#backup pidgin logs
+rsync /home/user/.purple/logs/ /media/mmc1/Backup/pidgin_logs -av --del
+
+#backup unsorted DCIM, i.e.: stuff not in ###_STUFF folders
+rsync /home/user/MyDocs/DCIM/ /media/mmc1/Backup/DCIM -av \
+  --exclude=[0-9][0-9][0-9]_* \
+  --delete-before
+
+run-standalone.sh dbus-send --type=method_call \
+  --dest=org.freedesktop.Notifications \
+  /org/freedesktop/Notifications \
+  org.freedesktop.Notifications.SystemNoteInfoprint \
+  string:"Backup created successfully"

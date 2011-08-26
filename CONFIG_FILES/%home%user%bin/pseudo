@@ -1,0 +1,7 @@
+#!/usr/bin/perl
+my $user = `whoami`;
+chomp $user;
+if($user ne 'root'){
+  exec "sudo $0 @ARGV";
+}
+system "echo 'env PATH='\$PATH':/root/bin' @ARGV | su - root"

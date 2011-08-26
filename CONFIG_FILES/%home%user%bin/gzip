@@ -1,0 +1,17 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my @args;
+for my $arg(@ARGV){
+  if($arg eq '--stdout'){
+    $arg = '-c';
+  }elsif($arg eq '--decompress'){
+    $arg = '-d';
+  }elsif($arg eq '--force'){
+    $arg = '-f';
+  }
+  push @args, $arg;
+}
+
+system '/bin/gzip', @args;

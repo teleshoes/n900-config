@@ -1,0 +1,7 @@
+start on started hildon-desktop
+stop on starting shutdown
+console none
+service
+script
+/etc/init.d/fcron start
+end script

@@ -1,0 +1,6 @@
+#!/usr/bin/perl
+my @lines = `fcrontab -l`;
+for my $line(@lines){
+  print $line if $line !~ /^#|^\s*$|^!/;
+}
+

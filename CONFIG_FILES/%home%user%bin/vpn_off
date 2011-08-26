@@ -1,0 +1,15 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+system "~/bin/sslvpn off";
+system "~/bin/resolvchooser google";
+my $attempts_left = 3;
+while($attempts_left > 0){
+  my @lines = `ping dev.escribe.com -c 1 -w 1`;
+  if($lines[0] =~ /\d+\. \d+\. \d+. \d+/x){
+    print "Resolved dev.escribe.com to $&\n";
+    exit 0;
+  }
+}
+print "ping dev.escribe.com timed out\n";
+exit 1;

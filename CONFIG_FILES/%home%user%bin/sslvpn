@@ -1,0 +1,29 @@
+#!/bin/bash
+if [ $# -ne 1 ]; then
+  echo "Usage: $0 [on|off]"
+  exit 1
+fi;
+
+if [ $1 = 'on' ]; then
+  echo starting, maybe...
+  cd ~/openvpn
+  if [ ! -e "client.pem" -o -h "client.pem" ]; then
+    if [ -e "client.pem.$HOSTNAME" ]; then
+      rm -f client.pem
+      ln -s client.pem.$HOSTNAME client.pem
+    elif [ -e "default.pem" ]; then
+      rm -f client.pem
+      ln -s default.pem client.pem
+    fi
+  fi
+  rm status
+  openvpn --config client.conf --status status 1
+elif [ $1 = 'off' ]; then
+  echo stopping, maybe...
+  killall -9 openvpn
+else
+  echo "Usage: $0 [on|off]"
+  exit 1
+fi;
+
+exit 0;

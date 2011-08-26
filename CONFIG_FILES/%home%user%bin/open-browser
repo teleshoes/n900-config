@@ -1,0 +1,5 @@
+#!/bin/sh
+dbus-send --session --print-reply /com/nokia/osso_browser \
+--dest=com.nokia.osso_browser com.nokia.osso_browser.open_new_window \
+string:$1
+

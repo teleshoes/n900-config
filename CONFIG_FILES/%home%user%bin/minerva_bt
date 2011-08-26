@@ -1,0 +1,1 @@
+sudo rfcomm connect 0 D8:75:33:56:D1:7C

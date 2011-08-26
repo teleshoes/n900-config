@@ -1,0 +1,4 @@
+#!/bin/bash
+cpu set 1000 1000
+/home/user/MyDocs/Games/CaveStory/cavestory
+cpu set 500 1000
