@@ -5,9 +5,11 @@ chdir `echo -n ~/.ssh`;
 
 sub keygen($){
   my $user = shift;
+  my $group = $user eq 'user' ? 'users' : $user;
   my $genCmd =
     "mkdir -p ~/.ssh;" .
     "chmod go-w ~/.ssh;" .
+    "chown $user.$group ~/;" .
     "rm ~/.ssh/*;" .
     "ssh-keygen -t rsa -N \"\" -q -f ~/.ssh/id_rsa;" .
     "mv ~/.ssh/id_rsa.pub ~/.ssh/n900.pub;";
