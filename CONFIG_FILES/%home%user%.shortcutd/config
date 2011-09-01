@@ -1,0 +1,11 @@
+{
+"proximityOn": 0,
+"proximityVibrateOn": 1,
+"camerakeyOn": 1,
+"proximityShortPress": "dashboard",
+"proximityLongPress": "phone",
+"proximityHold": "disabled",
+"camerakeyShortPress": "shellcommand",
+"camerakeyLongPress": "shellcommand",
+"shellCommand": "udo qcmd pause"
+}
