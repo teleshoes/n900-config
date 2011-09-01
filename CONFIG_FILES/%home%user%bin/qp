@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 use Time::HiRes qw(sleep);
 
-system "pseudo qcmd prev 1>/dev/null 2>/dev/null &";
+system "qcmd prev 1>/dev/null 2>/dev/null &";
 sleep 0.5;
-system "pseudo killall mplayer 1>/dev/null 2>/dev/null &";
-system "pseudo qcmd start 1>/dev/null 2>/dev/null &";
+system "killall mplayer 1>/dev/null 2>/dev/null &";
+system "qcmd start 1>/dev/null 2>/dev/null &";
 
