@@ -1,0 +1,8 @@
+start on XSESSIONS_STARTING
+respawn
+respawn limit 15 3
+
+script
+  /root/bin/qmplayer-dbus
+end script
+
