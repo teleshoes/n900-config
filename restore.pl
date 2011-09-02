@@ -50,15 +50,15 @@ my @utils = (
 'header' => "Install Packages:",
   '03' => '1' => 'apt_cache',
   '04' => '2' => 'apt_update',
-  '05' => '3' => 'apt_upgrade',
-  '06' => '4' => 'apt_install_crucial',
+  '05' => '4' => 'apt_install_crucial',
+  '08' => '3' => 'apt_upgrade',
   '09' => '5' => 'apt_install_preferred',
   '10' => '6' => 'apt_unblock_ovi (apt)',
   '11' => '7' => 'apt_install_blocked_ovi',
   '12' => '8' => 'install_others',
 'header' => "Copy Files/Settings:",
-  '07' => 'a' => 'config_files',
-  '08' => 's' => 'root_symlinks',
+  '06' => 'a' => 'config_files',
+  '07' => 's' => 'root_symlinks',
   '18' => 'd' => 'sync_mydocs',
   '19' => 'f' => 'default_cpu_limits',
   '20' => 'g' => 'xterm_color',
@@ -69,7 +69,7 @@ my @utils = (
   '25' => ';' => 'remember', 
 'header' => "EMERGENCY RECOVERY:",
   '01' => 'z' => 'reflash',
-  '02' => 'x' => 'ssh_keys',
+  '02' => 'x' => 'ssh_setup',
   '13' => 'c' => 'format_mydocs_ext3',
   '14' => 'v' => 'reboot_phone',
   '15' => 'b' => 'initialize_pidgin',
@@ -216,6 +216,10 @@ sub apt_install_crucial(){
    ' diffutils-gnu findutils-gnu grep-gnu rsync wget' .
    ' coreutils-gnu tar-gnu python-location';
   print "\n\nCrucial packages:\n$crucial_packages";
+  print "\n\n\n\n";
+  print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+  print "KERNEL POWER. ASKS YOU. TO CONTINUE. ON THE PHONE\n";
+  print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
   if(ask 'install crucial packages (hit accept on the phone)?'){
     system "ssh root@`n900` apt-get install $crucial_packages";
   }
@@ -509,9 +513,18 @@ sub reflash(){
   }
 }
 
-sub ssh_keys(){
+sub ssh_setup(){
   if(ask 'Setup SSH keys?'){
     system './utils/keygen.pl';
+  }
+  my $mac = '42:c6:65:ac:8b:bd';
+
+  print "Normally, the usb mac is randomly generated,
+    but you can make it be the same.\n";
+
+  if(ask "Make usb mac address $mac {was randomly generated on an n900}?"){
+    system "ssh root@`n900` '" .
+      "echo options g_nokia host_addr=$mac | tee /etc/modprobe.d/g_nokia'";
   }
 }
 
