@@ -21,15 +21,18 @@ sub keygen($){
 }
 
 
-print "add a user password so we dont have to fuss (we'll delete it later)\n";
+print "removing previous rsa host key from known hosts for " . `n900` . "\n\n";
+system "ssh-keygen -f ~/.ssh/known_hosts -R `n900`";
+
+print "add a user password so we dont have to fuss (we'll delete it later)\n\n";
 system "ssh root@`n900` passwd user";
 
-print "setting up root\n";
+print "setting up root\n\n";
 keygen 'root';
-print "setting up user\n";
+print "setting up user\n\n";
 keygen 'user';
 
-print "deleting user password\n";
+print "deleting user password\n\n";
 system "ssh root@`n900` passwd -d user";
 
 system "cat *.pub > authorized_keys";
