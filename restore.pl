@@ -264,6 +264,20 @@ sub apt_install_blocked_ovi(){
   }
 }
 
+sub installDebsFromLocal(@){
+  if(ask "install @_\n from locally stored debs {in ./packages}?"){
+    for my $debFile(@_){
+      my $realDeb = $debFile;
+      $realDeb = `cd ./packages; ls $realDeb`;
+      chomp $realDeb;
+      $realDeb =~ s/'/'\\''/g;
+      print "installing $realDeb\n";
+      system "scp ./packages/$realDeb root@`n900`:/opt";
+      system "ssh root@`n900` 'dpkg -i /opt/$realDeb; rm /opt/$realDeb'";
+    }
+  }
+}
+
 sub install_others(){
   if(ask 'install gcc-4.2 & g++-4.2 from SDK repo {disabled after}, and add links?'){
     system "ssh root@`n900` '" .
@@ -279,53 +293,30 @@ sub install_others(){
       "'";
   }
 
-  if(ask 'install gconf-editor from debs in ./packages?'){
-    my $mDeb = "maemo-select-menu-location*.deb";
-    my $gDeb = "gconf-editor*.deb";
-    system "scp ./packages/$mDeb ./packages/$gDeb root@`n900`:/home/user";
+  installDebsFromLocal(
+    "maemo-select-menu-location*.deb",
+    "gconf-editor*.deb",
+  );
 
-    system "ssh root@`n900` 'cd /home/user; " .
-      "dpkg -i $mDeb; " .
-      "dpkg -i $gDeb; " .
-      "rm $mDeb; " .
-      "rm $gDeb; " .
-      "'";
-  }
-
-  if(ask 'install fcron from debs in ./packages?'){
-    system "scp ./packages/fcron_*_armel_opt.deb root@`n900`:/home/user";
+  installDebsFromLocal("fcron_*_armel_opt.deb");
+  if(ask 'setup fcron?'){
     system "ssh root@`n900` '".
-      "dpkg -i /home/user/fcron_*_armel_opt.deb; " .
-      "rm /home/user/fcron_*_armel_opt.deb; " .
       "useradd fcron; " .
       "chown root:fcron /etc/fcron.*; " .
       "chmod 644 /etc/fcron.*; " .
       "chown -R fcron:fcron /var/spool/fcron; " .
       "/etc/init.d/fcron start; " .
-      "fcrontab /etc/fcrontab " .
+      "fcrontab /etc/fcrontab; " .
       "'";
   }
 
-  if(ask 'install curl from debs in ./packages?'){
-    system "scp ./packages/curl_*_armel.deb root@`n900`:/home/user";
-    system "scp ./packages/libcurl3_*_armel.deb root@`n900`:/home/user";
-    system "scp ./packages/libssl0.9.7_*_armel.deb root@`n900`:/home/user";
-    system "ssh root@`n900` 'cd /home/user; " .
-      "dpkg -i curl_*_armel.deb libcurl3_*_armel.deb " .
-        "libssl0.9.7_*_armel.deb; " .
-      "rm curl_*_armel.deb libcurl3_*_armel.deb " .
-        "libssl0.9.7_*_armel.deb'";
-  }
+  installDebsFromLocal(
+    "curl_*_armel.deb",
+    "libcurl3_*_armel.deb",
+    "libssl0.9.7_*_armel.deb",
+  );
 
-  if(ask 'install unison from debs in ./packages?'){
-    my $debUrl =
-      "http://www.bundyo.org/maemo/unison/unison_2.27.57-2_armel.deb";
-    system "ssh root@`n900` '".
-      "cd /home/user; ".
-      "wget $debUrl; ".
-      "dpkg -i unison_*_armel.deb; ".
-    "'";
-  }
+  installDebsFromLocal("unison_*_armel.deb");
 
   if(ask 'optify cpan?'){
     system "ssh root@`n900` '" .
