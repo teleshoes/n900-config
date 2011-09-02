@@ -321,9 +321,9 @@ sub install_others(){
   }
 
   if(ask 'cpan upgrade?'){
-    my $cmd = "ssh root@`n900` 'cpan Bundle::CPAN; cpan upgrade'";
+    my $cmd = "ssh root@`n900` 'cpan Bundle::CPAN; cpan -u'";
     system $cmd;
-    if(ask '  try again? might work this time if it just failed'){
+    if(ask '  if it failed, trying again might work. try again?'){
       system $cmd;
     }
   }
@@ -331,7 +331,7 @@ sub install_others(){
   if(ask 'install Term::ReadKey perl module through cpan?'){
     my $cmd = "ssh root@`n900` 'cpan Term::ReadKey'";
     system $cmd;
-    if(ask '  try again? might work this time if it just failed'){
+    if(ask '  if it failed, trying again might work. try again?'){
       system $cmd;
     }
   }
@@ -343,7 +343,7 @@ sub install_others(){
       "Net::Twitter" .
       "'";
     system $cmd;
-    if(ask '  try again? might work this time if it just failed'){
+    if(ask '  if it failed, trying again might work. try again?'){
       system $cmd;
     }
   }
