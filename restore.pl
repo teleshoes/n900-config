@@ -271,9 +271,11 @@ sub installDebsFromLocal(@){
       $realDeb = `cd ./packages; ls $realDeb`;
       chomp $realDeb;
       $realDeb =~ s/'/'\\''/g;
+      $realDeb = "'$realDeb'";
       print "installing $realDeb\n";
       system "scp ./packages/$realDeb root@`n900`:/opt";
-      system "ssh root@`n900` 'dpkg -i /opt/$realDeb; rm /opt/$realDeb'";
+      system "ssh root@`n900` dpkg -i /opt/$realDeb";
+      system "ssh root@`n900` rm /opt/$realDeb";
     }
   }
 }
