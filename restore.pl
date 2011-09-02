@@ -527,6 +527,8 @@ This is a list of unexposed stuff to manually configure:
    Settings -> Internet Connections -> Connections ->
    SSID {e.g. Flipsafad} -> Edit -> Next -> Next -> Next ->
    Advanced -> Other -> Power saving: Off -> Yes -> Save
+   ALSO: Internet Connections, automatic: CELLULAR, Never, Dont switch to wifi
+3) manually change the background once if you cant programmatically
 ";
 }
 
