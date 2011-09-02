@@ -53,10 +53,10 @@ for(my $i=0; $i<$size; $i++){
   my $image = $desktops[$i];
   if(defined $image and $image){
     # ' => '\''  (end quote, literal quote, start quote)
-    $image =~ s/'/\\'\\\\\\'\\'/g;
+    $image =~ s/'/'\\''/g;
     system "gconftool-2 -s " .
       "/apps/osso/hildon-desktop/views/$d/bg-image " .
-      "-t string \\'$image\\'";
+      "-t string '$image'";
   }
 }
 
