@@ -73,7 +73,7 @@ my @utils = (
   '13' => 'c' => 'format_mydocs_ext3',
   '14' => 'v' => 'reboot_phone',
   '15' => 'b' => 'initialize_pidgin',
-  '16' => 'n' => 'restore_contacts',
+  '16' => 'n' => 'restore_backup',
 );
 
 ###############################
@@ -537,9 +537,9 @@ sub initialize_pidgin(){
   }
 }
 
-sub restore_contacts(){
-  if(ask 'Overwrite contacts with latest microSD card backup?'){
-    system "./utils/contacts_restore.pl";
+sub restore_backup(){
+  if(ask 'Restore some thinge from the latest microSD card backup?'){
+    system "./utils/backup_restore.pl";
   }
 }
 
