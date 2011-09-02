@@ -319,12 +319,28 @@ sub install_others(){
     "'";
   }
 
+  if(ask 'cpan upgrade?'){
+    my $cmd = "ssh root@`n900` 'cpan Bundle::CPAN; cpan upgrade'";
+    system $cmd;
+    if(ask '  try again? might work this time if it just failed'){
+      system $cmd;
+    }
+  }
+
+  if(ask 'install Term::ReadKey perl module through cpan?'){
+    my $cmd = "ssh root@`n900` 'cpan Term::ReadKey'";
+    system $cmd;
+    if(ask '  try again? might work this time if it just failed'){
+      system $cmd;
+    }
+  }
+
   if(ask 'install Net::Twitter perl module through cpan?'){
-    my $cmd = "ssh root@`n900` 'cpan Bundle::CPAN; cpan upgrade; cpan " .
+    my $cmd = "ssh root@`n900` 'cpan " .
       "Params::Validate DateTime::Locale DateTime " .
       "DateTime::Format::Strptime " .
-      "Net::Twitter
-      '";
+      "Net::Twitter" .
+      "'";
     system $cmd;
     if(ask '  try again? might work this time if it just failed'){
       system $cmd;
