@@ -551,7 +551,7 @@ sub initialize_pidgin(){
 }
 
 sub restore_backup(){
-  if(ask 'Restore some thinge from the latest microSD card backup?'){
+  if(ask 'Restore some things from the latest microSD card backup?'){
     system "./utils/backup_restore.pl";
   }
 }
