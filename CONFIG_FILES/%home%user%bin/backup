@@ -33,7 +33,7 @@ mkdir -p "$path"/var/lib/hildon-application-manager
 
 chmod 777 "$path"
 
-find /home/user/MyDocs/Games/CaveStory/n900/ -iname profile*.dat \
+find /home/user/MyDocs/Games/CaveStory/n900/ -iname 'profile*.dat' \
   -exec cp {} "$path"/home/user/CaveStory \;
 
 cp     /home/user/MyDocs/Games/CaveStory/n900/profile*.dat   "$path"/home/user/CaveStory
