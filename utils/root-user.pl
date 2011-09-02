@@ -7,7 +7,8 @@ chomp $date;
 
 my @files = ('.bashrc', '.profile', '.vimrc',
              'bin', 'resolvconf', 'openvpn',
-             '.cpulimits', '.twip');
+             '.cpulimits', '.twip',
+             'q', '.qdb', '.qlist', '.qhistory', '.qcur');
 for my $file(@files){
   my $bakfile = $file . "_$date.bak";
 
