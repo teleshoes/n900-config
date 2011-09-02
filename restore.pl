@@ -42,7 +42,7 @@ my @utils = (
 'header' => "",
 'header' => "Routine Maintenance:",
   'xx' => 't' => 'retrieve_apt_cache',
-  '17' => 'y' => 'sync_pidgin',
+  '18' => 'y' => 'sync_pidgin',
   'xx' => 'u' => 'backup_dcim',
   'xx' => 'i' => 'reorganize_dcim',
   'xx' => 'o' => 'backup',
@@ -59,12 +59,12 @@ my @utils = (
 'header' => "Copy Files/Settings:",
   '06' => 'a' => 'config_files',
   '07' => 's' => 'root_symlinks',
-  '18' => 'd' => 'sync_mydocs',
+  '15' => 'd' => 'sync_mydocs',
   '19' => 'f' => 'default_cpu_limits',
   '20' => 'g' => 'xterm_color',
   '21' => 'h' => 'xterm_virtual_kb',
   '22' => 'j' => 'configure_desktop', 
-  '23' => 'k' => 'add_rhythmbox_symlink', 
+  '23' => 'k' => 'add_music_symlinks', 
   '24' => 'l' => 'hosts',
   '25' => ';' => 'remember', 
 'header' => "EMERGENCY RECOVERY:",
@@ -72,8 +72,8 @@ my @utils = (
   '02' => 'x' => 'ssh_setup',
   '13' => 'c' => 'format_mydocs_ext3',
   '14' => 'v' => 'reboot_phone',
-  '15' => 'b' => 'initialize_pidgin',
-  '16' => 'n' => 'restore_backup',
+  '16' => 'b' => 'initialize_pidgin',
+  '17' => 'n' => 'restore_backup',
 );
 
 ###############################
@@ -470,11 +470,12 @@ sub configure_desktop(){
   }
 }
 
-sub add_rhythmbox_symlink(){
-  if(ask 'Add wolke symlink for rhythmbox?'){
+sub add_music_symlinks(){
+  if(ask 'Add /media/mmc1/Music -> /home/wolke/Desktop/Music symlinks?'){
     system "ssh root@`n900` '".
       "mkdir -p /home/wolke/Desktop/Music; ".
-      "ln -s /media/mmc1/Music/Library /home/wolke/Desktop/Music/".
+      "ln -s /media/mmc1/Music/Library /home/wolke/Desktop/Music/; ".
+      "ln -s /media/mmc1/Music/flacmirror /home/wolke/Desktop/Music/; ".
     "'";
   }
 }
