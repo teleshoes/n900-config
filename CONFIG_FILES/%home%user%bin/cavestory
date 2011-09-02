@@ -1,4 +1,5 @@
 #!/bin/bash
 cpu set 1000 1000
-/home/user/MyDocs/Games/CaveStory/cavestory
+cd /home/user/MyDocs/Games/CaveStory/n900
+./nx
 cpu set 500 1000
