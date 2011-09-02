@@ -6,9 +6,10 @@
 
 $CPAN::Config = {
   'auto_commit' => q[0],
-  'build_cache' => q[10],
+  'build_cache' => q[1000],
   'build_dir' => q[/root/.cpan/build],
-  'build_requires_install_policy' => q[ask/yes],
+  'build_dir_reuse' => q[yes],
+  'build_requires_install_policy' => q[yes],
   'cache_metadata' => q[1],
   'check_sigs' => q[0],
   'commandnumber_in_prompt' => q[1],
@@ -54,7 +55,8 @@ $CPAN::Config = {
   'tar_verbosity' => q[v],
   'term_is_latin' => q[1],
   'term_ornaments' => q[1],
-  'trust_test_report_history' => q[0],
+  'test_report' => q[yes],
+  'trust_test_report_history' => q[yes],
   'unzip' => q[/usr/bin/unzip],
   'urllist' => [q[ftp://cpan-du.viaverio.com/pub/CPAN/], q[ftp://cpan-sj.viaverio.com/pub/CPAN/], q[ftp://cpan.erlbaum.net/CPAN/]],
   'use_sqlite' => q[0],
