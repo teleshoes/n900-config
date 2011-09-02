@@ -44,7 +44,7 @@ for(my $i=0; $i<$size; $i++){
   $list .= ',' if $i != $size-1;
 }
 $list .= ']';
-system "ssh root@`n900` gconftool-2 -s " .
+system "gconftool-2 -s " .
   "/apps/osso/hildon-desktop/views/active " .
   "-t list --list-type int $list";
  
@@ -54,7 +54,7 @@ for(my $i=0; $i<$size; $i++){
   if(defined $image and $image){
     # ' => '\''  (end quote, literal quote, start quote)
     $image =~ s/'/\\'\\\\\\'\\'/g;
-    system "ssh root@`n900` gconftool-2 -s " .
+    system "gconftool-2 -s " .
       "/apps/osso/hildon-desktop/views/$d/bg-image " .
       "-t string \\'$image\\'";
   }
