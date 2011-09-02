@@ -45,6 +45,7 @@ my @utils = (
   '17' => 'y' => 'sync_pidgin',
   'xx' => 'u' => 'backup_dcim',
   'xx' => 'i' => 'reorganize_dcim',
+  'xx' => 'o' => 'backup',
 #BOTTOM
 'header' => "Install Packages:",
   '03' => '1' => 'apt_cache',
@@ -179,6 +180,14 @@ sub reorganize_dcim(){
     system "ssh root@`n900` chown user.users -R /home/user/MyDocs/DCIM_VIDEOS";
   }
 }
+
+sub backup(){
+  if(ask 'run backup, and sync it locally?'){
+    system "ssh root@`n900` pseudo backup";
+    system "rsync -av root@`n900`:/media/mmc1/Backup/Latest/ ../Backup/Latest";
+  }
+}
+
 
 #####
 
