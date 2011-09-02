@@ -234,7 +234,7 @@ sub apt_install_preferred(){
    ' pidgin-maemo-docklet personal-ip-address mplayer mediabox ' .
    ' gstreamer0.10-flac libflac8 perl-modules make unzip ping' .
    ' ines drnoksnes xmodmap ogg-support git-core' .
-   ' libsdl-ttf2.0';
+   ' nxengine';
   print "\n\nPreferred packages:\n$preferred_packages";
   print "\n\nalso gconf-editor (seperately asked)";
   if(ask 'apt-get update first?'){
