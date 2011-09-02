@@ -306,7 +306,7 @@ sub install_others(){
       "'";
   }
 
-  if(ask 'install curl from debs?'){
+  if(ask 'install curl from debs in ./packages?'){
     system "scp ./packages/curl_*_armel.deb root@`n900`:/home/user";
     system "scp ./packages/libcurl3_*_armel.deb root@`n900`:/home/user";
     system "scp ./packages/libssl0.9.7_*_armel.deb root@`n900`:/home/user";
@@ -317,7 +317,7 @@ sub install_others(){
         "libssl0.9.7_*_armel.deb'";
   }
 
-  if(ask 'install unison from debs?'){
+  if(ask 'install unison from debs in ./packages?'){
     my $debUrl =
       "http://www.bundyo.org/maemo/unison/unison_2.27.57-2_armel.deb";
     system "ssh root@`n900` '".
