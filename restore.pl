@@ -320,6 +320,15 @@ sub install_others(){
     "'";
   }
 
+  if(ask 'optify cpan?'){
+    system "ssh root@`n900` '" .
+      "cp -ar /root/.cpan /opt/.cpan; " .
+      "rm -rf /root/.cpan; " .
+      "mkdir -p /opt/.cpan; " .
+      "ln -s /opt/.cpan /root/.cpan; " .
+      "'";
+  }
+
   if(ask 'cpan upgrade?'){
     my $cmd = "ssh root@`n900` 'cpan Bundle::CPAN; cpan -u'";
     system $cmd;
