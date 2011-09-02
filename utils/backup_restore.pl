@@ -46,6 +46,7 @@ if(prompt "OVERWRITE lmarbles profile and save?"){
     '/home/user/.lmarbles_profile',
     '/home/user/.lmarbles_state');
   my $cmd = '';
+  $cmd .= "mkdir -p /home/user/.lgames; ";
   for my $file(@files){
     $cmd .= "cp $lDir/$file $file; ";
   }
