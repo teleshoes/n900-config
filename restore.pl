@@ -42,7 +42,7 @@ my @utils = (
 'header' => "",
 'header' => "Routine Maintenance:",
   'xx' => 't' => 'retrieve_apt_cache',
-  '18' => 'y' => 'sync_pidgin',
+  '17' => 'y' => 'sync_pidgin',
   'xx' => 'u' => 'backup_dcim',
   'xx' => 'i' => 'reorganize_dcim',
   'xx' => 'o' => 'backup',
@@ -60,20 +60,19 @@ my @utils = (
   '06' => 'a' => 'config_files',
   '07' => 's' => 'root_symlinks',
   '15' => 'd' => 'sync_mydocs',
-  '19' => 'f' => 'default_cpu_limits',
-  '20' => 'g' => 'xterm_color',
-  '21' => 'h' => 'xterm_virtual_kb',
-  '22' => 'j' => 'configure_desktop', 
-  '23' => 'k' => 'add_music_symlinks', 
-  '24' => 'l' => 'hosts',
-  '25' => ';' => 'remember', 
+  '18' => 'f' => 'default_cpu_limits',
+  '19' => 'g' => 'xterm_color',
+  '20' => 'h' => 'xterm_virtual_kb',
+  '21' => 'j' => 'configure_desktop', 
+  '22' => 'k' => 'add_music_symlinks', 
+  '23' => 'l' => 'hosts',
+  '24' => ';' => 'remember', 
 'header' => "EMERGENCY RECOVERY:",
   '01' => 'z' => 'reflash',
   '02' => 'x' => 'ssh_setup',
   '13' => 'c' => 'format_mydocs_ext3',
   '14' => 'v' => 'reboot_phone',
-  '16' => 'b' => 'initialize_pidgin',
-  '17' => 'n' => 'restore_backup',
+  '16' => 'b' => 'restore_backup',
 );
 
 ###############################
@@ -266,7 +265,7 @@ sub apt_install_blocked_ovi(){
 }
 
 sub install_others(){
-  if(ask 'install gcc-4.2 & g++-4.2 from SDK repo, and add links?'){
+  if(ask 'install gcc-4.2 & g++-4.2 from SDK repo {disabled after}, and add links?'){
     system "ssh root@`n900` '" .
       "cd /etc/apt/sources.list.d; " .
       "mv sdk.list.disabled sdk.list; " .
@@ -280,7 +279,7 @@ sub install_others(){
       "'";
   }
 
-  if(ask 'install gconf-editor?'){
+  if(ask 'install gconf-editor from debs in ./packages?'){
     my $mDeb = "maemo-select-menu-location*.deb";
     my $gDeb = "gconf-editor*.deb";
     system "scp ./packages/$mDeb ./packages/$gDeb root@`n900`:/home/user";
@@ -293,7 +292,7 @@ sub install_others(){
       "'";
   }
 
-  if(ask 'install fcron?'){
+  if(ask 'install fcron from debs in ./packages?'){
     system "scp ./packages/fcron_*_armel_opt.deb root@`n900`:/home/user";
     system "ssh root@`n900` '".
       "dpkg -i /home/user/fcron_*_armel_opt.deb; " .
@@ -576,14 +575,6 @@ sub reboot_phone(){
     system "ssh root@`n900` 'dbus-send --system --print-reply " .
      "--dest=com.nokia.dsme " .
      "/com/nokia/dsme com.nokia.dsme.request.req_reboot &' &";
-  }
-}
-
-sub initialize_pidgin(){
-  if(ask 'mkdir /home/user/.purple?'){
-    system "ssh root@`n900` '" .
-      "mkdir /home/user/.purple; " .
-    "'";
   }
 }
 
