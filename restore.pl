@@ -230,21 +230,16 @@ sub apt_install_preferred(){
    ' mobilehotspot desktop-cmd-exec simple-brightness-applet fbreader' .
    ' fmms wifi-switcher pidgin fapn shortcutd systeminfowidget evince' .
    ' easy-deb-chroot openvpn ringtoned flashlight-applet' .
-#   ' gconf-editor' .
    ' pidgin-maemo-docklet personal-ip-address mplayer mediabox ' .
    ' gstreamer0.10-flac libflac8 perl-modules make unzip ping' .
    ' ines drnoksnes xmodmap ogg-support git-core' .
    ' nxengine';
   print "\n\nPreferred packages:\n$preferred_packages";
-  print "\n\nalso gconf-editor (seperately asked)";
   if(ask 'apt-get update first?'){
     system "ssh root@`n900` apt-get update";
   }
   if(ask 'install preferred packages (hit accept on the phone)?'){
     system "ssh root@`n900` apt-get install $preferred_packages";
-    if(ask 'install gconf-editor (may not work)'){
-      system "ssh root@`n900` apt-get install gconf-editor";
-    }
   }
 }
 
@@ -282,6 +277,19 @@ sub install_others(){
       "ln -s /usr/bin/gcc-4.2 /usr/bin/gcc; " .
       "ln -s /usr/bin/gcc-4.2 /usr/bin/cc; " .
       "ln -s /usr/bin/g++-4.2 /usr/bin/g++; " .
+      "'";
+  }
+
+  if(ask 'install gconf-editor?'){
+    my $mDeb = "maemo-select-menu-location*.deb";
+    my $gDeb = "gconf-editor*.deb";
+    system "scp ./packages/$mDeb ./packages/$gDeb root@`n900`:/home/user";
+
+    system "ssh root@`n900` 'cd /home/user; " .
+      "dpkg -i $mDeb; " .
+      "dpkg -i $gDeb; " .
+      "rm $mDeb; " .
+      "rm $gDeb; " .
       "'";
   }
 
