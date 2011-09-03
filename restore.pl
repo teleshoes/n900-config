@@ -82,6 +82,7 @@ my @utils = (
 
 sub parse_utils();
 sub ui_cmd_prompt();
+sub handleCmd($);
 
 sub ask($);
 sub callMagicSub($);
@@ -90,6 +91,10 @@ sub get_license_text();
 sub get_instructions_text();
 
 parse_utils();
+
+for my $arg(@ARGV){
+  handleCmd $arg;
+}
 
 while(1){
   ui_cmd_prompt();
@@ -685,11 +690,16 @@ sub ui_cmd_prompt(){
   
   print "Press a key (dont worry, we'll double-check again after): ";
   my $key = lc key();
+  handleCmd $key;
+}
+
+sub handleCmd($){
+  my $key = shift;
+  if($key eq "\n"){
+    return;
+  }
   print "\n\n";
   my $sub = $keys{$key};
-  if($key eq "\n"){
-    next;
-  }
   if(defined $sub){
     $sub =~ s/^([a-zA-Z0-9_-]+).*$/$1/sxi;
     callMagicSub $sub;
