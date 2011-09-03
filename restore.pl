@@ -93,7 +93,11 @@ sub get_instructions_text();
 parse_utils();
 
 for my $arg(@ARGV){
-  handleCmd $arg;
+  if(length $arg == 1){
+    handleCmd $arg;
+  }else{
+    callMagicSub $arg;
+  }
 }
 
 while(1){
