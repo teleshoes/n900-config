@@ -281,6 +281,18 @@ sub installDebsFromLocal(@){
 }
 
 sub install_others(){
+  if(ask 'install klomp from github?'){
+    my $d = '/home/user/klomp';
+    my $url = 'git://github.com/teleshoes/klomp.git';
+
+    system "ssh root@`n900` '" .
+      "if [ -d $d ]; then " .
+        "cd $d; git pull; " .
+      "else " .
+        "git clone $url $d; " .
+      "fi" .
+      "'";
+  }
   if(ask 'install gcc-4.2 & g++-4.2 from SDK repo {disabled after}, and add links?'){
     system "ssh root@`n900` '" .
       "cd /etc/apt/sources.list.d; " .
