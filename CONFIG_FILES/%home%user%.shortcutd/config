@@ -7,5 +7,5 @@
 "proximityHold": "disabled",
 "camerakeyShortPress": "shellcommand",
 "camerakeyLongPress": "shellcommand",
-"shellCommand": "udo qcmd pause"
+"shellCommand": "udo klomp-cmd pause"
 }

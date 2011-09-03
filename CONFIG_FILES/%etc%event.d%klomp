@@ -1,0 +1,4 @@
+start on XSESSIONS_STARTING
+
+exec /root/bin/klomp-call-handler
+
