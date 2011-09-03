@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Name=X Terminal
+Comment=Terminal Emulator
+Exec=/usr/bin/osso-xterm
+Icon=terminal
+Terminal=true
+Type=Application
+Categories=System;TerminalEmulator;
+X-HildonDesk-ShowInToolbar=true
+#line commented out for opening new terminal by default
+#X-Osso-Service=xterm
+X-Osso-Type=application/x-executable
+
