@@ -23,3 +23,9 @@ for my $file(@files){
   }
 }
 
+for my $file(`cat $DIR/config-files-to-remove`){
+  chomp $file;
+  if(-e $file){
+    system "rm -r $file";
+  }
+}
