@@ -198,7 +198,7 @@ sub backup(){
 }
 
 sub sync_claws_mail(){
-  if(ask 'sync claws-mail in MyDocs, and ensure symlink from home to MyDocs?'){
+  if(ask 'sync claws-mail to MyDocs, and forcibly replace ~/.claws-mail?'){
     system "ssh root@`n900` mkdir -p /home/user/MyDocs/claws-mail";
     system "rsync -av \$HOME/.claws-mail/ root@`n900`:/home/user/MyDocs/claws-mail";
     system "ssh root@`n900` '"
