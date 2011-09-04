@@ -3,6 +3,6 @@ Name=Klomp
 GenericName=Klomp
 Comment=Klomp CLI Music Player
 Exec=/usr/bin/osso-xterm '/home/user/bin/udo klomp'
-Icon=/home/user/klomp/klomp.png
+Icon=klomp
 Terminal=false
 Type=Application
