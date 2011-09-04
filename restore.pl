@@ -254,13 +254,12 @@ sub apt_install_crucial(){
 
 sub apt_install_preferred(){
   my @packages = qw(
-   mobilehotspot desktop-cmd-exec simple-brightness-applet fbreader
+   mobilehotspot simple-brightness-applet fbreader
    fmms wifi-switcher pidgin fapn shortcutd systeminfowidget evince
-   easy-deb-chroot openvpn ringtoned flashlight-applet
-   pidgin-maemo-docklet personal-ip-address mplayer mediabox
-   gstreamer0.10-flac libflac8 perl-modules make unzip ping
-   ines drnoksnes xmodmap ogg-support git-core
-   nxengine claws-mail
+   openvpn ringtoned flashlight-applet pidgin-maemo-docklet
+   personal-ip-address mplayer mediabox gstreamer0.10-flac
+   libflac8 perl-modules make unzip ping ines drnoksnes
+   xmodmap ogg-support git-core nxengine claws-mail
   );
   print "Install preferred packges\n";
   if(ask 'apt-get update first?'){
