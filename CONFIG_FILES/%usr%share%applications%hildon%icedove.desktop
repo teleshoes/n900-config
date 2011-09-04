@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=Icedove
-GenericName=Mail/News
-Comment=Debian Mail/News
-Exec=sudo debian icedove
-Icon=debthunderbird
-Terminal=false
-Type=Application

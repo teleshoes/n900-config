@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=Dominion Randomizer
-GenericName=Dominion Randomizer
-Comment=Dominion Randomizer
-Exec=/home/user/bin/dominion d
-Icon=/home/user/dominion/dominion_icon.jpg
-Terminal=false
-Type=Application
