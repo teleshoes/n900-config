@@ -1,4 +1,8 @@
-start on XSESSIONS_STARTING
-
-exec /root/bin/klomp-call-handler
+start on started hildon-desktop
+stop on starting shutdown
+console none
+service
+script
+/home/user/klomp/klomp-call-handler
+end script
 
