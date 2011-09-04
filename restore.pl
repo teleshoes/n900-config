@@ -312,11 +312,9 @@ sub install_others(){
     my $url = 'git://github.com/teleshoes/klomp.git';
 
     system "ssh root@`n900` '" .
-      "if [ -d $d ]; then " .
-        "cd $d; git pull; " .
-      "else " .
-        "git clone $url $d; " .
-      "fi" .
+      "rm -rf $d; " .
+      "git clone $url $d; " .
+      "chown user.users -R $d; " .
       "'";
   }
   if(ask 'install gcc-4.2 & g++-4.2 from SDK repo {disabled after}, and add links?'){
