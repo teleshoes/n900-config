@@ -218,37 +218,55 @@ sub apt_upgrade(){
   }
 }
 
-sub apt_install_crucial(){
-  my $crucial_packages =
-   ' openssh kernel-power-settings bash vim' .
-   ' diffutils-gnu findutils-gnu grep-gnu rsync wget' .
-   ' coreutils-gnu tar-gnu python-location';
-  print "\n\nCrucial packages:\n$crucial_packages";
-  print "\n\n\n\n";
-  print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
-  print "KERNEL POWER. ASKS YOU. TO CONTINUE. ON THE PHONE\n";
-  print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
-  if(ask 'install crucial packages (hit accept on the phone)?'){
-    system "ssh root@`n900` apt-get install $crucial_packages";
+sub installPackages($){
+  my @packages = @{shift()};
+
+  my $disp = '';
+  my $line = '';
+  for my $p(@packages){
+    if(length "$line $p" > get_term_width()){
+      $disp .= "$line\n";
+      $line = '';
+    }
+    $line .= " $p";
+  }
+  $disp .= $line;
+  print "\n\nPackages:\n$disp";
+
+  if(ask 'install packages (might required accept ON THE PHONE)?'){
+    my $pkgs = join ' ', @packages;
+    system "ssh root@`n900` apt-get install $pkgs";
   }
 }
 
+sub apt_install_crucial(){
+  my @packages = qw(
+   openssh kernel-power-settings bash vim
+   diffutils-gnu findutils-gnu grep-gnu rsync wget
+   coreutils-gnu tar-gnu python-location
+  );
+  print "Install crucial packages?\n";
+  print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+  print "KERNEL POWER. ASKS YOU. TO CONTINUE. ON THE PHONE\n";
+  print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+  installPackages(\@packages);
+}
+
 sub apt_install_preferred(){
-  my $preferred_packages =
-   ' mobilehotspot desktop-cmd-exec simple-brightness-applet fbreader' .
-   ' fmms wifi-switcher pidgin fapn shortcutd systeminfowidget evince' .
-   ' easy-deb-chroot openvpn ringtoned flashlight-applet' .
-   ' pidgin-maemo-docklet personal-ip-address mplayer mediabox ' .
-   ' gstreamer0.10-flac libflac8 perl-modules make unzip ping' .
-   ' ines drnoksnes xmodmap ogg-support git-core' .
-   ' nxengine';
-  print "\n\nPreferred packages:\n$preferred_packages";
+  my @packages = qw(
+   mobilehotspot desktop-cmd-exec simple-brightness-applet fbreader
+   fmms wifi-switcher pidgin fapn shortcutd systeminfowidget evince
+   easy-deb-chroot openvpn ringtoned flashlight-applet
+   pidgin-maemo-docklet personal-ip-address mplayer mediabox
+   gstreamer0.10-flac libflac8 perl-modules make unzip ping
+   ines drnoksnes xmodmap ogg-support git-core
+   nxengine claws-mail
+  );
+  print "Install preferred packges\n";
   if(ask 'apt-get update first?'){
     system "ssh root@`n900` apt-get update";
   }
-  if(ask 'install preferred packages (hit accept on the phone)?'){
-    system "ssh root@`n900` apt-get install $preferred_packages";
-  }
+  installPackages(\@packages);
 }
 
 sub apt_unblock_ovi(){
