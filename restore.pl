@@ -46,6 +46,7 @@ my @utils = (
   'xx' => 'u' => 'backup_dcim',
   'xx' => 'i' => 'reorganize_dcim',
   'xx' => 'o' => 'backup',
+  '18' => 'p' => 'sync_claws_mail',
 #BOTTOM
 'header' => "Install Packages:",
   '03' => '1' => 'apt_cache',
@@ -60,13 +61,13 @@ my @utils = (
   '06' => 'a' => 'config_files',
   '07' => 's' => 'root_symlinks',
   '15' => 'd' => 'sync_mydocs',
-  '18' => 'f' => 'default_cpu_limits',
-  '19' => 'g' => 'xterm_color',
-  '20' => 'h' => 'xterm_virtual_kb',
-  '21' => 'j' => 'configure_desktop', 
-  '22' => 'k' => 'add_music_symlinks', 
-  '23' => 'l' => 'hosts',
-  '24' => ';' => 'remember', 
+  '19' => 'f' => 'default_cpu_limits',
+  '20' => 'g' => 'xterm_color',
+  '21' => 'h' => 'xterm_virtual_kb',
+  '22' => 'j' => 'configure_desktop', 
+  '23' => 'k' => 'add_music_symlinks', 
+  '24' => 'l' => 'hosts',
+  '25' => ';' => 'remember', 
 'header' => "EMERGENCY RECOVERY:",
   '01' => 'z' => 'reflash',
   '02' => 'x' => 'ssh_setup',
@@ -196,6 +197,18 @@ sub backup(){
   }
 }
 
+sub sync_claws_mail(){
+  if(ask 'sync claws-mail in MyDocs, and ensure symlink from home to MyDocs?'){
+    system "ssh root@`n900` mkdir -p /home/user/MyDocs/claws-mail";
+    system "rsync -av \$HOME/.claws-mail/ root@`n900`:/home/user/MyDocs/claws-mail";
+    system "ssh root@`n900` '"
+      . "rm /home/user/.claws-mail; "
+      . "rm -rf /home/user/.claws-mail; "
+      . "ln -s MyDocs/claws-mail /home/user/.claws-mail; "
+      . "chown user.users -R /home/user/MyDocs/claws-mail; "
+      . "'";
+  }
+}
 
 #####
 
