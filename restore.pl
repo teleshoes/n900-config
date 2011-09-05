@@ -578,6 +578,7 @@ This is a list of unexposed stuff to manually configure:
    Advanced -> Other -> Power saving: Off -> Yes -> Save
    ALSO: Internet Connections, automatic: CELLULAR, Never, Dont switch to wifi
 3) manually change the background once if you cant programmatically
+4) Settings -> Text Input -> Auto-capitalization off
 ";
 }
 
