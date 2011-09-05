@@ -34,6 +34,16 @@ if(prompt "OVERWRITE contacts with osso-addressbook-backup?"){
     " | su - user'";
 }
 
+if(prompt "rsync fmms(doesnt del, but may overwrite)?"){
+  my $dest = '/home/user/.fmms';
+  my $fmmsDir = "$backupDir/fmms";
+  system "ssh root@`n900` '"
+    . "mkdir -p $dest; "
+    . "rsync -av $fmmsDir/ $dest; "
+    . "chown user.users -R $dest; "
+    . "'";
+}
+
 if(prompt "OVERWRITE cavestory save profile(s)?"){
   my $dest = '/home/user/MyDocs/Games/CaveStory/n900';
   system "ssh root@`n900` cp -a $lDir/home/user/CaveStory/* $dest";

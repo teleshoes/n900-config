@@ -60,6 +60,11 @@ rsync /home/user/MyDocs/DCIM/ /media/mmc1/Backup/DCIM -av \
   --exclude=[0-9][0-9][0-9]_* \
   --delete-before
 
+#backup fmms
+mkdir -p /media/mmc1/Backup/fmms
+rsync -av --del /home/user/.fmms/ /media/mmc1/Backup/fmms
+chown -R user.users /media/mmc1/Backup/fmms
+
 run-standalone.sh dbus-send --type=method_call \
   --dest=org.freedesktop.Notifications \
   /org/freedesktop/Notifications \
