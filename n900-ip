@@ -16,7 +16,7 @@ my $SSID_IPS = {
   flipsafad => '192.168.11.28',
   minerva => $MOBILE_HOTSPOT_IP,
   mobilehotspot => $MOBILE_HOTSPOT_IP,
-  jimbo => '192.168.2.5',
+  jimbo => '192.168.2.8',
 };
 
 my $usage = "Usage: \n  $0\n  or\n  $0 -s|-ssh\n  or\n  $0 -s|--ssh CMD\n";
