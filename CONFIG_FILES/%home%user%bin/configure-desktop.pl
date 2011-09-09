@@ -3,12 +3,8 @@ use strict;
 use warnings;
 
 # use undef or '' to leave the image thats already present
-my @desktops = (
-  '/home/user/MyDocs/.images/menrva.jpg',
-  '/home/user/MyDocs/.images/jamaicad_drinks.jpg',
-  '/home/user/MyDocs/.images/jamaicadyer_woman.jpg',
-  '/home/user/MyDocs/.images/simnuke_cello.jpg',
-);
+# use a single element for a preset image set
+my @desktops = ('menrva');
 
 #valid number is probably 7 or 10 digits
 #  number, view/desktop, x-pos, y-pos
@@ -23,15 +19,15 @@ my $GRID_ITEM_HEIGHT = 108;
 my $GRID_ITEM_WIDTH = 108;
 #[desktop/view, rowsize, leftpos, toppos, [items]]
 my @shortcutGrids = (
+  1, 1, 0, 56, [qw(
+    rtcom-call-ui
+    osso-addressbook
+    rtcom-messaging-ui
+  )],
   2, 3, 0, 56, [qw(
     fennec browser mobilehotspot
     xterm pidgin hildon-control-panel
     osso_calculator FBReader
-  )],
-  2, 1, 704, 56, [qw(
-    rtcom-call-ui
-    osso-addressbook
-    rtcom-messaging-ui
   )],
 );
 

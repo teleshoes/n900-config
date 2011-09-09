@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-my $imgDir = '/home/user/MyDocs/.images';
+my $imgDir = '/home/user/images';
 
 my %sets = (
   zelda => [map {"$imgDir/$_"} qw(
