@@ -15,17 +15,15 @@ my @contacts = (
   '6318975047', 1, 656, 56,
 );
 
-my $GRID_ITEM_HEIGHT = 108;
-my $GRID_ITEM_WIDTH = 108;
 #[desktop/view, rowsize, leftpos, toppos, [items]]
 my @shortcutGrids = (
-  1, 1, 0, 56, [qw(
+  1, 1, 0, 56, 108, 108, [qw(
     rtcom-call-ui
     rtcom-messaging-ui
     browser
     xterm
   )],
-  1, 1, 712, 240, [qw(klomp)]
+  1, 1, 712, 240, 108, 108, [qw(klomp)]
 );
 
 
@@ -46,6 +44,25 @@ my @applets = (
   1, 633, 344, "system_info", $GCDIR, $APPDIR,
   1, 633, 444, "personal-ip-address", $GCDIR, $APPDIR,
 );
+
+#title, width, height, display-title =>
+#update: click, desktop, boot, delay (index), network policy (index)
+#desktop/view widget should be on, and (x,y) coords
+#delay 0=disabled, 1=30s, 2=1min, 3=5min, 4=30min
+#network 0=disabled, 1=when connected, 2=when disconnected
+#  title        width  ht  disp    =>    updates     => desktop x y
+my @desktop_cmd_exec_instances = (
+#  'cpu_fast',    '.10',  '2.5', 1 => 1, 0, 0, 0, 0, => 1, 0,   56+76*0,
+#  'cpu_slow',    '.10',  '2.5', 1 => 1, 0, 0, 0, 0, => 1, 0,   56+76*1,
+#  'cpu_current', '.10',  '2.5', 0 => 1, 1, 1, 0, 0, => 1, 0,   56+76*2,
+#  'cpu_min',     '.10',  '2.5', 0 => 1, 1, 1, 3, 0, => 1, 0,   56+76*3,
+#  'cpu_max',     '.10',  '2.5', 0 => 1, 1, 1, 3, 0, => 1, 0,   56+76*4,
+#  'cpu_reset',   '.10',  '1.3', 1 => 1, 1, 1, 0, 0, => 1, 0,   56+76*5,
+#  'rootfs',      '.21',  '1.3', 1 => 1, 1, 1, 1, 0, => 1, 632, 404,
+#  'quick_ip',    '.21',  '1.3', 0 => 1, 1, 1, 1, 0, => 1, 632, 440,
+#  'test_sms',    '.14',  '1.3', 1 => 1, 0, 0, 0, 0, => 2, 688, 440,
+);
+ 
 
 my @desktop_cmd_exec_cmds = (
   'cpu_fast'     => 'CPU\\nfast'    => 'udo cpu set 500 1000|echo',
@@ -68,28 +85,6 @@ my @desktop_cmd_exec_cmds = (
   'rootfs'       => 'rootfs:'       => 'df | awk \'$1 == "rootfs" {print $5}\'',
   'free_rootfs'  => 'Free Rootfs:'  => 'df -h | awk \' $1 == "rootfs" {print $4"B"}\'',
 );
-
-#title, width, height, display-title =>
-#update: click, desktop, boot, delay (index), network policy (index)
-#desktop/view widget should be on, and (x,y) coords
-#delay 0=disabled, 1=30s, 2=1min, 3=5min, 4=30min
-#network 0=disabled, 1=when connected, 2=when disconnected
-#  title        width  ht  disp    =>    updates     => desktop x y
-my @desktop_cmd_exec_instances = (
-#  'cpu_fast',    '.10',  '2.5', 1 => 1, 0, 0, 0, 0, => 1, 0,   56+76*0,
-#  'cpu_slow',    '.10',  '2.5', 1 => 1, 0, 0, 0, 0, => 1, 0,   56+76*1,
-#  'cpu_current', '.10',  '2.5', 0 => 1, 1, 1, 0, 0, => 1, 0,   56+76*2,
-#  'cpu_min',     '.10',  '2.5', 0 => 1, 1, 1, 3, 0, => 1, 0,   56+76*3,
-#  'cpu_max',     '.10',  '2.5', 0 => 1, 1, 1, 3, 0, => 1, 0,   56+76*4,
-#  'cpu_reset',   '.10',  '1.3', 1 => 1, 1, 1, 0, 0, => 1, 0,   56+76*5,
-#  'rootfs',      '.21',  '1.3', 1 => 1, 1, 1, 1, 0, => 1, 632, 404,
-#  'quick_ip',    '.21',  '1.3', 0 => 1, 1, 1, 1, 0, => 1, 632, 440,
-#  'test_sms',    '.14',  '1.3', 1 => 1, 0, 0, 0, 0, => 2, 688, 440,
-);
- 
-
-
-
 
 ##########################################
 sub runcmdget($){
@@ -160,15 +155,17 @@ sub main(){
   set_applets(@appletNames, @views, @positions);
 
 
-  for(my $i=0; $i<@shortcutGrids; $i+=5){
+  for(my $i=0; $i<@shortcutGrids; $i+=7){
     my $view = $shortcutGrids[$i];
     my $rowSize = $shortcutGrids[$i+1];
     my $leftPos = $shortcutGrids[$i+2];
     my $topPos = $shortcutGrids[$i+3];
-    my @elems = @{$shortcutGrids[$i+4]};
+    my $itemWidth = $shortcutGrids[$i+4];
+    my $itemHeight = $shortcutGrids[$i+5];
+    my @elems = @{$shortcutGrids[$i+6]};
 
     desktop_grid('shortcut', $view, $rowSize, $leftPos, $topPos,
-      $GRID_ITEM_WIDTH, $GRID_ITEM_HEIGHT, @elems);
+      $itemWidth, $itemHeight, @elems);
   }
 
 
