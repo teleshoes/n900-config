@@ -23,15 +23,16 @@ my $GRID_ITEM_HEIGHT = 108;
 my $GRID_ITEM_WIDTH = 108;
 #[desktop/view, rowsize, leftpos, toppos, [items]]
 my @shortcutGrids = (
-  2, 3, 0, 56, [
-    'fennec', 'browser', 'mobilehotspot',
-    'osso-xterm', 'pidgin', 'hildon-control-panel',
-    'osso_calculator', 'FBReader',
-  ],
-  2, 1, 704, 56, [
-    'rtcom-call-ui',
-    'osso-addressbook',
-    'rtcom-messaging-ui'],
+  2, 3, 0, 56, [qw(
+    fennec browser mobilehotspot
+    xterm pidgin hildon-control-panel
+    osso_calculator FBReader
+  )],
+  2, 1, 704, 56, [qw(
+    rtcom-call-ui
+    osso-addressbook
+    rtcom-messaging-ui
+  )],
 );
 
 
