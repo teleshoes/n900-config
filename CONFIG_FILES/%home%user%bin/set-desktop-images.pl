@@ -2,18 +2,15 @@
 use strict;
 use warnings;
 
+my $imgDir = '/home/user/MyDocs/.images';
+
 my %sets = (
-  'zelda' => [
-    '/home/user/MyDocs/.images/zelda1.jpg',
-    '/home/user/MyDocs/.images/zelda2.jpg',
-    '/home/user/MyDocs/.images/zelda3.jpg',
-  ],
-  'menrva' => [
-    '/home/user/MyDocs/.images/menrva.jpg',
-    '/home/user/MyDocs/.images/jamaicad_drinks.jpg',
-    '/home/user/MyDocs/.images/jamaicadyer_woman.jpg',
-    '/home/user/MyDocs/.images/simnuke_cello.jpg',
-  ],
+  zelda => [map {"$imgDir/$_"} qw(
+    zelda1.jpg zelda2.jpg zelda3.jpg
+  )],
+  menrva => [map {"$imgDir/$_"} qw(
+    menrva.jpg jamaicad_drinks.jpg jamaicadyer_woman.jpg simnuke_cello.jpg
+  )],
 );
 
 if(@ARGV == 0){
