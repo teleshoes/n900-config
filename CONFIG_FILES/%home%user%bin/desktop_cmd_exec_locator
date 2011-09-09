@@ -23,7 +23,7 @@ sub get_id_by_title($){
 my $applets = '/apps/osso/hildon-desktop/applets';
 
 my $id = get_id_by_title "locator";
-if($id > 0){
+if($id >= 0){
   my $dir = "$applets/desktop-cmd-exec.desktop-$id";
   my $pos = `gconftool-2 -g $dir/position`;
   chomp $pos;
