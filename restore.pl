@@ -64,10 +64,10 @@ my @utils = (
   '19' => 'f' => 'default_cpu_limits',
   '20' => 'g' => 'xterm_color',
   '21' => 'h' => 'xterm_virtual_kb',
-  '22' => 'j' => 'configure_desktop', 
-  '23' => 'k' => 'add_music_symlinks', 
+  '22' => 'j' => 'configure_hildon',
+  '23' => 'k' => 'add_music_symlinks',
   '24' => 'l' => 'hosts',
-  '25' => ';' => 'remember', 
+  '25' => ';' => 'remember',
 'header' => "EMERGENCY RECOVERY:",
   '01' => 'z' => 'reflash',
   '02' => 'x' => 'ssh_setup',
@@ -529,7 +529,10 @@ sub xterm_virtual_kb(){
   }
 }
 
-sub configure_desktop(){
+sub configure_hildon(){
+  if(ask 'Overwrite and reorganize apps menu?'){
+    system "ssh root@`n900` pseudo configure-apps-menu.pl";
+  }
   if(ask 'Replace all desktop shortcuts {and desktop-cmd-exec configs}?'){
     system "ssh root@`n900` pseudo configure-desktop.pl";
     
