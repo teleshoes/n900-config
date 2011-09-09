@@ -4,7 +4,7 @@ use warnings;
 
 # use undef or '' to leave the image thats already present
 # use a single element for a preset image set
-my @desktops = ('menrva');
+my @desktops = ('/home/user/images/menrva');
 
 #valid number is probably 7 or 10 digits
 #  number, view/desktop, x-pos, y-pos
@@ -21,14 +21,11 @@ my $GRID_ITEM_WIDTH = 108;
 my @shortcutGrids = (
   1, 1, 0, 56, [qw(
     rtcom-call-ui
-    osso-addressbook
     rtcom-messaging-ui
+    browser
+    xterm
   )],
-  2, 3, 0, 56, [qw(
-    fennec browser mobilehotspot
-    xterm pidgin hildon-control-panel
-    osso_calculator FBReader
-  )],
+  1, 1, 712, 240, [qw(klomp)]
 );
 
 
