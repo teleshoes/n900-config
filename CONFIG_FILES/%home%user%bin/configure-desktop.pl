@@ -1,89 +1,50 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use Safe;
 
-# use undef or '' to leave the image thats already present
-# use a single element for a preset image set
-my @desktops = ('zelda');
+my $file = shift;
+$file = '/home/user/profiles/default.pl' if not defined $file;
 
-#valid number is probably 7 or 10 digits
-#  number, view/desktop, x-pos, y-pos
-#  e.g.:
-#  ('5551231234', 2, 656, 56,
-#  );
-my @contacts = (
-  '6318975047', 1, 656, 56,
-);
+print "Obtaining perl code from '$file' for safe evaluation\n";
+my $unsafeCode = `cat $file`;
 
-#[desktop/view, rowsize, leftpos, toppos, [items]]
-my @shortcutGrids = (
-  1, 1, 0, 56, 108, 108, [qw(
-    rtcom-call-ui
-    rtcom-messaging-ui
-    browser
-    xterm
-  )],
-  1, 1, 712, 240, 108, 108, [qw(klomp)]
-);
+print "Safely evaluating the code slurped from $file\n";
+my $compartment = new Safe;
+my @config = $compartment->reval($unsafeCode);
+if(@config != 5){
+  die "Could not read config from $file\n";
+}
+print "Loaded profile from $file\n\n";
+
+my @desktops = @{$config[0]};
+my @contacts = @{$config[1]};
+my @shortcutGrids = @{$config[2]};
+my @applets = @{$config[3]};
+my @dce_instances = @{$config[4]};
 
 
-my $GCDIR = '/apps/osso/hildon-desktop/applets/';
-my $APPDIR = '/usr/share/applications/hildon-home/';
-#view/desktop, xpos, ypos, desktop_file, gconf_dir, desktop_dir
-# desktop_file is the simple file name of a .desktop file,
-# without the dirname. the .desktop extension is appended if missing.
-#   e.g.: system_info
-# gconf_dir is the gconfkey prefix before the desktop_file
-#   e.g.: /apps/osso/hildon-desktop/applets/
-# desktop_dir is the filepath prefix before the desktop_file
-#   e.g.: /usr/share/applications/hildon-home/
-#
-#the hyphen and index (e.g.: '-0') is appended to the end based
-# on the order in the list
-my @applets = (
-  1, 633, 344, "system_info", $GCDIR, $APPDIR,
-  1, 633, 444, "personal-ip-address", $GCDIR, $APPDIR,
-);
 
-#title, width, height, display-title =>
-#update: click, desktop, boot, delay (index), network policy (index)
-#desktop/view widget should be on, and (x,y) coords
-#delay 0=disabled, 1=30s, 2=1min, 3=5min, 4=30min
-#network 0=disabled, 1=when connected, 2=when disconnected
-#  title        width  ht  disp    =>    updates     => desktop x y
-my @desktop_cmd_exec_instances = (
-#  'cpu_fast',    '.10',  '2.5', 1 => 1, 0, 0, 0, 0, => 1, 0,   56+76*0,
-#  'cpu_slow',    '.10',  '2.5', 1 => 1, 0, 0, 0, 0, => 1, 0,   56+76*1,
-#  'cpu_current', '.10',  '2.5', 0 => 1, 1, 1, 0, 0, => 1, 0,   56+76*2,
-#  'cpu_min',     '.10',  '2.5', 0 => 1, 1, 1, 3, 0, => 1, 0,   56+76*3,
-#  'cpu_max',     '.10',  '2.5', 0 => 1, 1, 1, 3, 0, => 1, 0,   56+76*4,
-#  'cpu_reset',   '.10',  '1.3', 1 => 1, 1, 1, 0, 0, => 1, 0,   56+76*5,
-#  'rootfs',      '.21',  '1.3', 1 => 1, 1, 1, 1, 0, => 1, 632, 404,
-#  'quick_ip',    '.21',  '1.3', 0 => 1, 1, 1, 1, 0, => 1, 632, 440,
-#  'test_sms',    '.14',  '1.3', 1 => 1, 0, 0, 0, 0, => 2, 688, 440,
-);
- 
+my @dce_cmds = (
+  ['cpu_fast'     => 'CPU\\nfast'    => 'udo cpu set 500 1000|echo'],
+  ['cpu_slow'     => 'CPU\\nslow'    => 'udo cpu set 250 600|echo'],
+  ['cpu_current'  => 'CPU cur freq'  => 'udo cpu get cur'],
+  ['cpu_min'      => 'CPU min freq'  => 'udo cpu get min'],
+  ['cpu_max'      => 'CPU max freq'  => 'udo cpu get max'],
+  ['quick_ip'     => 'quick ip'      => 'udo quick_ip'],
+  ['test_sms'     => 'test sms'      => 'udo send_sms 6314184821 test'],
+  ['cpu_reset'    => 'reset'         => 'udo cpu set|echo'],
+  ['locator'      => 'Locator'       => 'udo desktop_cmd_exec_locator'],
 
-my @desktop_cmd_exec_cmds = (
-  'cpu_fast'     => 'CPU\\nfast'    => 'udo cpu set 500 1000|echo',
-  'cpu_slow'     => 'CPU\\nslow'    => 'udo cpu set 250 600|echo',
-  'cpu_current'  => 'CPU cur freq'  => 'udo cpu get cur',
-  'cpu_min'      => 'CPU min freq'  => 'udo cpu get min',
-  'cpu_max'      => 'CPU max freq'  => 'udo cpu get max',
-  'quick_ip'     => 'quick ip'      => 'udo quick_ip',
-  'test_sms'     => 'test sms'      => 'udo send_sms 6314184821 test',
-  'cpu_reset'    => 'reset'         => 'udo cpu set|echo',
-  'locator'      => 'Locator'       => 'udo desktop_cmd_exec_locator',
-
-  'uptime'       => 'Uptime:'       => 'uptime|cut -d" " -f4-|sed \'s/\\\\, *load.*//\'',
-  'battery'      => 'Battery(%):'   => 'hal-device bme | awk -F"[. ]" \'$5 == "is_charging" {chrg = $7}\\;\\s$5 == "percentage" {perc = $7} END if (chrg == "false") {print perc "%"} else {print "Chrg"}\'',
-  'battery_mah'  => 'Battery(mAh):' => 'hal-device bme | grep battery.reporting | awk -F. \'{print $3}\' | sort | awk \'$1 == "current" { current = $3}\\;\\s$1== "design" {print current "/" $3}\'',
-  'boot_reason'  => 'Boot Reason:'  => 'cat /proc/bootreason',
-  'boot_count'   => 'Boot Count:'   => 'cat /var/lib/dsme/boot_count',
-  'external_ip'  => 'External IP:'  => 'wget --timeout=10 -q -O - api.myiptest.com | awk -F "\\\\"" \'{print $4}\'',
-  'internal_ip'  => 'Internal IP:'  => '/sbin/ifconfig | grep "inet addr" | awk -F: \'{print $2}\' | awk \'{print $1}\'',
-  'rootfs'       => 'rootfs:'       => 'df | awk \'$1 == "rootfs" {print $5}\'',
-  'free_rootfs'  => 'Free Rootfs:'  => 'df -h | awk \' $1 == "rootfs" {print $4"B"}\'',
+  ['uptime'       => 'Uptime:'       => 'uptime|cut -d" " -f4-|sed \'s/\\\\, *load.*//\''],
+  ['battery'      => 'Battery(%):'   => 'hal-device bme | awk -F"[. ]" \'$5 == "is_charging" {chrg = $7}\\;\\s$5 == "percentage" {perc = $7} END if (chrg == "false") {print perc "%"} else {print "Chrg"}\''],
+  ['battery_mah'  => 'Battery(mAh):' => 'hal-device bme | grep battery.reporting | awk -F. \'{print $3}\' | sort | awk \'$1 == "current" { current = $3}\\;\\s$1== "design" {print current "/" $3}\''],
+  ['boot_reason'  => 'Boot Reason:'  => 'cat /proc/bootreason'],
+  ['boot_count'   => 'Boot Count:'   => 'cat /var/lib/dsme/boot_count'],
+  ['external_ip'  => 'External IP:'  => 'wget --timeout=10 -q -O - api.myiptest.com | awk -F "\\\\"" \'{print $4}\''],
+  ['internal_ip'  => 'Internal IP:'  => '/sbin/ifconfig | grep "inet addr" | awk -F: \'{print $2}\' | awk \'{print $1}\''],
+  ['rootfs'       => 'rootfs:'       => 'df | awk \'$1 == "rootfs" {print $5}\''],
+  ['free_rootfs'  => 'Free Rootfs:'  => 'df -h | awk \' $1 == "rootfs" {print $4"B"}\''],
 );
 
 ##########################################
@@ -130,13 +91,13 @@ sub main(){
   my @appletNames;
   my @views;
   my @positions;
-  for(my $i=0; $i<@applets; $i+=6){
-    my $view = $applets[$i];
-    my $xPos = $applets[$i+1];
-    my $yPos = $applets[$i+2];
-    my $name = $applets[$i+3];
-    my $gconfDir = $applets[$i+4];
-    my $appDir = $applets[$i+5];
+  for my $applet(@applets){
+    my $view = $$applet[0];
+    my $xPos = $$applet[1];
+    my $yPos = $$applet[2];
+    my $name = $$applet[3];
+    my $gconfDir = $$applet[4];
+    my $appDir = $$applet[5];
     if($name !~ /\.desktop$/){
       $name .= '.desktop';
     }
@@ -155,14 +116,14 @@ sub main(){
   set_applets(@appletNames, @views, @positions);
 
 
-  for(my $i=0; $i<@shortcutGrids; $i+=7){
-    my $view = $shortcutGrids[$i];
-    my $rowSize = $shortcutGrids[$i+1];
-    my $leftPos = $shortcutGrids[$i+2];
-    my $topPos = $shortcutGrids[$i+3];
-    my $itemWidth = $shortcutGrids[$i+4];
-    my $itemHeight = $shortcutGrids[$i+5];
-    my @elems = @{$shortcutGrids[$i+6]};
+  for my $grid(@shortcutGrids){
+    my $view = $$grid[0];
+    my $rowSize = $$grid[1];
+    my $leftPos = $$grid[2];
+    my $topPos = $$grid[3];
+    my $itemWidth = $$grid[4];
+    my $itemHeight = $$grid[5];
+    my @elems = @{$$grid[6]};
 
     desktop_grid('shortcut', $view, $rowSize, $leftPos, $topPos,
       $itemWidth, $itemHeight, @elems);
@@ -325,18 +286,19 @@ sub config_contacts(){
 
   my $applets;
   my (@keydirs, @views, @positions);
-  for(my $i=0; $i<@contacts; $i+=4){
-    my $num = $contacts[$i];
-    my $view = $contacts[$i+1];
-    my $x = $contacts[$i+2];
-    my $y = $contacts[$i+3];
+  for(my $i=0; $i<@contacts; $i++){
+    my $contact = $contacts[$i];
+    my $num = $$contact[0];
+    my $view = $$contact[1];
+    my $x = $$contact[2];
+    my $y = $$contact[3];
 
     print "adding #$num to view $view at ($x,$y)\n";
 
     my $uid = $uid_by_num{$num};
     my $applet = "osso-abook-applet-$uid";
     $applets .= $applet;
-    if($i+4 < @contacts){
+    if($i < $#contacts){
       $applets .= ',';
     }
 
@@ -360,10 +322,10 @@ sub config_desktop_cmd_exec($){
   my $other_widgets = shift;
   my $version = '0.7';
 
-  my @cmds = @desktop_cmd_exec_cmds;
-  my @instances = @desktop_cmd_exec_instances;
+  my @cmds = @dce_cmds;
+  my @instances = @dce_instances;
 
-  my $size = int((@instances)/12);
+  my $size = @instances;
 
   my $file = "
 [config]
@@ -371,46 +333,45 @@ version=$version
 ";
 
   my (@titles, @commands, %titles_by_id, %commands_by_id);
-  for(my $i=0; $i<@cmds; $i+=3){
-    my $id = $cmds[$i];
-    my $title = $cmds[$i+1];
-    my $cmd = $cmds[$i+2];
+  for my $cmd(@cmds){
+    my $id = $$cmd[0];
+    my $title = $$cmd[1];
+    my $cmdExec = $$cmd[2];
 
     push @titles, $title;
-    push @commands, $cmd;
+    push @commands, $cmdExec;
     $titles_by_id{$id} = $title;
-    $commands_by_id{$id} = $cmd;
+    $commands_by_id{$id} = $cmdExec;
   }
   $file .= 'c_titles=' . (join ';', @titles) . ";\n";
   $file .= 'c_commands=' . (join ';', @commands) . ";\n";
 
   my (@keydirs, @views, @positions);
-  for(my $i=0; $i<@instances; $i+=12){
-    my $id = $instances[$i];
-    my $width = $instances[$i+1];
-    my $height = $instances[$i+2];
-    my $display_title = $instances[$i+3] ? 'true' : 'false';
-    my $update_on_click = $instances[$i+4] ? 'true' : 'false';
-    my $update_on_desktop = $instances[$i+5] ? 'true' : 'false';
-    my $update_on_boot = $instances[$i+6] ? 'true' : 'false';
-    my $update_delay_index = $instances[$i+7];
-    my $update_network_policy = $instances[$i+8];
+  for(my $i=0; $i<@instances; $i++){
+    my $instance = $instances[$i];
+    my $id = $$instance[0];
+    my $width = $$instance[1];
+    my $height = $$instance[2];
+    my $display_title = $$instance[3] ? 'true' : 'false';
+    my $update_on_click = $$instance[4] ? 'true' : 'false';
+    my $update_on_desktop = $$instance[5] ? 'true' : 'false';
+    my $update_on_boot = $$instance[6] ? 'true' : 'false';
+    my $update_delay_index = $$instance[7];
+    my $update_network_policy = $$instance[8];
 
-    my $view = $instances[$i+9];
-    my $x = $instances[$i+10];
-    my $y = $instances[$i+11];
+    my $view = $$instance[9];
+    my $x = $$instance[10];
+    my $y = $$instance[11];
 
     my $title = $titles_by_id{$id};
     my $cmd = $commands_by_id{$id};
     $cmd =~ s/\\;\\s/; /g;
 
-    my $num = int($i/12);
-
-    print "parsing instance " . ($num+1) . "/$size - $title {$id}\n";
+    print "parsing instance " . ($i+1) . "/$size - $title {$id}\n";
 
     #its updNeworkPolicy [sic], with a typo missing a t
     $file .= "
-[desktop-cmd-exec.desktop-$num]
+[desktop-cmd-exec.desktop-$i]
 widthRatio=0$width
 heightRatio=$height
 displayTitle=$display_title
@@ -423,7 +384,7 @@ instanceTitle=$title
 instanceCmd=$cmd
 ";
     my $keydir = "/apps/osso/hildon-desktop/applets/";
-    $keydir .= "desktop-cmd-exec.desktop-$num";
+    $keydir .= "desktop-cmd-exec.desktop-$i";
     my $position = "[$x,$y]";
     push @keydirs, $keydir;
     push @views, $view;
