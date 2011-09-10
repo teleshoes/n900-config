@@ -2,7 +2,7 @@
 
 # use undef or '' to leave the image thats already present
 # use a single element for a preset image set
-my @desktops = ('menrva');
+my @desktops = ('menrva.jpg');
 
 #  number, desktop, x-pos, y-pos
 #  e.g.: (['5551231234', 2, 656, 56])
@@ -46,13 +46,8 @@ my @applets = (
 #delay 0=disabled, 1=30s, 2=1min, 3=5min, 4=30min
 #network 0=disabled, 1=when connected, 2=when disconnected
 #       title        width  ht  disp    =>    updates     => desktop x y
-#e.g.:  'rootfs',      '.21',  '1.3', 1 => 1, 1, 1, 1, 0, => 1, 632, 404,
+#e.g.: ['rootfs',      '.10',  '1.3', 1 => 1, 1, 1, 1, 0, => 1, 0, 56],
 my @dce_instances = (
-  ['cpu_fast',    '.10',  '2.5', 1 => 1, 1, 1, 3, 0, => 2, 0, 56+76*1],
-  ['cpu_slow',    '.10',  '2.5', 1 => 1, 1, 1, 3, 0, => 2, 0, 56+76*2],
-  ['cpu_min',    '.10',  '2.5', 0 => 1, 1, 1, 3, 0, => 2, 0, 56+76*3],
-  ['cpu_max',    '.10',  '2.5', 0 => 1, 1, 1, 3, 0, => 2, 0, 56+76*4],
-  ['cpu_reset',    '.10',  '1.3', 1 => 1, 1, 1, 3, 0, => 2, 0, 56+76*5],
 );
 
 my @config =
