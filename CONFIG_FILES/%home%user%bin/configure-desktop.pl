@@ -4,7 +4,7 @@ use warnings;
 
 # use undef or '' to leave the image thats already present
 # use a single element for a preset image set
-my @desktops = ('/home/user/images/menrva');
+my @desktops = ('zelda');
 
 #valid number is probably 7 or 10 digits
 #  number, view/desktop, x-pos, y-pos
