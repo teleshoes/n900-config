@@ -26,7 +26,7 @@ if(@ARGV == 1 and defined $sets{$ARGV[0]}){
 }
 
 for my $desktop(@desktops){
-  if(not -e $desktop and -e "$bgDir/$desktop"){
+  if($desktop !~ /^\// and -e "$bgDir/$desktop"){
     $desktop = "$bgDir/$desktop";
   }
 }
