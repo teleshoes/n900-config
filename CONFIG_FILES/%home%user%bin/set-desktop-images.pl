@@ -2,14 +2,14 @@
 use strict;
 use warnings;
 
-my $imgDir = '/home/user/images';
+my $bgDir = '/home/user/images/backgrounds';
 
 my %sets = (
-  zelda => [map {"$imgDir/$_"} qw(
+  zelda => [qw(
     zelda1.jpg zelda2.jpg zelda3.jpg
   )],
-  menrva => [map {"$imgDir/$_"} qw(
-    menrva.jpg jamaicad_drinks.jpg jamaicadyer_woman.jpg simnuke_cello.jpg
+  menrva => [qw(
+    menrva.jpg jamaicad_drinks.jpg jamaicad_woman.jpg simnuke_cello.jpg
   )],
 );
 
@@ -18,13 +18,17 @@ if(@ARGV == 0){
     "\nOR\n       $0 [" . join('|', keys %sets) . "]\n";
 }
 
-my $maybeSet = $ARGV[0];
-
 my @desktops;
-if(defined $sets{$maybeSet}){
-  @desktops = @{$sets{$maybeSet}};
+if(@ARGV == 1 and defined $sets{$ARGV[0]}){
+  @desktops = @{$sets{$ARGV[0]}};
 }else{
   @desktops = @ARGV;
+}
+
+for my $desktop(@desktops){
+  if(not -e $desktop and -e "$bgDir/$desktop"){
+    $desktop = "$bgDir/$desktop";
+  }
 }
 
 my $size = @desktops;
