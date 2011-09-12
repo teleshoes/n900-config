@@ -25,6 +25,7 @@ if($arg eq 'toggle'){
 
 if($arg eq 'on'){
   print "Turning tethering ON and NetworkManager OFF\n";
+  system 'killall', '-9', 'pppd', 'wvdial';
   system "sudo initctl stop network-manager";
   system 'wvdial', '-C', $CONFIG;
 }elsif($arg eq 'off'){
