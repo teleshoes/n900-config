@@ -458,9 +458,11 @@ sub sync_mydocs(){
 }
 
 sub default_cpu_limits(){
-  if(ask 'set DEFAULT CPU limits to 500/1000 and voltage to ideal?'){
-    system "ssh root@`n900` 'kernel-config load ideal; " .
-     "kernel-config limits 500 1000; kernel-config default'";
+  if(ask "default cpu limits and voltages?"){
+    system "ssh root@`n900` '" .
+     "udo cpu def; " .
+     "kernel-config default; " .
+     "'";
   }
 }
 
