@@ -1,0 +1,34 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $DEV = '/dev/ttyACM0';
+my $CONFIG = `echo -n \$HOME/Desktop/N900/config/utils/wvdial.conf`;
+
+my $arg = shift;
+$arg = 'toggle' if not defined $arg;
+if(($arg ne 'on' and $arg ne 'off' and $arg ne 'toggle') or @ARGV > 0){
+  die "Usage: $0 [on|off|toggle]  {toggle is default}\n";
+}
+
+
+if(not -e $DEV){
+  die "Device $DEV not found\n";
+}
+
+if($arg eq 'toggle'){
+  system "pidof pppd wvdial";
+  my $isUp = $? == 0;
+  $arg = $isUp ? 'off' : 'on';
+}
+
+
+if($arg eq 'on'){
+  print "Turning tethering ON and NetworkManager OFF\n";
+  system "sudo initctl stop network-manager";
+  system 'wvdial', '-C', $CONFIG;
+}elsif($arg eq 'off'){
+  print "Turning tethering OFF and NetworkManager ON\n";
+  system "sudo initctl start network-manager";
+  system 'killall', '-9', 'pppd', 'wvdial';
+}
