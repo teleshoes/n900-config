@@ -1,7 +1,10 @@
 #!/usr/bin/perl
 my $user = `whoami`;
 chomp $user;
-if($user ne 'root'){
-  exec "sudo $0 @ARGV";
+if($user eq 'root'){
+  exec "su user /usr/bin/run-standalone.sh $0 @ARGV";
+}elsif($user eq 'user'){
+  exec "PATH=\$PATH:/root/bin @ARGV";
+}else{
+  die "Unknown user: $user\n";
 }
-system "echo 'env PATH='\$PATH':/root/bin' @ARGV | su - user"
