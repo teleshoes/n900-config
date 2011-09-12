@@ -27,8 +27,9 @@ my $usage = "Usage:
   $0 [OPTS] -s|--ssh [CMD]
     Guess the IP of the n900 on lan/hotspot/usb {reads ifconfig} and run ssh
     The rest of the command line after --ssh is the CMD to be run, if any
-  $0 -t|--tether
-    Instead of fetching an IP address, run $tetherExec
+  $0 -t|--tether [on|off|toggle]
+    Instead of fetching an IP address, run below command {default is toggle}
+    $tetherExec [on|off|toggle]
 
   OPTS can be:
     -u   only try usb
@@ -51,8 +52,11 @@ sub main(@){
   my $dest = undef;
   my $sshCmd = undef;
   
-  if(@_ == 1 and ($_[0] eq '-t' or $_[0] eq '--tether')){
-    system "sudo sh -c '$tetherExec &'";
+  if((@_ == 1 or @_ == 2) and
+     ($_[0] eq '-t' or $_[0] eq '--tether') and
+     (@_ == 1 or $_[1] eq 'on' or $_[1] eq 'off' or $_[1] eq 'toggle')){
+    my $arg = @_ == 2 ? $_[1] : '';
+    system "sudo sh -c '$tetherExec $arg &'";
     exit 0;
   }
 
