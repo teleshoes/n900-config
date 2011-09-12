@@ -67,7 +67,11 @@ sub main(@){
   }
 
   if(@_ > 0 and ($_[0] eq '-s' or $_[0] eq '--ssh')){
-    $sshCmd = join ' ', @_[1..$#_];
+    $sshCmd = '';
+    for my $arg(@_[1..$#_]){
+      $arg =~ s/"/"\\""/g;
+      $sshCmd .= "\"$arg\" ";
+    }
   }elsif(@_ > 0){
     die $usage;
   }
@@ -79,7 +83,7 @@ sub main(@){
   }
   $dest = "$N900_HOSTNAME.local" if not defined $dest;
   if(defined $sshCmd){
-    system "ssh root\@$dest $sshCmd";
+    system 'ssh', "root\@$dest", $sshCmd;
   }else{
     print $dest;
   }
