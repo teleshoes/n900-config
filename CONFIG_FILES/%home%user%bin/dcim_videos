@@ -12,7 +12,7 @@ sub runcmd($){
   system $cmd;
 }
 
-my @exts = qw(mp4);
+my @exts = qw(mp4 flv);
 my $extRule = '';
 for(my $i=0; $i<@exts; $i++){
   $extRule .= ' -or ' if $i > 0;
