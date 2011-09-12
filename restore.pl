@@ -172,7 +172,7 @@ sub reorganize_dcim(){
       "root@`n900`:/home/user/MyDocs/DCIM";
   }
   if(ask 'make dcim video symlinks and rearrange on localhost?'){
-    system "/home/wolke/bin/dcim_videos /home/wolke/Desktop/N900/MyDocs";
+    system "\$HOME/bin/dcim_videos \$HOME/Desktop/N900/MyDocs";
   }
   if(ask 'make dcim video symlinks and rearrange on n900?'){
     system "ssh root@`n900` /home/user/bin/dcim_videos /home/user/MyDocs";
