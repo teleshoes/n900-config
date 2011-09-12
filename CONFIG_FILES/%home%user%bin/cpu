@@ -2,11 +2,13 @@
 use strict;
 use warnings;
 
-my $cmd = shift || '';
+my %magicArgs = (
+  'def' => ['ideal', 500, 950],
+  'pow' => ['starving', 250, 600],
+  'per' => ['lv', 1000, 1000],
+);
 
-if($cmd eq 'set' and @ARGV == 2){
-  system "kernel-config limits @ARGV";
-}elsif($cmd eq 'get' and @ARGV <= 1){
+if(@ARGV == 0){
   my $info = shift || 'format';
   my $out = `kernel-config show`;
   $out =~ /min\. frequency: ([0-9]+)/;
@@ -16,20 +18,80 @@ if($cmd eq 'set' and @ARGV == 2){
   $out =~ /current frequency: ([0-9]+)/;
   my $cur = $1;
 
-if($info eq 'min'){
-    print "min\n$min\n";
-  }elsif($info eq 'max'){
-    print "max\n$max\n";
-  }elsif($info eq 'cur' or $info eq 'current'){
-    print "cur\n$cur\n";
-  }elsif($info eq 'format'){
-    print "$cur ($min $max)\n";
-  }else{
-    die "Unknown item requested: $info";
+  print "$cur ($min $max)\n";
+  exit 0;
+}
+
+my $magic = $ARGV[0];
+if(@ARGV == 1 and defined $magicArgs{$magic}){
+  my ($profile, $min, $max) = @{$magicArgs{$magic}};
+  print "Setting $profile + [$min,$max]\n";
+  system "kernel-config load $profile";
+  system "kernel-config limits $min $max";
+  exit 0;
+}
+
+if($ARGV[0] eq '-h' or $ARGV[0] eq '--help'){
+  my $magicKeys = join ', ', keys %magicArgs;
+  my $magicUsage = "$0 [$magicKeys]";
+  for my $key(keys %magicArgs){
+    $magicUsage .= "\n     $key => " . join ', ', @{$magicArgs{$key}};
+  }
+  die "Usage:
+   $magicUsage
+   $0
+      Print 'CURRENT (MIN MAX)' in MHz
+   $0 profile
+      Applies profile {cannot be all digits}
+   $0 [profile] min_MHz max_MHz
+      Set cpu MHz limits to min_MHz and max_MHz.
+      Optionally applies [profile] first, which sets the voltage.
+   $0 [profile] min_max_MHz
+      Set min and max limits to the same value, min_max_MHz
+      Optionally applies [profile] first, which sets the voltage.
+
+   CPU power consumption (without constants)
+     = leakage + capacitance + switching
+     = voltage^2 + frequency + (voltage^2 * frequency)
+
+   CPU dynamic power consumption
+     = capacitance * frequency * voltage^2
+
+   kernel parameter per profile, where voltage = 0.6 + param*0.0125
+   FREQUENCY   Nokia   LV    ULV   XLV   ideal starving
+   0 MHz       30      30    25    30    30    22
+   125 MHz     30      30    25    20    30    22
+   250 MHz     38      38    25    30    30    28
+   500 MHz     48      48    33    33    30    29
+   550 MHz    *54*     48    38    38    33    32
+   600 MHz     60     *54*   38    38    38    34
+   700 MHz             54    45    45    45    41
+   750 MHz             54    45    45    45    42
+   810 MHz             54    48    48    48    45
+   850 MHz             54    48    48    48    46
+   900 MHz             54   *54*  *54*  *54*   49
+   950 MHz             54    54    54    54    52
+   1000 MHz            60    60    60    60   *55*
+   1100 MHz            72    72    72    72    63
+   1150 MHz            72    72    72    72    69
+   
+   *X* is the first over-volted frequency\n";
+}
+
+my $get = (@ARGV == 0) ? 1 : 0;
+my $profile = $ARGV[0] =~ /^\d+$/ ? '' : shift;
+my $min = @ARGV && $ARGV[0] =~ /^\d+$/ ? shift : 0;
+my $max = @ARGV && $ARGV[0] =~ /^\d+$/ ? shift : $min;
+
+if($get){
+}elsif($profile or $min or $max){
+  if($profile){
+    system "kernel-config load $profile";
+  }
+  
+  if($min or $max){
+    system "kernel-config limits $min $max";
   }
 }else{
-  die "Usage:
-   $0 set min_MHz MAX_MHz
-   $0 get [min|max|cur|current|format]
-     (defaults to 'format' if arg is missing)";
+
 }
