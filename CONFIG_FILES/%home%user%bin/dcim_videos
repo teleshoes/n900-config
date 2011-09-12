@@ -44,8 +44,11 @@ for my $file(@files){
     $file = $1;
     my $dir = $file;
     $dir =~ s/\/[^\/]*$//;
-    my $cmd = "mkdir -p '$DCIM_VIDEOS/$dir'";
-    runcmd $cmd;
+    my $cmd;
+    if(-d $dir){
+      $cmd = "mkdir -p '$DCIM_VIDEOS/$dir'";
+      runcmd $cmd;
+    }
 
     $cmd = "mv '$DCIM/$file' '$DCIM_VIDEOS/$dir'";
     runcmd $cmd;
