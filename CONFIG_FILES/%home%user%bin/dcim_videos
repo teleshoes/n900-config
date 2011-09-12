@@ -3,6 +3,7 @@ use strict;
 use warnings;
 
 my $myDocsDir = shift;
+die "Usage: $0 path_to_mydocs\n" if not defined $myDocsDir;
 chdir $myDocsDir;
 
 sub runcmd($){
@@ -11,6 +12,14 @@ sub runcmd($){
   system $cmd;
 }
 
+my @exts = qw(mp4);
+my $extRule = '';
+for(my $i=0; $i<@exts; $i++){
+  $extRule .= '-or ' if $i > 0;
+  $extRule .= "-name \\*.$exts[$i]";
+}
+$extRule = "\\( $extRule \\)" if $extRule;
+
 my $DCIM = 'DCIM';
 my $DCIM_VIDEOS = 'DCIM_VIDEOS';
 if(not -e $DCIM or not -e $DCIM_VIDEOS){
@@ -18,7 +27,7 @@ if(not -e $DCIM or not -e $DCIM_VIDEOS){
 }
 
 print "remove all symlinks\n";
-my @files = `find $DCIM -type l -name *.mp4`;
+my @files = `find $DCIM -type l $extRule`;
 for my $file(@files){
   chomp $file;
   $file =~ s/'/'\\''/g;
@@ -27,7 +36,7 @@ for my $file(@files){
 }
 
 print "move all the appropriate files to $DCIM_VIDEOS\n";
-@files = `find $DCIM -type f -name *.mp4`;
+@files = `find $DCIM -type f $extRule`;
 for my $file(@files){
   chomp $file;
   $file =~ s/'/'\\''/g;
@@ -44,7 +53,7 @@ for my $file(@files){
 }
 
 print "add new ones for all the ones in DCIM_VIDEOS\n";
-@files = `find $DCIM_VIDEOS -type f -name *.mp4`;
+@files = `find $DCIM_VIDEOS -type f $extRule`;
 for my $file(@files){
   chomp $file;
   $file =~ s/'/'\\''/g;
