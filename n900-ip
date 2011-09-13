@@ -56,7 +56,7 @@ sub main(@){
      ($_[0] eq '-t' or $_[0] eq '--tether') and
      (@_ == 1 or $_[1] eq 'on' or $_[1] eq 'off' or $_[1] eq 'toggle')){
     my $arg = @_ == 2 ? $_[1] : '';
-    system "sudo sh -c '$tetherExec $arg &'";
+    system "sudo -b $tetherExec $arg";
     exit 0;
   }
 
@@ -114,6 +114,7 @@ sub pcSuiteMode(){
     $ifconfig = `ifconfig $dev`;
     if($ifconfig !~ /inet addr:$USB_PC_IP/){
       system "sudo ifconfig $dev $USB_PC_IP netmask 255.255.255.0 up";
+      print STDERR "USB DEVICE UP\n";
     }
     return 1;
   }else{
