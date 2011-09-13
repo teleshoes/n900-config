@@ -13,8 +13,9 @@ if(($arg ne 'on' and $arg ne 'off' and $arg ne 'toggle') or @ARGV > 0){
 }
 
 
-if(not -e $DEV){
-  die "Device $DEV not found\n";
+if($arg ne 'off' and not -e $DEV){
+  print STDERR "Device $DEV not found:\nrunning $0 off instead of $0 $arg\n";
+  $arg = 'off';
 }
 
 if($arg eq 'toggle'){
