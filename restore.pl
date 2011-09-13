@@ -171,6 +171,11 @@ sub reorganize_dcim(){
       "../MyDocs/DCIM " .
       "root@`n900`:/home/user/MyDocs/DCIM";
   }
+  if(ask 'mv dcim_video files around on n900 to match localhost?'){
+    system "./utils/presync " .
+      "../MyDocs/DCIM_VIDEOS " .
+      "root@`n900`:/home/user/MyDocs/DCIM_VIDEOS";
+  }
   if(ask 'make dcim video symlinks and rearrange on localhost?'){
     system "\$HOME/bin/dcim_videos \$HOME/Desktop/N900/MyDocs";
   }
