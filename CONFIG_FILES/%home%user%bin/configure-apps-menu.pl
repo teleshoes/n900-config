@@ -9,7 +9,7 @@ worldclock mobilehotspot nokia-maps cavestory hildon-control-panel
 
 evince FBReader fennec osso_calculator osso_sketch
 osso-backup fapn gconf-editor maemoblocks chess_startup
-mahjong_startup osso_lmarbles ines drnoksnes
+mahjong_startup osso_lmarbles ines drnoksnes transmission
 );
 
 my $file = '/etc/xdg/menus/hildon.menu';
