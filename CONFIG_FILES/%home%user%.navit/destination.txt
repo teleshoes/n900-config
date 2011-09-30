@@ -1,0 +1,5 @@
+type=former_destination label="Albany"
+mg:-0xd0dfb3 0x54cfea
+type=former_destination label="Map Point"
+mg:-0x7c8590 0x4ba55b
+

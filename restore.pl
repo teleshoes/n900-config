@@ -277,13 +277,18 @@ sub apt_install_preferred(){
    openvpn ringtoned flashlight-applet pidgin-maemo-docklet
    personal-ip-address mplayer mediabox gstreamer0.10-flac
    libflac8 perl-modules make unzip ping ines drnoksnes
-   xmodmap ogg-support git-core nxengine claws-mail
+   xmodmap ogg-support git-core nxengine claws-mail transmission
   );
   print "Install preferred packges\n";
   if(ask 'apt-get update first?'){
     system "ssh root@`n900` apt-get update";
   }
   installPackages(\@packages);
+  my @navit = qw(
+    libfreetype6-navit navit navit-graphics-qt-qpainter navit-gui-qml gdb espeak
+  );
+  print "\nInstall navit (turn-by-turn directions using openstreetmap)?\n";
+  installPackages(\@navit);
 }
 
 sub apt_unblock_ovi(){
