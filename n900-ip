@@ -91,7 +91,7 @@ sub main(@){
   }elsif(not defined $dest){
     $dest = wireless();
   }
-  $dest = "$N900_HOSTNAME.local" if not defined $dest;
+  $dest = $N900_HOSTNAME if not defined $dest;
   if(defined $sshCmd){
     system 'ssh', "root\@$dest", $sshCmd;
   }else{
