@@ -4,7 +4,7 @@ use warnings;
 
 my $DEV = '/dev/ttyACM0';
 my $CONFIG = `echo -n \$HOME/Desktop/N900/config/utils/wvdial.conf`;
-my $resolvChooserExec = `echo -n \$HOME/bin/resolvchooser`;
+my $resolvChooserExec = 'resolvchooser';
 
 my $arg = shift;
 $arg = 'toggle' if not defined $arg;
@@ -27,7 +27,7 @@ if($arg eq 'toggle'){
 my $peerFile = '/etc/ppp/peers/wvdial';
 
 if($arg eq 'on'){
-  print "Turning tethering ON and NetworkManager OFF\n";
+  print "Turning tethering ON and wifi/NetworkManager OFF\n";
   my @lines = `cat $peerFile`;
   for my $line(@lines){
     $line =~ s/^usepeerdns\n?$//;
@@ -38,6 +38,7 @@ if($arg eq 'on'){
   system 'killall', '-9', 'pppd', 'wvdial';
   system "initctl stop network-manager";
   system "$resolvChooserExec default";
+  system "wdisconnect";
   system 'wvdial', '-C', $CONFIG;
 }elsif($arg eq 'off'){
   print "Turning tethering OFF and NetworkManager ON\n";
