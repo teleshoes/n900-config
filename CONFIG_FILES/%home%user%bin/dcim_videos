@@ -22,7 +22,7 @@ my @exts = qw(mp4 flv);
 my $extRule = '';
 for(my $i=0; $i<@exts; $i++){
   $extRule .= ' -or ' if $i > 0;
-  $extRule .= "-name \\*.$exts[$i]";
+  $extRule .= "-iname \\*.$exts[$i]";
 }
 $extRule = "\\( $extRule \\)" if $extRule;
 
