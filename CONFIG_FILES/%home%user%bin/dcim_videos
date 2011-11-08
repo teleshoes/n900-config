@@ -48,15 +48,17 @@ for my $file(@files){
   $file =~ s/'/'\\''/g;
   if($file =~ /^DCIM\/(.*)$/){
     $file = $1;
-    my $dir = $file;
-    $dir =~ s/\/[^\/]*$//;
+    my $dir = "DCIM_VIDEOS";
+    if($file =~ /^(.*)\//){
+      $dir = "$dir/$1";
+    }
     my $cmd;
-    if(-d $dir){
-      $cmd = "mkdir -p '$DCIM_VIDEOS/$dir'";
+    if(not -d $dir){
+      $cmd = "mkdir -p $dir";
       runcmd $cmd;
     }
 
-    $cmd = "mv '$DCIM/$file' '$DCIM_VIDEOS/$dir'";
+    $cmd = "mv '$DCIM/$file' '$dir/'";
     runcmd $cmd;
   }
 }
