@@ -1,0 +1,86 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $gDir = '/usr/bin/gnu';
+
+my $find = -x "$gDir/find" ? "$gDir/find" : 'find';
+my $ln = -x "$gDir/ln" ? "$gDir/ln" : 'ln';
+my $touch = -x "$gDir/touch" ? "$gDir/touch" : 'touch';
+
+my $myDocsDir = shift;
+die "Usage: $0 path_to_mydocs\n" if not defined $myDocsDir;
+chdir $myDocsDir;
+
+sub runcmd($){
+  my $cmd = shift;
+  print "$cmd\n";
+  system $cmd;
+}
+
+my @exts = qw(mp4 flv);
+my $extRule = '';
+for(my $i=0; $i<@exts; $i++){
+  $extRule .= ' -or ' if $i > 0;
+  $extRule .= "-iname \\*.$exts[$i]";
+}
+$extRule = "\\( $extRule \\)" if $extRule;
+
+my $DCIM = 'DCIM';
+my $DCIM_VIDEOS = 'DCIM_VIDEOS';
+if(not -e $DCIM or not -e $DCIM_VIDEOS){
+  die "could not find $DCIM or $DCIM_VIDEOS";
+}
+
+print "remove all symlinks\n";
+my @files = `$find $DCIM -type l $extRule`;
+for my $file(@files){
+  chomp $file;
+  $file =~ s/'/'\\''/g;
+  my $cmd = "rm '$file'";
+  runcmd $cmd;
+}
+
+print "move all the appropriate files to $DCIM_VIDEOS\n";
+@files = `$find $DCIM -type f $extRule`;
+for my $file(@files){
+  chomp $file;
+  $file =~ s/'/'\\''/g;
+  if($file =~ /^DCIM\/(.*)$/){
+    $file = $1;
+    my $dir = "DCIM_VIDEOS";
+    if($file =~ /^(.*)\//){
+      $dir = "$dir/$1";
+    }
+    my $cmd;
+    if(not -d $dir){
+      $cmd = "mkdir -p $dir";
+      runcmd $cmd;
+    }
+
+    $cmd = "mv '$DCIM/$file' '$dir/'";
+    runcmd $cmd;
+  }
+}
+
+print "add new ones for all the ones in DCIM_VIDEOS\n";
+@files = `$find $DCIM_VIDEOS -type f $extRule`;
+for my $file(@files){
+  chomp $file;
+  $file =~ s/'/'\\''/g;
+  if($file =~ /^$DCIM_VIDEOS\/(.*)$/){
+    $file = $1;
+    my $depth = 1;
+    while($file =~ /\//g){
+      $depth++;
+    }
+    my $cmd =
+      "$ln -s ".
+        "'" . ("../"x$depth) . "$DCIM_VIDEOS/$file' ".
+        "'$DCIM/$file'";
+    runcmd $cmd;
+
+    $cmd = "$touch $DCIM/$1 --reference=$DCIM_VIDEOS/$1 --no-dereference";
+    runcmd $cmd;
+  }
+}
