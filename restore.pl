@@ -14,7 +14,7 @@ use warnings;
 #E%text%
 #  large bodies of freetext
 
-my $DIR = '/home/wolke/Desktop/N900/config';
+my $DIR = '/home/wolke/Code/n900-config';
 chdir $DIR;
 
 ###############################
@@ -177,7 +177,7 @@ sub reorganize_dcim(){
       "root@`n900`:/home/user/MyDocs/DCIM_VIDEOS";
   }
   if(ask 'make dcim video symlinks and rearrange on localhost?'){
-    system "\$HOME/bin/dcim_videos \$HOME/Desktop/N900/MyDocs";
+    system "\$HOME/bin/dcim_videos $DIR/MyDocs";
   }
   if(ask 'make dcim video symlinks and rearrange on n900?'){
     system "ssh root@`n900` /home/user/bin/dcim_videos /home/user/MyDocs";
