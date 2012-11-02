@@ -14,7 +14,7 @@ use warnings;
 #E%text%
 #  large bodies of freetext
 
-my $DIR = '/home/wolke/Code/n900-config';
+my $DIR = '/home/wolke/Code/n900';
 chdir $DIR;
 
 ###############################
