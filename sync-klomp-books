@@ -1,0 +1,51 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+system "klomp-cmd playlist-main";
+system "n900u", "-s", "klomp-cmd playlist-main";
+
+sub modS($$){
+  my $file = shift;
+  my $remote = shift;
+  my $cmd = "stat -c %Y $file";
+  my $fs;
+  if($remote eq 'remote'){
+    $fs = `n900u -b "$cmd"`;
+  }elsif($remote eq 'local'){
+    $fs = `$cmd`;
+  }
+  if($fs =~ /^(\d+)/){
+    return $1;
+  }else{
+    return 0;
+  }
+}
+
+my $dir = "~/.klomplist-books";
+
+my $localCur = modS "$dir/.klompcur", "local";
+my $remoteCur = modS "$dir/.klompcur", "remote";
+my $localList = modS "$dir/.klomplist", "local";
+my $remoteList = modS "$dir/.klomplist", "remote";
+
+print "        cur                        list\n";
+print "loc: " . localtime($localCur) . "   " . localtime($localList) . "\n";
+print "rem: " . localtime($remoteCur) . "   " . localtime($remoteList) . "\n";
+
+system "mkdir -p $dir";
+system "n900u", "-b", "mkdir -p $dir";
+
+if($localCur < $remoteCur and $localList <= $remoteList){
+  print "remote => local\n";
+  system "rsync -avP user@`n900`:$dir/ $dir";
+  print "books on local\n";
+  system "klomp-cmd", "playlist", "books";
+}elsif($localCur > $remoteCur and $localList >= $remoteList){
+  print "local => remote\n";
+  system "rsync -avP $dir/ user@`n900`:$dir";
+  print "books on remote\n";
+  system "n900u", "-b", "klomp-cmd", "playlist", "books";
+}else{
+  print "not updating\n";
+}

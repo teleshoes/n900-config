@@ -1,0 +1,28 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $depsDir = "$ENV{HOME}/Code/n900/klomp";
+my $gitRepo = "git://github.com/teleshoes/klomp.git";
+
+sub run(@){
+  print "@_\n";
+  system @_;
+}
+
+run "scp $depsDir/.klomplib user\@`n900`:/home/user";
+
+run "n900", "-b", "
+  if [ -e /root/klomp ]; then
+    echo updating klomp git repo
+    cd /root/klomp
+    git pull
+  else
+    echo fetching klomp git repo
+    cd /root
+    git clone $gitRepo
+  fi
+  echo running klomp install
+  cd /root/klomp
+  ./install.pl /usr
+";
