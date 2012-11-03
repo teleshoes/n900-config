@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 system "klomp-cmd playlist-main";
-system "n900u", "-s", "klomp-cmd playlist-main";
+system "n900u", "-b", "klomp-cmd playlist-main";
 
 sub modS($$){
   my $file = shift;
