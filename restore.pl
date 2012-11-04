@@ -262,6 +262,7 @@ sub apt_install_crucial(){
    openssh kernel-power-settings bash vim
    diffutils-gnu findutils-gnu grep-gnu rsync wget
    coreutils-gnu tar-gnu python-location
+   busybox-power
   );
   print "Install crucial packages?\n";
   print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
