@@ -543,6 +543,14 @@ sub xterm_virtual_kb(){
 }
 
 sub configure_hildon(){
+  my $uiRotate = 'false';
+  my $desktopRotateLocked= 'true';
+  print "rotate => $uiRotate,  desktop locked => $desktopRotateLocked\n";
+  system "ssh root@`n900` gconftool-2 -s -t bool " .
+    "/apps/osso/hildon-desktop/ui_can_rotate $uiRotate";
+  system "ssh root@`n900` gconftool-2 -s -t bool " .
+    "/apps/osso/hildon-desktop/desktop_orientation_lock $desktopRotateLocked";
+
   if(ask 'Overwrite and reorganize apps menu?'){
     system "ssh root@`n900` pseudo configure-apps-menu.pl";
   }
