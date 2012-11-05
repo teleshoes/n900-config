@@ -54,8 +54,6 @@ my @utils = (
   '05' => '3' => 'apt_install_crucial',
   '08' => '4' => 'apt_upgrade',
   '09' => '5' => 'apt_install_preferred',
-  '10' => '6' => 'apt_unblock_ovi (apt)',
-  '11' => '7' => 'apt_install_blocked_ovi',
   '12' => '8' => 'install_others',
 'header' => "Copy Files/Settings:",
   '06' => 'a' => 'config_files',
@@ -292,27 +290,6 @@ sub apt_install_preferred(){
   );
   print "\nInstall navit (turn-by-turn directions using openstreetmap)?\n";
   installPackages(\@navit);
-}
-
-sub apt_unblock_ovi(){
-  if(ask 'remove mp-fremantle-002-pr and install old apt?'){
-    system "scp ./packages/apt_*_armel.deb root@`n900`:/home/user";
-    system "ssh root@`n900` apt-get remove mp-fremantle-002-pr";
-    system "ssh root@`n900` dpkg -i /home/user/apt_*_armel.deb";
-    system "ssh root@`n900` rm /home/user/apt_*_armel.deb";
-  }
-}
-
-sub apt_install_blocked_ovi(){
-  my $ovi_packages =
-  print "\n\nOvi packages:\n$ovi_packages";
-  print "\nMAY HANG during install: will prompt for autofix";
-  if(ask 'install packages blocked by ovi-store crippled apt?'){
-    system "ssh root@`n900` apt-get install $ovi_packages";
-    if(ask '  wanna pkill apt-get; dpkg --configure -a?'){
-      system "ssh root@`n900` 'pkill apt-get; dpkg --configure -a'";
-    }
-  }
 }
 
 sub installDebsFromLocal(@){
