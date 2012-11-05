@@ -1,0 +1,13 @@
+#name:default-or-empty:library-path:flacmirror-path
+1:default:/media/n900/Music/1:/media/n900/Music/flacmirrors/1
+2:default:/media/n900/Music/2:/media/n900/Music/flacmirrors/2
+3:default:/media/n900/Music/3:/media/n900/Music/flacmirrors/3
+4:default:/media/n900/Music/4:/media/n900/Music/flacmirrors/4
+5:default:/media/n900/Music/5:/media/n900/Music/flacmirrors/5
+6:default:/media/n900/Music/6:/media/n900/Music/flacmirrors/6
+b::/media/n900/Music/b:/media/n900/Music/flacmirrors/b
+#7:default:/media/n900/Music/7:/media/n900/Music/flacmirrors/7
+#8:default:/media/n900/Music/8:/media/n900/Music/flacmirrors/8
+#books::/media/n900/Music/books:/media/n900/Music/flacmirrors/books
+#noshuffle::/media/n900/Music/NoShuffle:/media/n900/Music/flacmirrors/NoShuffle
+#emily::/media/n900/Music/Emily:
