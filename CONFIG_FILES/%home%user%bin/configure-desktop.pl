@@ -23,9 +23,21 @@ my @shortcutGrids = @{$config[2]};
 my @applets = @{$config[3]};
 my @dce_instances = @{$config[4]};
 
-
+sub klompCmd($){
+  return "udo klomp-cmd @_ 1>dev/null 2>/dev/null &";
+}
 
 my @dce_cmds = (
+  ['klomp_pause'  => '||'            => klompCmd('pause')],
+  ['klomp_next'   => '>|'            => klompCmd('next')],
+  ['klomp_prev'   => '|<'            => klompCmd('prev')],
+  ['klomp_fwd10'  => '>>'            => klompCmd('seek 10')],
+  ['klomp_bwd10'  => '<<'            => klompCmd('seek -10')],
+  ['klomp_fwd60'  => '>>>'           => klompCmd('seek 60')],
+  ['klomp_bwd60'  => '<<<'           => klompCmd('seek -60')],
+  ['klomp_books'  => '[=]'           => klompCmd('playlist books')],
+
+
   ['cpu_fast'     => 'CPU\\nfast'    => 'udo cpu set 500 1000|echo'],
   ['cpu_slow'     => 'CPU\\nslow'    => 'udo cpu set 250 600|echo'],
   ['cpu_current'  => 'CPU cur freq'  => 'udo cpu get cur'],
