@@ -273,6 +273,7 @@ sub apt_install_crucial(){
 
 sub apt_install_preferred(){
   my @packages = qw(
+   fennec
    mobilehotspot simple-brightness-applet fbreader
    fmms wifi-switcher pidgin fapn shortcutd systeminfowidget evince
    openvpn ringtoned flashlight-applet pidgin-maemo-docklet
@@ -304,7 +305,6 @@ sub apt_unblock_ovi(){
 
 sub apt_install_blocked_ovi(){
   my $ovi_packages =
-   'fennec';
   print "\n\nOvi packages:\n$ovi_packages";
   print "\nMAY HANG during install: will prompt for autofix";
   if(ask 'install packages blocked by ovi-store crippled apt?'){
