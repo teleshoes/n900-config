@@ -1,0 +1,25 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my %dirs = (
+  "/usr/share/locale" => "/opt/locale",
+);
+
+for my $dir(keys %dirs){
+  my $optDir = $dirs{$dir};
+  system "n900", "-s", "
+    if [ -L $dir ]; then
+      echo '  '$dir is already optified
+    else
+      mkdir -p $optDir
+      rsync -avP --del $dir/ $optDir
+      if [ \$? != 0 ]; then
+        echo FAILED to rsync $dir to $optDir
+        exit 0
+      fi
+      rm -rf $dir
+      ln -s $optDir $dir
+    fi
+  ";
+}
