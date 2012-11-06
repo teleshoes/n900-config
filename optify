@@ -3,10 +3,13 @@ use strict;
 use warnings;
 
 my %dirs = (
-  "/usr/lib/git-core" => "/opt/git-core-lib",
   "/usr/lib/locale" => "/opt/locale-lib",
   "/usr/share/locale" => "/opt/locale-share",
+
   "/usr/share/microb-engine" => "/opt/microb-engine",
+
+  "/usr/lib/git-core" => "/opt/git-core-lib",
+
 );
 
 for my $dir(keys %dirs){
