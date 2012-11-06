@@ -55,6 +55,7 @@ my @utils = (
   '08' => '4' => 'apt_upgrade',
   '09' => '5' => 'apt_install_preferred',
   '10' => '6' => 'install_others',
+  'xx' => '7' => 'apt_remove_bad_packages',
 'header' => "Copy Files/Settings:",
   '06' => 'a' => 'config_files',
   '07' => 's' => 'root_symlinks',
@@ -269,6 +270,10 @@ sub apt_install_crucial(){
   installPackages(\@packages);
 }
 
+sub apt_remove_bad_packages(){
+  my @pkgs = "tutorial-home-applet";
+  system "n900", "-s", "apt-get remove @pkgs";
+}
 sub apt_install_preferred(){
   my @packages = qw(
    fennec task-swapper swappolube-nogui
