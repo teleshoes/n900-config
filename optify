@@ -5,6 +5,7 @@ use warnings;
 my %dirs = (
   "/usr/lib/git-core" => "/opt/git-core-lib",
   "/usr/share/locale" => "/opt/locale",
+  "/usr/share/microb-engine" => "/opt/microb-engine",
 );
 
 for my $dir(keys %dirs){
