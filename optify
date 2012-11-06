@@ -6,6 +6,7 @@ my %dirs = (
   "/usr/lib/locale" => "/opt/locale-lib",
   "/usr/share/locale" => "/opt/locale-share",
 
+  "/usr/share/nokia-maps" => "/opt/nokia-maps",
   "/usr/share/microb-engine" => "/opt/microb-engine",
 
   "/usr/lib/git-core" => "/opt/git-core-lib",
