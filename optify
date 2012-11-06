@@ -9,6 +9,7 @@ my %dirs = (
   "/usr/share/nokia-maps" => "/opt/nokia-maps",
   "/usr/share/microb-engine" => "/opt/microb-engine",
 
+  "/usr/lib/browser/plugins" => "/opt/browser-plugins",
   "/usr/lib/git-core" => "/opt/git-core-lib",
 
 );
