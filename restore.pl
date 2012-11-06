@@ -271,7 +271,7 @@ sub apt_install_crucial(){
 
 sub apt_install_preferred(){
   my @packages = qw(
-   fennec
+   fennec task-swapper
    mobilehotspot simple-brightness-applet fbreader
    fmms wifi-switcher pidgin fapn shortcutd systeminfowidget evince
    openvpn ringtoned flashlight-applet pidgin-maemo-docklet
