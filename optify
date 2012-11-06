@@ -2,6 +2,8 @@
 use strict;
 use warnings;
 
+my $perlLib = "/usr/share/perl/5.10";
+
 my %dirs = (
   "/usr/lib/locale" => "/opt/locale-lib",
   "/usr/share/locale" => "/opt/locale-share",
@@ -12,6 +14,12 @@ my %dirs = (
   "/usr/lib/browser/plugins" => "/opt/browser-plugins",
   "/usr/lib/git-core" => "/opt/git-core-lib",
 
+  "$perlLib/unicore" => "/opt/perl-unicore",
+  "$perlLib/Unicode" => "/opt/perl-Unicode",
+  "$perlLib/Pod" => "/opt/perl-Pod",
+  "$perlLib/ExtUtils" => "/opt/perl-ExtUtils",
+  "$perlLib/CPANPLUS" => "/opt/perl-CPANPLUS",
+  "$perlLib/Math" => "/opt/perl-Math",
 );
 
 for my $dir(keys %dirs){
