@@ -338,12 +338,6 @@ sub install_others(){
       "ln -s /usr/bin/g++-4.2 /usr/bin/g++; " .
       "'";
   }
-
-  installDebsFromLocal(
-    "maemo-select-menu-location*.deb",
-    "gconf-editor*.deb",
-  );
-
   installDebsFromLocal("fcron_*_armel_opt.deb");
   if(ask 'setup fcron?'){
     system "ssh root@`n900` '".
@@ -355,12 +349,6 @@ sub install_others(){
       "fcrontab /etc/fcrontab; " .
       "'";
   }
-
-  installDebsFromLocal(
-    "curl_*_armel.deb",
-    "libcurl3_*_armel.deb",
-    "libssl0.9.7_*_armel.deb",
-  );
 
   installDebsFromLocal("unison_*_armel.deb");
 
