@@ -1,39 +1,7 @@
 #!/usr/bin/perl
-#######################################################################
-# Twip Client (TWitter IP utility - client)
-# Interfaces with twip main script
-# Performs caching and identification of IP via preshared ssh key
-# Intended to be used by the client for accessing their server remotely
-#
-# Twip is for sending and retrieving IP addresses to/from twitter.
-# Intended to serve as a makeshift replacement for dynamic DNS
-#
-# Encrypts IPs weakly using OpenPGP `gpg'
-# Sends data using the Twitter API through Net::Twitter
-#
-# Copyright (c) 2010 Elliot Wolk
-#
-# Essentially a wrapper around Net::Twitter, which is:
-#   Copyright (c) 2009 Marc Mims
-#
-# The Twitter API itself is:
-#   Copyright (c) 2009 Twitter
-#
-# This script is licensed under GNU GPL version 3.0 or above
-#######################################################################
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#######################################################################
+# twipc: TWitter IP Client (this file is part of Twip)
+# Copyright 2010,2012 Elliot Wolk
+# License: GNU GPL version 3 or any later version
 use strict;
 use warnings;
 use Getopt::Long;
@@ -48,17 +16,21 @@ my $CACHE_LINE_REGEX = qr/^ (\d+\. \d+\. \d+\. \d+) \t (.*) \n? $/x;
 
 my $usage =
 "Usage: $0 [options..]
+  Read and decrypt IP from twitter using OAUTH and twitter api
+    {or parsing http with wget if Net::Twitter::Lite is missing}
+  Caches the ip
 Options:
  --file    Use this cache file
            Defaults to ~/.twipcache
  --entries Maximum number of entries allowed in cache
            Defaults to 20
+ --test    If an IP is found in the cache, test it with ssh.
+           If --test isnt specified, the cache is assumed correct.
  --timeout The length of time to wait in seconds before failing IP test
            Defaults to 2 seconds
- --notest  Assume the IP in the cache is identified as your server
-           {allows client to run their own test}
- --fetch   Ignore cache hits; always fetch a new ip and add it to the cache
- --nocache Do not cache the results. Implies --fetch
+ --fetch   Do not read from the cache, nor run any tests
+           Always fetch a new ip {OAUTH or wget}, and add it to the cache
+ --nocache Do not read from nor write to the cache. Implies --fetch
  -s/--ssh  take the user passed in and ssh to the ip returned
            \"$0 --ssh root\"
              is essentially the same as
@@ -76,13 +48,13 @@ e.g.:
 124.141.12.12 Sun Aug 22 14:45:36 EDT 2010
 ";
 
-my ($file, $entries, $timeout, $notest, $fetch,
+my ($file, $entries, $timeout, $test, $fetch,
     $nocache, $ssh_user, $verbose, $help);
 my $result = GetOptions(
   "file=s"    => \$file,
   "entries=i" => \$entries,
   "timeout=i" => \$timeout,
-  "notest"    => \$notest,
+  "test"      => \$test,
   "fetch"     => \$fetch,
   "nocache"   => \$nocache,
   "s|ssh:s"   => \$ssh_user,
@@ -116,6 +88,16 @@ if(defined $ssh_user){
   print "$ip\n";
 }
 
+sub fetch(){
+  my $twitterLib = eval { require Net::Twitter::Lite };
+  if($twitterLib){
+    print "getting IP with OAUTH\n" if $verbose;
+    return `twip --get`;
+  }else{
+    print "fetching IP with wget\n" if $verbose;
+    return `twip --fetch`;
+  }
+}
 
 
 sub testIP($){
@@ -202,7 +184,7 @@ sub get_ip($){
     print "Cache is empty/unused\n" if $verbose;
   }
 
-  if(not $notest and
+  if($test and
      not $fetch and
      defined $ip_cache and
      not testIP $ip_cache
@@ -217,7 +199,7 @@ sub get_ip($){
     $ip = $ip_cache;
   }else{
     print "Fetching new ip\n" if $verbose;
-    $ip_cache = `twip -g`;
+    $ip_cache = fetch();
     chomp $ip_cache;
     print "Fetched $ip_cache\n" if $verbose;
     $date_cache = `date`;
