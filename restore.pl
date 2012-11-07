@@ -298,22 +298,6 @@ sub apt_install_preferred(){
   installPackages(\@navit);
 }
 
-sub installDebsFromLocal(@){
-  if(ask "install @_\n from locally stored debs {in ./packages}?"){
-    for my $debFile(@_){
-      my $realDeb = $debFile;
-      $realDeb = `cd ./packages; ls $realDeb`;
-      chomp $realDeb;
-      $realDeb =~ s/'/'\\''/g;
-      $realDeb = "'$realDeb'";
-      print "installing $realDeb\n";
-      system "scp ./packages/$realDeb root@`n900`:/opt";
-      system "ssh root@`n900` dpkg -i /opt/$realDeb";
-      system "ssh root@`n900` rm /opt/$realDeb";
-    }
-  }
-}
-
 sub install_others(){
   if(ask 'install gcc-4.2 & g++-4.2 from SDK repo {disabled after}, and add links?'){
     system "ssh root@`n900` '" .
@@ -327,22 +311,6 @@ sub install_others(){
       "ln -s /usr/bin/gcc-4.2 /usr/bin/cc; " .
       "ln -s /usr/bin/g++-4.2 /usr/bin/g++; " .
       "'";
-  }
-  if(ask 'optify cpan?'){
-    system "ssh root@`n900` '" .
-      "cp -ar /root/.cpan /opt/.cpan; " .
-      "rm -rf /root/.cpan; " .
-      "mkdir -p /opt/.cpan; " .
-      "ln -s /opt/.cpan /root/.cpan; " .
-      "'";
-  }
-
-  if(ask 'cpan upgrade?'){
-    my $cmd = "ssh root@`n900` 'cpan Bundle::CPAN; cpan -u'";
-    system $cmd;
-    if(ask '  if it failed, trying again might work. try again?'){
-      system $cmd;
-    }
   }
 }
 
