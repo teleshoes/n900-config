@@ -352,18 +352,6 @@ sub install_others(){
       system $cmd;
     }
   }
-
-  if(ask 'install Net::Twitter perl module through cpan?'){
-    my $cmd = "ssh root@`n900` 'cpan " .
-      "Params::Validate DateTime::Locale DateTime " .
-      "DateTime::Format::Strptime " .
-      "Net::Twitter" .
-      "'";
-    system $cmd;
-    if(ask '  if it failed, trying again might work. try again?'){
-      system $cmd;
-    }
-  }
 }
 
 
