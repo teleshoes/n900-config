@@ -276,7 +276,7 @@ sub apt_remove_bad_packages(){
 }
 sub apt_install_preferred(){
   my @packages = qw(
-   fennec task-swapper swappolube-nogui
+   fennec task-swapper swappolube-nogui x11vnc
    mobilehotspot simple-brightness-applet fbreader
    fmms wifi-switcher pidgin fapn shortcutd systeminfowidget evince
    openvpn ringtoned flashlight-applet pidgin-maemo-docklet
