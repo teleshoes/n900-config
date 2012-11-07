@@ -328,20 +328,6 @@ sub install_others(){
       "ln -s /usr/bin/g++-4.2 /usr/bin/g++; " .
       "'";
   }
-  installDebsFromLocal("fcron_*_armel_opt.deb");
-  if(ask 'setup fcron?'){
-    system "ssh root@`n900` '".
-      "useradd fcron; " .
-      "chown root:fcron /etc/fcron.*; " .
-      "chmod 644 /etc/fcron.*; " .
-      "chown -R fcron:fcron /var/spool/fcron; " .
-      "/etc/init.d/fcron start; " .
-      "fcrontab /etc/fcrontab; " .
-      "'";
-  }
-
-  installDebsFromLocal("unison_*_armel.deb");
-
   if(ask 'optify cpan?'){
     system "ssh root@`n900` '" .
       "cp -ar /root/.cpan /opt/.cpan; " .
