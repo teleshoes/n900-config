@@ -276,7 +276,7 @@ sub apt_remove_bad_packages(){
 }
 sub apt_install_preferred(){
   my @packages = qw(
-   curl gconf-editor
+   curl gconf-editor libterm-readkey-perl
    fennec task-swapper swappolube-nogui x11vnc
    mobilehotspot simple-brightness-applet fbreader
    fmms wifi-switcher pidgin fapn shortcutd systeminfowidget evince
@@ -339,14 +339,6 @@ sub install_others(){
 
   if(ask 'cpan upgrade?'){
     my $cmd = "ssh root@`n900` 'cpan Bundle::CPAN; cpan -u'";
-    system $cmd;
-    if(ask '  if it failed, trying again might work. try again?'){
-      system $cmd;
-    }
-  }
-
-  if(ask 'install Term::ReadKey perl module through cpan?'){
-    my $cmd = "ssh root@`n900` 'cpan Term::ReadKey'";
     system $cmd;
     if(ask '  if it failed, trying again might work. try again?'){
       system $cmd;
