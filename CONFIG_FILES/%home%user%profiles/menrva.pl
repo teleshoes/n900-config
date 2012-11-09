@@ -38,6 +38,7 @@ my $appdir = '/usr/share/applications/hildon-home/';
 my @applets = (
   [1, 633, 344, "system_info", $gcdir, $appdir],
   [1, 633, 444, "personal-ip-address", $gcdir, $appdir],
+  [1, 572, 304, "bluezwitch", $gcdir, $appdir],
 );
 
 #title, width, height, display-title =>
