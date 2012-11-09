@@ -1,0 +1,76 @@
+#!/usr/bin/perl
+#Copyright 2012 Elliot Wolk
+#License: GNU GENERAL PUBLIC LICENSE v3 or later, at your choice
+use strict;
+use warnings;
+
+my $usage = "Usage:
+  $0 or $0 [-t|--toggle|toggle]
+    simulates pushing the power-button
+  $0 [-g|--get|get]
+    prints locked or unlocked, or exits with error code
+    determined by dbus method com.nokia.mce.request.get_tklock_mode
+  $0 [-l|--lock|lock]
+    if 'get' returns unlocked, simulates pushing the power-button
+  $0 [-u|--unlock|unlock]
+    if 'get' returns locked, simulates pushing the power-button
+";
+
+sub getLock(){
+  my @cmd = qw(dbus-send
+    --system
+    --print-reply
+    --type=method_call
+    --dest=com.nokia.mce
+    /com/nokia/mce/request
+    com.nokia.mce.request.get_tklock_mode
+  );
+
+  my $tklockMode = `@cmd`;
+  if($tklockMode =~ /string "(locked|unlocked)"/){
+    return $1;
+  }else{
+    die "Error- couldnt understand dbus reply '$tklockMode'\n";
+  } 
+}
+
+sub powerButton(){
+  my $EVENT_POWER_KEY='\x74\x00';
+  my $POWERBUTTON_EVENT_FILE='/dev/input/pwrbutton';
+  my $EVENT_TIMESTAMP='\x48\x67\x98\x45\x5f\x16\x0b\x00';
+  my $EVENT_KEY_TYPE='\x01\x00';
+  my $EVENT_PRESS_VALUE='\x01\x00\x00\x00';
+  my $EVENT_RELEASE_VALUE='\x00\x00\x00\x00';
+
+  my $bytes = join '', (
+    $EVENT_TIMESTAMP,
+    $EVENT_KEY_TYPE,
+    $EVENT_POWER_KEY,
+    $EVENT_PRESS_VALUE,
+    $EVENT_TIMESTAMP,
+    $EVENT_KEY_TYPE,
+    $EVENT_POWER_KEY,
+    $EVENT_RELEASE_VALUE,
+  );
+
+  system "printf \"$bytes\" > $POWERBUTTON_EVENT_FILE";
+}
+
+sub main(@){
+  my $arg = shift;
+  $arg = '--toggle' if not defined $arg;
+  die $usage if @_ > 0;
+  if($arg =~ /^(-t|--toggle|toggle)$/){
+    powerButton;
+  }elsif($arg =~ /^(-l|--lock|lock)$/){
+    powerButton if getLock eq 'unlocked';
+  }elsif($arg =~ /^(-u|--unlock|unlock)$/){
+    powerButton if getLock eq 'locked';
+  }elsif($arg =~ /^(-g|--get|get)$/){
+    print getLock() . "\n";
+  }else{
+    die $usage;
+  }
+}
+
+&main(@ARGV);
