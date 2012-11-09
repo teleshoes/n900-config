@@ -2,62 +2,29 @@
 use strict;
 use warnings;
 
-my @jobs = qw(
-  xsession/applauncherd
-  xsession/applifed
-  xsession/conndlgs
-  xsession/sysuid
-);
+my @jobs = qw();
 
 my @packagesToRemove = qw(
-  wxapp apnews realgolf2011 gof2 nfsshift
-  angrybirdsfreemagic
-  ovi-music-store morpheus morpheus-guard
-
-  mp-harmattan-001-pr
-  facebook facebookqml libqt-facebook facebook-meego twitter twitter-qml
 );
 
 my %pkgGroups = (
   '1' => [qw(
-    bash vim rsync wget git openvpn
-  )],
-  '2' => [qw(
-    perl bash-completion python python-apt
-    htop
-    mcetools bzip2 sqlite3
-    x11-utils xresponse
-    meecast
-    xmimd
-    imagemagick
-    libterm-readkey-perl
-    python-pyside.qtgui python-qmsystem python-pyside.qtdeclarative
-    python-qtmobility.multimediakit
-  )],
-  '3' => [qw(
-    linux-kernel-headers
-    gcc make
-    curl
-    screen
-  )],
-  '4' => [qw(
-    qtodo brujula dropcache-mdn
   )],
 );
 
 my $repoDir = 'repos';
 my $debDir = 'debs-custom';
 my $debDestPrefix = '/opt';
-my $env = 'AEGIS_FIXED_ORIGIN=com.nokia.maemo';
+my $env = '';
 
 sub runPhone(@){
-  system "n9", "-s", @_;
+  system "n900", "-s", @_;
 }
 sub readProcPhone(@){
-  return `n9 -s @_`;
+  return `n900 -s @_`;
 }
 sub host(){
-  my $host = `n9`;
+  my $host = `n900`;
   chomp $host;
   return $host;
 }
@@ -209,13 +176,6 @@ sub installDebs(){
   print "\n\nSyncing $debDestPrefix/$debDir to $debDestPrefix on dest:\n";
   my $host = host();
   system "rsync $debDir root\@$host:$debDestPrefix -av --progress --delete";
-
-  my $mtToggles = `cd $debDir; ls */mt-toggles*.deb`;
-  my $systemUi = `cd $debDir; ls */system-ui*.deb`;
-  if(not isAlreadyInstalled "$debDir/$mtToggles"){
-    print "mt-toggles isnt installed, so reinstalling system-ui\n";
-    runPhone "$env dpkg -i $debDestPrefix/$debDir/$systemUi";
-  }
 
   my $count = 0;
   print "\n\nChecking installed versions\n";
