@@ -39,9 +39,11 @@ my $env = '';
 
 sub runPhone(@){
   system "n900", "-s", @_;
+  die "error running 'n900 -s @_'\n" if $? != 0;
 }
 sub readProcPhone(@){
   return `n900 -s @_`;
+  die "error running 'n900 -s @_'\n" if $? != 0;
 }
 sub host(){
   my $host = `n900`;
