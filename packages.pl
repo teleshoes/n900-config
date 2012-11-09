@@ -153,8 +153,10 @@ sub removePackages(){
   print "\n\nInstalling the deps for removed packages to unmarkauto\n";
   my %deps;
   for my $line(readProcPhone "apt-cache depends @packagesToRemove"){
-    if($line =~ /  Depends: (.*)/){
-      $deps{$1} = 1;
+    if($line =~ /  Depends: ([^<>]*)/){
+      my $pkg = $1;
+      chomp $pkg;
+      $deps{$pkg} = 1;
     }
   }
   for my $pkg(@packagesToRemove){
