@@ -7,7 +7,7 @@ my $hostName = "wolke-n900";
 my $DIR = '/opt/CONFIG_FILES';
 my $user = 'user';
 my $group = 'users';
-my $binTarget = '/usr/bin';
+my $binTarget = '/usr/local/bin';
 
 my @rsyncOpts = qw(
   -a  --no-owner --no-group
