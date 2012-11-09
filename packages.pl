@@ -24,7 +24,7 @@ my %pkgGroups = (
     personal-ip-address mplayer mediabox gstreamer0.10-flac
     libflac8 perl-modules make unzip ping ines drnoksnes
     xmodmap ogg-support git-core nxengine claws-mail transmission
-    less
+    less bluezwitch
   )],
   '3navit' => [qw(
     libfreetype6-navit navit navit-graphics-qt-qpainter navit-gui-qml
