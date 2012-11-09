@@ -31,7 +31,7 @@ my %pkgGroups = (
     mplayer mediabox
     gstreamer0.10-flac libflac8 ogg-support
 
-    systeminfowidget personal-ip-address bluezwitch
+    desktop-cmd-exec systeminfowidget personal-ip-address bluezwitch
     flashlight-applet simple-brightness-applet wifi-switcher
     shortcutd ringtoned
   )],
