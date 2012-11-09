@@ -34,26 +34,16 @@ sub getLock(){
   } 
 }
 
-sub powerButton(){
-  my $EVENT_POWER_KEY='\x74\x00';
-  my $POWERBUTTON_EVENT_FILE='/dev/input/pwrbutton';
-  my $EVENT_TIMESTAMP='\x48\x67\x98\x45\x5f\x16\x0b\x00';
-  my $EVENT_KEY_TYPE='\x01\x00';
-  my $EVENT_PRESS_VALUE='\x01\x00\x00\x00';
-  my $EVENT_RELEASE_VALUE='\x00\x00\x00\x00';
-
-  my $bytes = join '', (
-    $EVENT_TIMESTAMP,
-    $EVENT_KEY_TYPE,
-    $EVENT_POWER_KEY,
-    $EVENT_PRESS_VALUE,
-    $EVENT_TIMESTAMP,
-    $EVENT_KEY_TYPE,
-    $EVENT_POWER_KEY,
-    $EVENT_RELEASE_VALUE,
+sub tklock($){
+  my $arg = shift;
+  my @cmd = qw(dbus-send
+    --system
+    --type=method_call
+    --dest=com.nokia.mce
+    /com/nokia/mce/request
+    com.nokia.mce.request.req_tklock_mode_change
   );
-
-  system "printf \"$bytes\" > $POWERBUTTON_EVENT_FILE";
+  system @cmd, "string:$arg";
 }
 
 sub main(@){
@@ -61,11 +51,11 @@ sub main(@){
   $arg = '--toggle' if not defined $arg;
   die $usage if @_ > 0;
   if($arg =~ /^(-t|--toggle|toggle)$/){
-    powerButton;
+    tklock (getLock eq 'locked' ? 'unlocked' : 'locked');
   }elsif($arg =~ /^(-l|--lock|lock)$/){
-    powerButton if getLock eq 'unlocked';
+    tklock 'locked';
   }elsif($arg =~ /^(-u|--unlock|unlock)$/){
-    powerButton if getLock eq 'locked';
+    tklock 'unlocked';
   }elsif($arg =~ /^(-g|--get|get)$/){
     print getLock() . "\n";
   }else{
