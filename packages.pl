@@ -16,15 +16,24 @@ my %pkgGroups = (
     busybox-power
   )],
   '2' => [qw(
-    curl gconf-editor libterm-readkey-perl
-    fennec task-swapper swappolube-nogui x11vnc
-    mobilehotspot simple-brightness-applet fbreader
-    fmms wifi-switcher pidgin fapn shortcutd systeminfowidget evince
-    openvpn ringtoned flashlight-applet pidgin-maemo-docklet
-    personal-ip-address mplayer mediabox gstreamer0.10-flac
-    libflac8 perl-modules make unzip ping ines drnoksnes
-    xmodmap ogg-support git-core nxengine claws-mail transmission
-    less bluezwitch
+    x11vnc ping curl openvpn git-core perl-modules make unzip less
+    libterm-readkey-perl xmodmap
+
+    swappolube-nogui
+
+    mobilehotspot fmms fapn
+    pidgin pidgin-maemo-docklet fennec transmission claws-mail
+    fbreader evince
+    gconf-editor task-swapper
+
+    ines drnoksnes nxengine
+
+    mplayer mediabox
+    gstreamer0.10-flac libflac8 ogg-support
+
+    systeminfowidget personal-ip-address bluezwitch
+    flashlight-applet simple-brightness-applet wifi-switcher
+    shortcutd ringtoned
   )],
   '3navit' => [qw(
     libfreetype6-navit navit navit-graphics-qt-qpainter navit-gui-qml
