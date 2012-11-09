@@ -50,7 +50,6 @@ my @utils = (
 'header' => "Install Packages:",
   '10' => '6' => 'install_others',
 'header' => "Copy Files/Settings:",
-  '06' => 'a' => 'config_files',
   '07' => 's' => 'root_symlinks',
   '13' => 'd' => 'sync_mydocs',
   '17' => 'f' => 'default_cpu_limits',
@@ -217,15 +216,6 @@ sub install_others(){
   }
 }
 
-
-sub config_files(){
-  if(ask 'Sync and override CONFIG_FILES?'){
-    system "rsync -av --del ".
-      "$DIR/CONFIG_FILES/ ".
-      "root@`n900`:/opt/CONFIG_FILES";
-    system "ssh root@`n900` /opt/CONFIG_FILES/config-overwrite.pl";
-  }
-}
 
 sub root_symlinks(){
   if(ask 'add symlinks to .bashrc, etc. from /root/* => /home/user/ ?'){

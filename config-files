@@ -1,0 +1,18 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $src = 'CONFIG_FILES';
+my $dest = '/opt/CONFIG_FILES';
+my $host = `n900`;
+chomp $host;
+
+system 'rsync',
+  '-a', '--no-owner', '--no-group',
+  '--del',
+  '-v', '--progress',
+  "$src/", "root\@$host:$dest";
+
+system 'ssh', "root\@$host", "chown root.root -R $dest";
+
+system 'ssh', "root\@$host", "$dest/config-overwrite.pl";
