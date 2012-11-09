@@ -258,10 +258,6 @@ sub installPackages($){
 
 sub apt_install_crucial(){
   my @packages = qw(
-   openssh kernel-power-settings bash vim
-   diffutils-gnu findutils-gnu grep-gnu rsync wget
-   coreutils-gnu tar-gnu python-location
-   busybox-power
   );
   print "Install crucial packages?\n";
   print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
@@ -271,20 +267,11 @@ sub apt_install_crucial(){
 }
 
 sub apt_remove_bad_packages(){
-  my @pkgs = "tutorial-home-applet";
+  my @pkgs = "";
   system "n900", "-s", "apt-get remove @pkgs";
 }
 sub apt_install_preferred(){
   my @packages = qw(
-   curl gconf-editor libterm-readkey-perl
-   fennec task-swapper swappolube-nogui x11vnc
-   mobilehotspot simple-brightness-applet fbreader
-   fmms wifi-switcher pidgin fapn shortcutd systeminfowidget evince
-   openvpn ringtoned flashlight-applet pidgin-maemo-docklet
-   personal-ip-address mplayer mediabox gstreamer0.10-flac
-   libflac8 perl-modules make unzip ping ines drnoksnes
-   xmodmap ogg-support git-core nxengine claws-mail transmission
-   less
   );
   print "Install preferred packges\n";
   if(ask 'apt-get update first?'){
@@ -292,7 +279,6 @@ sub apt_install_preferred(){
   }
   installPackages(\@packages);
   my @navit = qw(
-    libfreetype6-navit navit navit-graphics-qt-qpainter navit-gui-qml gdb espeak
   );
   print "\nInstall navit (turn-by-turn directions using openstreetmap)?\n";
   installPackages(\@navit);

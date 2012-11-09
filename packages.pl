@@ -5,10 +5,30 @@ use warnings;
 my @jobs = qw();
 
 my @packagesToRemove = qw(
+  tutorial-home-applet
 );
 
 my %pkgGroups = (
   '1' => [qw(
+    openssh kernel-power-settings bash vim
+    diffutils-gnu findutils-gnu grep-gnu rsync wget
+    coreutils-gnu tar-gnu python-location
+    busybox-power
+  )],
+  '2' => [qw(
+    curl gconf-editor libterm-readkey-perl
+    fennec task-swapper swappolube-nogui x11vnc
+    mobilehotspot simple-brightness-applet fbreader
+    fmms wifi-switcher pidgin fapn shortcutd systeminfowidget evince
+    openvpn ringtoned flashlight-applet pidgin-maemo-docklet
+    personal-ip-address mplayer mediabox gstreamer0.10-flac
+    libflac8 perl-modules make unzip ping ines drnoksnes
+    xmodmap ogg-support git-core nxengine claws-mail transmission
+    less
+  )],
+  '3navit' => [qw(
+    libfreetype6-navit navit navit-graphics-qt-qpainter navit-gui-qml
+    gdb espeak
   )],
 );
 
