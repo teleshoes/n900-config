@@ -57,7 +57,6 @@ my @utils = (
   '18' => 'g' => 'xterm_color',
   '19' => 'h' => 'xterm_virtual_kb',
   '20' => 'j' => 'configure_hildon',
-  '21' => 'k' => 'add_music_symlinks',
   '22' => 'l' => 'hosts',
   '23' => ';' => 'remember',
 'header' => "EMERGENCY RECOVERY:",
@@ -366,16 +365,6 @@ sub configure_hildon(){
     }else{
       print "skipped\n";
     }
-  }
-}
-
-sub add_music_symlinks(){
-  if(ask 'Add /media/mmc1/Music -> /home/wolke/Desktop/Music symlinks?'){
-    system "ssh root@`n900` '".
-      "mkdir -p /home/wolke/Desktop/Music; ".
-      "ln -s /media/mmc1/Music/Library /home/wolke/Desktop/Music/; ".
-      "ln -s /media/mmc1/Music/flacmirror /home/wolke/Desktop/Music/; ".
-    "'";
   }
 }
 
