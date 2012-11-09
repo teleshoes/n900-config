@@ -41,7 +41,6 @@ my @utils = (
   'xx' => 'r' => 'license',
 'header' => "",
 'header' => "Routine Maintenance:",
-  'xx' => 't' => 'retrieve_apt_cache',
   '15' => 'y' => 'sync_pidgin',
   'xx' => 'u' => 'backup_dcim',
   'xx' => 'i' => 'reorganize_dcim',
@@ -49,13 +48,7 @@ my @utils = (
   '16' => 'p' => 'sync_claws_mail',
 #BOTTOM
 'header' => "Install Packages:",
-  '03' => '1' => 'apt_cache',
-  '04' => '2' => 'apt_update',
-  '05' => '3' => 'apt_install_crucial',
-  '08' => '4' => 'apt_upgrade',
-  '09' => '5' => 'apt_install_preferred',
   '10' => '6' => 'install_others',
-  'xx' => '7' => 'apt_remove_bad_packages',
 'header' => "Copy Files/Settings:",
   '06' => 'a' => 'config_files',
   '07' => 's' => 'root_symlinks',
@@ -139,13 +132,6 @@ sub license(){
   print get_license_text();
 }
 
-sub retrieve_apt_cache(){
-  if(ask 'sync n900:/var/cache/apt/ to apt-cache?'){
-    system "rsync -av --del root@`n900`:/var/cache/apt/ " .
-      "./packages/apt-cache";
-  }
-}
-
 sub sync_pidgin(){
   if(ask 'sync pidgin logs?'){
     system "./utils/syncPidgin";
@@ -215,74 +201,6 @@ sub sync_claws_mail(){
 }
 
 #####
-
-sub apt_cache(){
-  if(ask 'copy apt-cache?'){
-    system "scp -r packages/apt-cache root@`n900`:/opt/var/cache/apt-new";
-    system "ssh root@`n900` 'cd /opt/var/cache/; rm -rf apt; mv apt-new apt'";
-  }
-}
-
-sub apt_update(){
-  if(ask 'apt-get update?'){
-    system "ssh root@`n900` apt-get update";
-  }
-}
-
-sub apt_upgrade(){
-  if(ask 'apt-get upgrade?'){
-    system "ssh root@`n900` apt-get upgrade";
-  }
-}
-
-sub installPackages($){
-  my @packages = @{shift()};
-
-  my $disp = '';
-  my $line = '';
-  for my $p(@packages){
-    if(length "$line $p" > get_term_width()){
-      $disp .= "$line\n";
-      $line = '';
-    }
-    $line .= " $p";
-  }
-  $disp .= $line;
-  print "\n\nPackages:\n$disp";
-
-  if(ask 'install packages (might required accept ON THE PHONE)?'){
-    my $pkgs = join ' ', @packages;
-    system "ssh root@`n900` apt-get install $pkgs";
-  }
-}
-
-sub apt_install_crucial(){
-  my @packages = qw(
-  );
-  print "Install crucial packages?\n";
-  print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
-  print "KERNEL POWER. ASKS YOU. TO CONTINUE. ON THE PHONE\n";
-  print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
-  installPackages(\@packages);
-}
-
-sub apt_remove_bad_packages(){
-  my @pkgs = "";
-  system "n900", "-s", "apt-get remove @pkgs";
-}
-sub apt_install_preferred(){
-  my @packages = qw(
-  );
-  print "Install preferred packges\n";
-  if(ask 'apt-get update first?'){
-    system "ssh root@`n900` apt-get update";
-  }
-  installPackages(\@packages);
-  my @navit = qw(
-  );
-  print "\nInstall navit (turn-by-turn directions using openstreetmap)?\n";
-  installPackages(\@navit);
-}
 
 sub install_others(){
   if(ask 'install gcc-4.2 & g++-4.2 from SDK repo {disabled after}, and add links?'){
