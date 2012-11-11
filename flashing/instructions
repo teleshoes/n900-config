@@ -1,0 +1,65 @@
+How to flash the rootfs AND eMMC
+this is for only certain kinds of folks that do certain kinds of things
+
+start charging the phone
+
+1) go here:
+http://tablets-dev.nokia.com/maemo-dev-env-downloads.php
+
+Download maemo_flasher-*_i386.deb
+'Maemo Flasher-3.5 Tool for Fremantle and Diablo,
+ installation package for Debian based Linuxes (x86, 32-bit)'
+as of July 28, 2010:
+ maemo_flasher-3.5_2.5.2.2_i386.deb
+
+2) Then go here:
+http://tablets-dev.nokia.com/nokia_N900.php
+
+Your product id might be 356938034939406 if youre elliot wolk
+
+Download RX-51_*_PR_COMBINED_002_ARM.bin
+'Latest Maemo 5 USA release for Nokia N900'
+as of July 28, 2010:
+ RX-51_2009SE_10.2010.19-1.002_PR_COMBINED_002_ARM.bin
+
+
+Download RX-51_*.VANILLA_PR_EMMC_MR0_ARM.bin
+'Latest Vanilla version of the eMMC content for Nokia N900'
+as of July 28, 2010:
+ RX-51_2009SE_10.2010.13-2.VANILLA_PR_EMMC_MR0_ARM.bin
+
+3) take out the battery, put it back in, wait a sec.
+
+this is the way the say to do it, but see below for a way that seems better:
+hold u key on the keyboard
+hook the phone up via usb while holding
+if bright Nokia screen with usb symbol appears, let go of U key
+otherwise, let go, wait 10s, unplug usb, hold u key and replug usb
+repeat the above step until it works. if it really really isnt working,
+charge the phone more and retry.
+
+this may work better:
+plug phone in via usb
+turn phone on, being prepared to press U as soon as you see the
+white Nokia screen
+press and hold u on the keyboard
+the nokia screen should be replaced with a Nokia screen with a usb symbol
+
+4) reflash
+run reflash.pl
+this is more or less equivalent to:
+#cd utils #or wherever you dled to
+#sudo dpkg -i maemo_flasher-*_i386.deb --force-architecture #64-bit is fine
+#sudo flasher-3.5 -F RX-51_*_PR_COMBINED_002_ARM.bin -f
+#sudo flasher-3.5 -F RX-51_*.VANILLA_PR_EMMC_MR0_ARM.bin -R
+
+the Nokia screen will flash white, then the phone will turn off
+
+turn the phone on
+this will be somewhat slower than a normal boot,
+with most of the time spent on the five bouncing white dots
+
+when you get to the normal initial boot menu,
+(Language, Region, Time, Date) push save to dismiss it
+
+et voila. maybe.
