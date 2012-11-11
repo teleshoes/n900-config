@@ -30,8 +30,50 @@ sub runcmd($){
   system $cmd;
 }
 
-sub desktop_grid($$$$$$$\@);
+sub set_desktop_images(@);
+sub clear_desktop();
+sub config_contacts();
+sub config_applets(@);
+sub config_shortcuts(@);
+
+sub get_contact_uids();
 sub set_applets(\@\@\@);
+sub desktop_grid($$$$$$$\@);
+sub add_hildon_shortcuts(\@);
+sub config_desktop_cmd_exec($);
+
+sub main(@){
+  set_desktop_images(@desktops);
+  print "\n\n\n";
+
+  clear_desktop();
+
+  config_contacts();
+  config_applets(@applets);
+  config_shortcuts(@shortcutGrids);
+
+
+  print "\n\n";
+  my $restart = 0;
+
+  if(@ARGV == 1 and $ARGV[0] eq '--restart'){
+    $restart = 1;
+  }else{
+    print "pkill hildon-desktop (auto-restarts with new positions)? [y/N] ";
+    my $response = <STDIN>;
+    chomp $response;
+    if(lc $response eq 'y'){
+      $restart = 1;
+    }else{
+      print "skipped\n";
+    }
+  }
+
+  if($restart){
+    print "running pkill hildon-desktop\n";
+    runcmd "pkill hildon-desktop";
+  }
+}
 
 sub set_desktop_images(@){
   my @imgs = map {"'$_'"} @_;
@@ -51,6 +93,42 @@ sub clear_desktop(){
     "gconftool-2 -s -t list --list-type string $bkmk_key []; " .
     "gconftool-2 -s -t list --list-type string $contacts_key []; " .
     "echo > /home/user/.config/hildon-desktop/home.plugins";
+}
+
+sub config_contacts(){
+  print "configuring contact desktop shortcuts\n";
+
+  my %uid_by_num = %{get_contact_uids()};
+
+  my $applets;
+  my (@keydirs, @views, @positions);
+  for(my $i=0; $i<@contacts; $i++){
+    my $contact = $contacts[$i];
+    my $num = $$contact[0];
+    my $view = $$contact[1];
+    my $x = $$contact[2];
+    my $y = $$contact[3];
+
+    print "adding #$num to view $view at ($x,$y)\n";
+
+    my $uid = $uid_by_num{$num};
+    my $applet = "osso-abook-applet-$uid";
+    $applets .= $applet;
+    if($i < $#contacts){
+      $applets .= ',';
+    }
+
+    my $keydir = "/apps/osso/hildon-desktop/applets/$applet";
+    push @keydirs, $keydir;
+    push @views, $view;
+    push @positions, "[$x,$y]";
+  }
+  $applets = "[$applets]";
+
+  my $key = '/apps/osso-addressbook/home-applets';
+  runcmd "gconftool-2 -s -t list --list-type string $key '$applets'";
+ 
+  set_applets(@keydirs, @views, @positions);
 }
 
 sub config_applets(@){
@@ -99,63 +177,30 @@ sub config_shortcuts(@){
   }
 }
 
-sub main(@){
-  set_desktop_images(@desktops);
-  print "\n\n\n";
+#####
+#####
+#####
 
-  clear_desktop();
+sub get_contact_uids(){
+  open FH, "< /home/user/.osso-abook/db/addressbook.db";
+  my @lines = <FH>;
+  close FH;
 
-  config_contacts();
-
-  config_applets(@applets);
-  config_shortcuts(@shortcutGrids);
-
-
-  print "\n\n";
-  my $restart = 0;
-
-  if(@ARGV == 1 and $ARGV[0] eq '--restart'){
-    $restart = 1;
-  }else{
-    print "pkill hildon-desktop (auto-restarts with new positions)? [y/N] ";
-    my $response = <STDIN>;
-    chomp $response;
-    if(lc $response eq 'y'){
-      $restart = 1;
-    }else{
-      print "skipped\n";
-    }
-  }
-
-  if($restart){
-    print "running pkill hildon-desktop\n";
-    runcmd "pkill hildon-desktop";
-  }
-}
-
-sub add_hildon_shortcuts(\@){
-  my @new = @{scalar shift};
-  my $key = '/apps/osso/hildon-home/task-shortcuts';
-  my $shct = runcmdget "gconftool-2 -g $key";
-  chomp $shct;
-  $shct =~ s/^\[(.*)\]$/$1/s;
-  my @old = split ',', $shct;
-  for my $new_shct(@new){
-    $new_shct .= '.desktop';
-    my $found = 0;
-    for my $old_shct(@old){
-      if($new_shct eq $old_shct){
-        $found = 1;
-        last;
+  @lines = reverse @lines;
+  my %uid_by_num;
+  for(my $i=0; $i<@lines; $i++){
+    if($lines[$i] =~ /^TEL.*1?(\d{3}?\d{7})/){
+      my $num = $1;
+      $i++;
+      until($lines[$i] =~ /^UID:/){
+        $i++;
       }
-    }
-    unless($found){
-      push @old, $new_shct;
+      $lines[$i] =~ /^UID:.*?(\d+)/;
+      my $uid = $1;
+      $uid_by_num{$num} = $uid;
     }
   }
-
-  $shct = '[' . (join ',', @old) . ']';
-  runcmd "gconftool-2 --set --type list --list-type string $key '$shct'";
+  return \%uid_by_num;
 }
 
 sub set_applets(\@\@\@){
@@ -237,63 +282,29 @@ sub desktop_grid($$$$$$$\@){
   set_applets(@keydirs, @views, @positions);
 }
 
-sub get_contact_uids(){
-  open FH, "< /home/user/.osso-abook/db/addressbook.db";
-  my @lines = <FH>;
-  close FH;
-
-  @lines = reverse @lines;
-  my %uid_by_num;
-  for(my $i=0; $i<@lines; $i++){
-    if($lines[$i] =~ /^TEL.*1?(\d{3}?\d{7})/){
-      my $num = $1;
-      $i++;
-      until($lines[$i] =~ /^UID:/){
-        $i++;
+sub add_hildon_shortcuts(\@){
+  my @new = @{scalar shift};
+  my $key = '/apps/osso/hildon-home/task-shortcuts';
+  my $shct = runcmdget "gconftool-2 -g $key";
+  chomp $shct;
+  $shct =~ s/^\[(.*)\]$/$1/s;
+  my @old = split ',', $shct;
+  for my $new_shct(@new){
+    $new_shct .= '.desktop';
+    my $found = 0;
+    for my $old_shct(@old){
+      if($new_shct eq $old_shct){
+        $found = 1;
+        last;
       }
-      $lines[$i] =~ /^UID:.*?(\d+)/;
-      my $uid = $1;
-      $uid_by_num{$num} = $uid;
+    }
+    unless($found){
+      push @old, $new_shct;
     }
   }
-  return \%uid_by_num;
-}
 
-sub config_contacts(){
-
-  print "configuring contact desktop shortcuts\n";
-
-  my %uid_by_num = %{get_contact_uids()};
-
-  my $applets;
-  my (@keydirs, @views, @positions);
-  for(my $i=0; $i<@contacts; $i++){
-    my $contact = $contacts[$i];
-    my $num = $$contact[0];
-    my $view = $$contact[1];
-    my $x = $$contact[2];
-    my $y = $$contact[3];
-
-    print "adding #$num to view $view at ($x,$y)\n";
-
-    my $uid = $uid_by_num{$num};
-    my $applet = "osso-abook-applet-$uid";
-    $applets .= $applet;
-    if($i < $#contacts){
-      $applets .= ',';
-    }
-
-    my $keydir = "/apps/osso/hildon-desktop/applets/$applet";
-    push @keydirs, $keydir;
-    push @views, $view;
-    push @positions, "[$x,$y]";
-  }
-  $applets = "[$applets]";
-
-  my $key = '/apps/osso-addressbook/home-applets';
-  runcmd "gconftool-2 -s -t list --list-type string $key '$applets'";
- 
-  set_applets(@keydirs, @views, @positions);
+  $shct = '[' . (join ',', @old) . ']';
+  runcmd "gconftool-2 --set --type list --list-type string $key '$shct'";
 }
 
 sub config_desktop_cmd_exec($){
