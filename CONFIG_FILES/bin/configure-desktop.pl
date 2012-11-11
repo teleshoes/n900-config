@@ -33,15 +33,12 @@ sub runcmd($){
 sub desktop_grid($$$$$$$\@);
 sub set_applets(\@\@\@);
 
-sub main(){
-  my $setDesktopCmd = "pseudo set-desktop-images.pl ";
-  for my $desktop(@desktops){
-    $setDesktopCmd .= "'$desktop' ";
-  }
-  runcmd $setDesktopCmd;
-  print "\n\n\n";
+sub set_desktop_images(@){
+  my @imgs = map {"'$_'"} @_;
+  runcmd "pseudo set-desktop-images.pl @imgs";
+}
 
-
+sub clear_desktop(){
   print "clearing desktop (shortcuts, widgets, " .
     "bookmarks, contact-shortcuts)\n";
   my $applets_key = '/apps/osso/hildon-desktop/applets';
@@ -54,17 +51,15 @@ sub main(){
     "gconftool-2 -s -t list --list-type string $bkmk_key []; " .
     "gconftool-2 -s -t list --list-type string $contacts_key []; " .
     "echo > /home/user/.config/hildon-desktop/home.plugins";
+}
 
-
-  config_contacts();
-
-
+sub config_applets(@){
   my $other_widgets;
   my %appIndexes;
   my @appletNames;
   my @views;
   my @positions;
-  for my $applet(@applets){
+  for my $applet(@_){
     my $view = $$applet[0];
     my $xPos = $$applet[1];
     my $yPos = $$applet[2];
@@ -87,9 +82,10 @@ sub main(){
   }
   config_desktop_cmd_exec($other_widgets);
   set_applets(@appletNames, @views, @positions);
+}
 
-
-  for my $grid(@shortcutGrids){
+sub config_shortcuts(@){
+  for my $grid(@_){
     my $view = $$grid[0];
     my $rowSize = $$grid[1];
     my $leftPos = $$grid[2];
@@ -101,6 +97,18 @@ sub main(){
     desktop_grid('shortcut', $view, $rowSize, $leftPos, $topPos,
       $itemWidth, $itemHeight, @elems);
   }
+}
+
+sub main(@){
+  set_desktop_images(@desktops);
+  print "\n\n\n";
+
+  clear_desktop();
+
+  config_contacts();
+
+  config_applets(@applets);
+  config_shortcuts(@shortcutGrids);
 
 
   print "\n\n";
@@ -406,4 +414,4 @@ instanceCmd=$cmd
   runcmd "chown user.users $config";
 }
 
-main;
+&main(@ARGV);
