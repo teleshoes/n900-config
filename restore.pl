@@ -167,9 +167,6 @@ sub xterm_color(){
 }
 
 sub configure_hildon(){
-  if(ask 'Overwrite and reorganize apps menu?'){
-    system "ssh root@`n900` pseudo configure-apps-menu.pl";
-  }
 }
 
 sub hosts(){
