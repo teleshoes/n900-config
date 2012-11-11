@@ -160,9 +160,6 @@ sub install_others(){
 
 
 sub root_symlinks(){
-  if(ask 'add symlinks to .bashrc, etc. from /root/* => /home/user/ ?'){
-    system './utils/root-user.pl';
-  }
   if(ask 'replace mobilehotspot.desktop symlink with copy?'){
     my $src = '/opt/mobilehotspot/resources/mobilehotspot.desktop';
     my $ln = '/usr/share/applications/hildon/mobilehotspot.desktop';
