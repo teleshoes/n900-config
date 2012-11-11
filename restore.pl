@@ -42,8 +42,6 @@ my @utils = (
 'header' => "",
 'header' => "Routine Maintenance:",
   '15' => 'y' => 'sync_pidgin',
-  'xx' => 'u' => 'backup_dcim',
-  'xx' => 'i' => 'reorganize_dcim',
   'xx' => 'o' => 'backup',
   '16' => 'p' => 'sync_claws_mail',
 #BOTTOM
@@ -51,7 +49,6 @@ my @utils = (
   '10' => '6' => 'install_others',
 'header' => "Copy Files/Settings:",
   '07' => 's' => 'root_symlinks',
-  '13' => 'd' => 'sync_mydocs',
   '17' => 'f' => 'default_cpu_limits',
   '18' => 'g' => 'xterm_color',
   '19' => 'h' => 'xterm_virtual_kb',
@@ -136,48 +133,6 @@ sub sync_pidgin(){
   }
 }
 
-sub backup_dcim(){
-  if(ask 'rsync n900:DCIM to localhost:DCIM?'){
-    system "rsync -av root@`n900`:/home/user/MyDocs/DCIM/ ../MyDocs/DCIM/";
-  }
-}
-
-sub reorganize_dcim(){
-  if(ask 'rsync n900:DCIM to localhost:DCIM?'){
-    system "rsync -av root@`n900`:/home/user/MyDocs/DCIM/ ../MyDocs/DCIM/";
-  }
-  print "\n\n\nMAKE YOUR ### DIRECTORIES NOW.\n";
-  print "DONT MOVE VIDEOS TO DCIM_VIDEOS, WE'LL DO THAT LATER\n\n\n";
-  print "when youre done, this script will make the n900 match whatchoo did";
-  if(ask 'mv dcim files around on n900 to match localhost?'){
-    system "./utils/presync " .
-      "../MyDocs/DCIM " .
-      "root@`n900`:/home/user/MyDocs/DCIM";
-  }
-  if(ask 'mv dcim_video files around on n900 to match localhost?'){
-    system "./utils/presync " .
-      "../MyDocs/DCIM_VIDEOS " .
-      "root@`n900`:/home/user/MyDocs/DCIM_VIDEOS";
-  }
-  if(ask 'make dcim video symlinks and rearrange on localhost?'){
-    system "\$HOME/bin/dcim_videos $DIR/MyDocs";
-  }
-  if(ask 'make dcim video symlinks and rearrange on n900?'){
-    system "ssh root@`n900` /home/user/bin/dcim_videos /home/user/MyDocs";
-  }
-  if(ask 'rsync localhost:DCIM to N900:DCIM?'){
-    system "rsync -av ../MyDocs/DCIM/ root@`n900`:/home/user/MyDocs/DCIM/";
-  }
-  if(ask 'rsync localhost:DCIM_VIDEOS to N900:DCIM_VIDEOS?'){
-    system "rsync -av ../MyDocs/DCIM_VIDEOS/ " .
-      "root@`n900`:/home/user/MyDocs/DCIM_VIDEOS/";
-  }
-  if(ask 'chown user.users N900:DCIM and N900:DCIM_VIDEOS'){
-    system "ssh root@`n900` chown user.users -R /home/user/MyDocs/DCIM";
-    system "ssh root@`n900` chown user.users -R /home/user/MyDocs/DCIM_VIDEOS";
-  }
-}
-
 sub backup(){
   if(ask 'run backup, and sync it locally?'){
     system "ssh root@`n900` pseudo backup";
@@ -212,17 +167,6 @@ sub root_symlinks(){
     my $src = '/opt/mobilehotspot/resources/mobilehotspot.desktop';
     my $ln = '/usr/share/applications/hildon/mobilehotspot.desktop';
     system "ssh root@`n900` 'rm $ln; cp $src $ln'";
-  }
-}
-
-sub sync_mydocs(){
-  if(ask 'sync mydocs (ignores files named DCIM* and debian*.img.ext2)?'){
-    system "rsync -av " .
-     "../MyDocs/ " .
-     "root@`n900`:/home/user/MyDocs " .
-     "--exclude debian*.img.ext2 " .
-     "--exclude DCIM* ";
-    system "ssh root@`n900` chown -R user.users /home/user/MyDocs";
   }
 }
 
