@@ -4,6 +4,42 @@ use warnings;
 
 my $inc = 6;
 
+my $usage = "Usage:
+  $0           print volume
+  $0 get       print volume
+  $0 up        volume +$inc
+  $0 down      volume -$inc
+  $0 [0-100]   volume set to
+  $0 +[0-100]  volume +INT
+  $0 -[0-100]  volume -INT
+";
+
+sub get();
+sub set($);
+
+sub main(@){
+  die $usage if @_ > 1;
+
+  my $arg = shift;
+  $arg = 'get' if not defined $arg;
+
+  $arg = "+$inc" if $arg eq 'up';
+  $arg = "-$inc" if $arg eq 'down';
+
+  if($arg eq 'get'){
+    print get . "\n";
+  }elsif($arg =~ /^([+|\-])?(\d|\d\d|100)$/){
+    my ($op, $vol) = ($1, $2);
+    $op = '' if not defined $op;
+    $vol = get() + $vol if $op eq '+';
+    $vol = get() - $vol if $op eq '-';
+
+    print get;
+    set $vol;
+    print " => " . get . "\n";
+  }
+}
+
 sub get(){
   my $cmd = ''
     . "dbus-send "
@@ -35,35 +71,4 @@ sub set($){
   system "$cmd";
 }
 
-sub setAndPrint($){
-  print get;
-  set $_[0];
-  print " => " . get . "\n";
-}
-
-my $arg = shift;
-$arg = '' if not defined $arg;
-
-if($arg eq 'get'){
-  print get . "\n";
-}elsif($arg eq 'up' or $arg eq '+'){
-  setAndPrint get + $inc;
-}elsif($arg eq 'down' or $arg eq '-'){
-  setAndPrint get - $inc;
-}elsif($arg =~ /^(\d+)$/ and $arg < 100){
-  setAndPrint $1;
-}elsif($arg =~ /^\+(\d+)$/){
-  setAndPrint get + $1;
-}elsif($arg =~ /^-(\d+)$/){
-  setAndPrint get - $1;
-}else{
-  die "Usage:
-    $0 get
-    $0 up    {+$inc}
-    $0 +     {+$inc}
-    $0 down  {-$inc}
-    $0 -     {-$inc}
-    $0 INT   {set exactly 0-100}
-    $0 +INT  {increment by INT}
-    $0 -INT  {decrement by INT}\n";
-}
+&main(@ARGV);
