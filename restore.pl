@@ -51,7 +51,6 @@ my @utils = (
   '07' => 's' => 'root_symlinks',
   '17' => 'f' => 'default_cpu_limits',
   '18' => 'g' => 'xterm_color',
-  '19' => 'h' => 'xterm_virtual_kb',
   '20' => 'j' => 'configure_hildon',
   '22' => 'l' => 'hosts',
   '23' => ';' => 'remember',
@@ -181,58 +180,6 @@ sub xterm_color(){
       "gconftool-2 -s -t string \"$bg_key\" \"$bg\"; " .
       "gconftool-2 -s -t string \"$fg_key\" \"$fg\"; " .
       "'";
-  }
-}
-
-sub xterm_virtual_kb(){
-  if(ask 'Set xterm virtual keys?'){
-    my $keylabels_gconf = '/apps/osso/xterm/key_labels';
-    my $keys_gconf = '/apps/osso/xterm/keys';
-
-    #Key Label, Key Value
-    my @keys = (
-      'Tab' => 'Tab',
-      'Esc' => 'Escape',
-      '~'   => 'asciitilde',
-      '|'   => 'bar',
-      '<'   => 'less',
-      '>'   => 'greater',
-      '^'   => 'asciicircum',
-      '\`'  => 'grave',
-      '\{'  => 'braceleft',
-      '\}'  => 'braceright',
-      '\['  => 'bracketleft',
-      '\]'  => 'bracketright',
-      'pgU' => 'Prior',
-      'pgD' => 'Next',
-      'Ent' => 'Return',
-    );
-
-    my ($key_labels, $key_values);
-    for (my $i=0; $i<@keys; $i+=2){
-      $key_labels .= $keys[$i];
-      $key_values .= $keys[$i+1];
-      if($i+2 < @keys){
-        $key_labels .= ',';
-        $key_values .= ',';
-      }
-    }
-
-    $key_labels = "[$key_labels]";
-    $key_values = "[$key_values]";
-
-    print "Current xterm virtual keys:\n";
-    system "echo -n Labels:; ssh root@`n900` gconftool-2 -g $keylabels_gconf";
-    system "echo -n Values:; ssh root@`n900` gconftool-2 -g $keys_gconf";
-
-    print "\n";
-
-    print "Setting to:\nLabels:$key_labels\nValues:$key_values\n";
-
-    system "ssh root@`n900` 'gconftool-2 -s $keylabels_gconf -t list ".
-      "--list-type=string \"$key_labels\"'";
-    system "ssh root@`n900` 'gconftool-2 -s $keys_gconf -t list ".
-      "--list-type=string \"$key_values\"'";
   }
 }
 

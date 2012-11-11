@@ -2,6 +2,7 @@
 use strict;
 use warnings;
 
+sub termKeys($);
 sub gconfGetCmd($);
 sub gconfSetCmd($$$$);
 sub listInt($);
@@ -9,7 +10,9 @@ sub listString($);
 
 my $display = '/system/osso/dsm/display';
 my $desktop = '/apps/osso/hildon-desktop';
+my $xterm = '/apps/osso/xterm';
 my $hotspot = '/apps/mobilehotspot';
+
 my %gconf = (
   "$display/display_dim_timeout" => [240, 'int'],
   "$display/possible_display_dim_timeouts" =>
@@ -17,6 +20,9 @@ my %gconf = (
 
   "$desktop/ui_can_rotate"             => ["false", "bool"],
   "$desktop/desktop_orientation_lock"  => ["true", "bool"],
+
+  "$xterm/keys" => listString [termKeys 'keys'],
+  "$xterm/key_labels" => listString [termKeys 'labels'],
 
   "$hotspot/ssid"            => ["Minerva"],
   "$hotspot/encryption_algo" => ["WEP"],
@@ -26,6 +32,30 @@ my %gconf = (
   "$hotspot/network_address" => ["10.248.140."],
   "$hotspot/state_pickle"    => [""],
 );
+
+sub termKeys($){
+  my @termKeys = (
+    ['Tab' => 'Tab'],
+    ['Esc' => 'Escape'],
+    ['~'   => 'asciitilde'],
+    ['|'   => 'bar'],
+    ['<'   => 'less'],
+    ['>'   => 'greater'],
+    ['^'   => 'asciicircum'],
+    ['\`'  => 'grave'],
+    ['\{'  => 'braceleft'],
+    ['\}'  => 'braceright'],
+    ['\['  => 'bracketleft'],
+    ['\]'  => 'bracketright'],
+    ['pgU' => 'Prior'],
+    ['pgD' => 'Next'],
+    ['Ent' => 'Return'],
+  );
+
+  die "termKeys(labels) or termKeys(keys)\n" if $_[0] !~ /^(labels|keys)$/;
+  my $evenOdd = $_[0] eq 'labels' ? 0 : 1;
+  return map {${$_}[$evenOdd]} @termKeys;
+}
 
 sub main(@){
   die "Usage: $0\n" if @_ > 0;
