@@ -2,7 +2,7 @@
 Name=Klomp
 GenericName=Klomp
 Comment=Klomp CLI Music Player
-Exec=/usr/bin/osso-xterm '/usr/local/bin/udo klomp'
+Exec=/usr/bin/osso-xterm 'udo klomp'
 Icon=klomp
 Terminal=false
 Type=Application
