@@ -208,14 +208,6 @@ sub root_symlinks(){
   if(ask 'add symlinks to .bashrc, etc. from /root/* => /home/user/ ?'){
     system './utils/root-user.pl';
   }
-  if(ask 'add /root/bin/pseudo=>/bin/pseudo, etc?'){
-    system "ssh root@`n900` '" .
-      "rm /bin/udo; " .
-      "rm /bin/pseudo; " .
-      "ln -s /root/bin/udo /bin/udo; " .
-      "ln -s /root/bin/pseudo /bin/pseudo; " .
-      "'";
-  }
   if(ask 'replace mobilehotspot.desktop symlink with copy?'){
     my $src = '/opt/mobilehotspot/resources/mobilehotspot.desktop';
     my $ln = '/usr/share/applications/hildon/mobilehotspot.desktop';
