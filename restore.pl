@@ -461,24 +461,6 @@ the nokia screen should be replaced with a Nokia screen with a usb symbol
    if youre still connected with usb, it will ask you to switch modes.
    Select PC Suite Mode.
 
-6) get rootsh
-   connect to internet
-   open the web browser
-   search 'n900 rootsh downloads'
-   install it
-   
-7) open up the terminal, and type:
-   sudo gainroot
-   apt-get install openssh
-
-   connect to the local network
-   (either wifi or plug in the usb cable and then run 'ifup usb0' as root)
-
-8) continue with this script until the reboot,
-   wait for the phone to be back up,
-   connect the phone to the local network,
-   and continue with the script again
-
 et voila. maybe.
 ";
 }

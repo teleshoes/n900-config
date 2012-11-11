@@ -1,0 +1,13 @@
+A) flash
+
+B) get rootsh
+   connect to internet, open web browser,
+   search 'n900 rootsh downloads'
+   install it
+
+C) open a terminal
+sudo gainroot
+apt-get install openssh
+
+D) get on local network, or connect usb and sync-and-connect
+
