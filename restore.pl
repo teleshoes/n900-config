@@ -213,16 +213,6 @@ sub root_symlinks(){
     my $ln = '/usr/share/applications/hildon/mobilehotspot.desktop';
     system "ssh root@`n900` 'rm $ln; cp $src $ln'";
   }
-  if(ask 'replace /usr/bin/stat with a symlink to gstat?'){
-    system "ssh root@`n900` '" .
-      "if [ -L /usr/bin/stat ]; then " .
-        "rm /usr/bin/stat; " .
-      "else " .
-        "mv /usr/bin/stat /usr/bin/stat_busybox; " .
-      "fi; " .
-      "ln -s gstat /usr/bin/stat; " .
-    "'";
-  }
 }
 
 sub sync_mydocs(){
