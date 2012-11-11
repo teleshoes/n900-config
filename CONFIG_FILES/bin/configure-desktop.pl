@@ -21,6 +21,8 @@ my @dce_instances = @{$config[4]};
 my @dce_cmds = @{$config[5]};
 ##########################################
 
+my $usage = "Usage: $0\n";
+
 sub runcmdget($){
   my $cmd = shift;
   return `$cmd`;
@@ -43,6 +45,8 @@ sub add_hildon_shortcuts(\@);
 sub config_desktop_cmd_exec($);
 
 sub main(@){
+  die $usage if @_ != 0;
+
   set_desktop_images(@desktops);
   print "\n\n\n";
 
