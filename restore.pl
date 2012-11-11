@@ -39,9 +39,6 @@ my @utils = (
   'xx' => 'w' => 'print_restore_instructions',
   'xx' => 'e' => 'execute_all_in_order',
   'xx' => 'r' => 'license',
-#BOTTOM
-'header' => "Copy Files/Settings:",
-  '23' => ';' => 'remember',
 );
 
 ###############################
@@ -109,21 +106,6 @@ sub license(){
 }
 
 #####
-
-sub remember(){
-  print "
-This is a list of unexposed stuff to manually configure:
-1) Phone talking app -> top menu -> Turning Control ->
-   Display orientation -> Landscape
-2) Turn off power saving mode on home wifi {P.S.M sux if you wanna ssh}
-   Settings -> Internet Connections -> Connections ->
-   SSID {e.g. Flipsafad} -> Edit -> Next -> Next -> Next ->
-   Advanced -> Other -> Power saving: Off -> Yes -> Save
-   ALSO: Internet Connections, automatic: CELLULAR, Never, Dont switch to wifi
-3) manually change the background once if you cant programmatically
-4) Settings -> Text Input -> Auto-capitalization off
-";
-}
 
 ###############################
 ###############################
