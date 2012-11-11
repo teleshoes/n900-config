@@ -41,7 +41,6 @@ my @utils = (
   'xx' => 'r' => 'license',
 'header' => "",
 'header' => "Routine Maintenance:",
-  'xx' => 'o' => 'backup',
   '16' => 'p' => 'sync_claws_mail',
 #BOTTOM
 'header' => "Copy Files/Settings:",
@@ -110,13 +109,6 @@ sub execute_all_in_order(){
 sub license(){
   system "clear";
   print get_license_text();
-}
-
-sub backup(){
-  if(ask 'run backup, and sync it locally?'){
-    system "ssh root@`n900` pseudo backup";
-    system "rsync -av root@`n900`:/media/mmc1/Backup/Latest/ ../Backup/Latest";
-  }
 }
 
 sub sync_claws_mail(){
