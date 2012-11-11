@@ -3,19 +3,15 @@ use strict;
 use warnings;
 use Safe;
 
-my $file = shift;
-$file = '/home/user/.desktop-config' if not defined $file;
-
-print "Obtaining perl code from '$file' for safe evaluation\n";
-my $unsafeCode = `cat $file`;
-
-print "Safely evaluating the code slurped from $file\n";
+##########################################
+my $configFile = '/home/user/.desktop-config';
+my $unsafeCode = `cat $configFile`;
 my $compartment = new Safe;
 my @config = $compartment->reval($unsafeCode);
 if(@config != 6){
-  die "Could not read config from $file\n";
+  die "Could not read config from $configFile\n";
 }
-print "Loaded profile from $file\n\n";
+print "Loaded profile from $configFile\n\n";
 
 my @desktops = @{$config[0]};
 my @contacts = @{$config[1]};
@@ -23,8 +19,8 @@ my @shortcutGrids = @{$config[2]};
 my @applets = @{$config[3]};
 my @dce_instances = @{$config[4]};
 my @dce_cmds = @{$config[5]};
-
 ##########################################
+
 sub runcmdget($){
   my $cmd = shift;
   return `$cmd`;
