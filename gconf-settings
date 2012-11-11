@@ -8,10 +8,19 @@ sub listInt($);
 sub listString($);
 
 my $display = '/system/osso/dsm/display';
+my $hotspot = '/apps/mobilehotspot';
 my %gconf = (
   "$display/display_dim_timeout" => [240, 'int'],
   "$display/possible_display_dim_timeouts" =>
     listInt [15, 30, 60, 120, 180, 240],
+
+  "$hotspot/ssid"            => ["Minerva"],
+  "$hotspot/encryption_algo" => ["WEP"],
+  "$hotspot/encryption_key"  => ["WISDOMS_LOGOS"],
+  "$hotspot/connection_name" => ["T-Mobile Internet"],
+  "$hotspot/interface_name"  => ["WLAN"],
+  "$hotspot/network_address" => ["10.248.140."],
+  "$hotspot/state_pickle"    => [""],
 );
 
 sub main(@){
