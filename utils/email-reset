@@ -1,0 +1,166 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my %accounts = (
+  '1L' => {
+    email => 'elliot.wolk@lillegroup.com',
+    password => 'forty242',
+    limit => '20',
+    offline_sync => 'false',
+    imap => ['imap.gmail.com', 'password', 'ssl', 993],
+    smtp => ['smtp.gmail.com', 'password', 'ssl', 465],
+  },
+  '2G' => {
+    email => 'elliot.wolk@gmail.com',
+    password => 'A1muffins',
+    limit => '20',
+    offline_sync => 'false',
+    imap => ['imap.gmail.com', 'password', 'ssl', 993],
+    smtp => ['smtp.gmail.com', 'password', 'ssl', 465],
+  },
+  '3A' => {
+    email => 'liberifataliviii@aol.com',
+    password => 'forty242',
+    limit => '10',
+    offline_sync => 'false',
+    imap => ['imap.aol.com', 'none', 'none', 143],
+    smtp => ['smtp.aol.com', 'password', 'ssl', 465],
+  },
+);
+
+my %settings = (
+  msg_size_limit => 1000,
+  play_sound_msg_arrive => 'true',
+  show_cc => 'false',
+  fetch_external_images => 'false',
+  update_when_connected_by => 2,   #wifi-only 1, any 2
+  notifications => 'true',
+  show_bcc => 'false',
+  auto_update => 'true',
+  latest_attach_file_path => '/home/user/MyDocs',
+  latest_save_attachment_path => '/home/user/MyDocs',
+  auto_add_to_contacs => 'true',
+  update_interval => 30,
+  prefer_formatted_text => 'false',
+);
+
+sub getGconfCmds($);
+sub getSettingsGconfs($);
+sub getAccountGconfs($);
+
+sub main(@){
+  my @cmds;
+  my $settingGconfs = getSettingsGconfs \%settings;
+  @cmds = (@cmds, getGconfCmds $settingGconfs);
+  for my $accName(sort keys %accounts){
+    my $acc = $accounts{$accName};
+    $$acc{name} = $accName;
+    my $accGconfs = getAccountGconfs $acc;
+    @cmds = (@cmds, getGconfCmds $accGconfs);
+  }
+  
+  system "n900", "-s", "
+    set -x
+    pkill -9 modest
+    gconftool-2 --recursive-unset /apps/modest
+    rm -rf /home/user/.modest
+    rm -rf /media/mmc1/.modest
+    @cmds
+  ";
+}
+
+sub getGconfCmds($){
+  my $gconfs = shift;
+
+  my @cmds;
+  for my $key(sort keys %$gconfs){
+    my $val = $$gconfs{$key};
+    my $type = 'string';
+    if($val =~ /^(true|false)$/){
+      $type = 'bool';
+    }elsif($val =~ /^\d+$/){
+      $type = 'int';
+    }
+    push @cmds, "gconftool-2 --set $key '$val' --type=$type\n";
+  }
+  return @cmds;
+}
+
+sub getSettingsGconfs($){
+  my $gconfs = shift();
+  my %newGconfs;
+  for my $key(keys %$gconfs){
+    $newGconfs{"/apps/modest/$key"} = $$gconfs{$key};
+  }
+  return \%newGconfs;
+}
+
+sub getAccountGconfs($){
+  my $acc = shift;
+  my $accDir = "/apps/modest/accounts/$$acc{name}ID";
+  my $storeDir = "/apps/modest/server_accounts/$$acc{name}ID_store";
+  my $transDir = "/apps/modest/server_accounts/$$acc{name}ID_transport";
+  my @imap = @{$$acc{imap}};
+  my @smtp = @{$$acc{imap}};
+  
+  return {
+    "$accDir/email" => $$acc{email},
+    "$accDir/display_name" => $$acc{name},
+    "$accDir/store_account" => "$$acc{name}ID_store",
+    "$accDir/transport_account" => "$$acc{name}ID_transport",
+    "$accDir/limit-retrieve" => $$acc{limit},
+
+    "$accDir/enabled" => "true",
+    "$accDir/retrieve" => "messages-and-attachments",
+    "$accDir/leave_on_server" => "true",
+    "$accDir/use_signature" => "false",
+    "$accDir/signature" => "",
+    "$accDir/has_new_mails" => "false",
+    "$accDir/use_specific_smtp" => "false",
+    "$accDir/fullname" => "",
+
+    "$storeDir/username" => $$acc{email},
+    "$storeDir/password" => $$acc{password},
+    "$storeDir/hostname" => $imap[0],
+    "$storeDir/auth_mech" => $imap[1],
+    "$storeDir/security" => $imap[2],
+    "$storeDir/port" => $imap[3],
+    "$storeDir/offline_sync" => $$acc{offline_sync},
+    "$storeDir/proto" => "imap",
+
+    "$transDir/username" => $$acc{email},
+    "$transDir/password" => $$acc{password},
+    "$transDir/hostname" => $smtp[0],
+    "$transDir/auth_mech" => $smtp[1],
+    "$transDir/security" => $smtp[2],
+    "$transDir/port" => $smtp[3],
+    "$transDir/offline_sync" => "false",
+    "$transDir/proto" => "smtp",
+  };
+}
+
+&main(@ARGV);
+
+#default_account = LID
+#
+#alarm_id = 161
+#tree_view = false
+#/apps/modest/server_accounts:
+#
+#/apps/modest/widgets:
+# /apps/modest/widgets/modest-msg-paned:
+#  pos = 50
+# /apps/modest/widgets/modest-main-paned:
+#  pos = 30
+# /apps/modest/widgets/modest-msg-view-window:
+#  show_toolbar_fullscreen = true
+#  show_toolbar = true
+# /apps/modest/widgets/modest-edit-msg-window:
+#  show_toolbar_fullscreen = false
+#  show_toolbar = false
+# /apps/modest/widgets/modest-main-window:
+#  show_toolbar_fullscreen = true
+#  show_toolbar = true
+# /apps/modest/widgets/modest-folder-view-window:
+#  tree_view_indentation = 30
