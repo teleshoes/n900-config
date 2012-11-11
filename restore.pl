@@ -183,15 +183,6 @@ sub ssh_setup(){
   if(ask 'Setup SSH keys?'){
     system './utils/keygen.pl';
   }
-  my $mac = '42:c6:65:ac:8b:bd';
-
-  print "Normally, the usb mac is randomly generated,
-    but you can make it be the same.\n";
-
-  if(ask "Make usb mac address $mac {was randomly generated on an n900}?"){
-    system "ssh root@`n900` '" .
-      "echo options g_nokia host_addr=$mac | tee /etc/modprobe.d/g_nokia'";
-  }
 }
 
 sub format_mydocs_ext3(){

@@ -1,0 +1,9 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $mac = '42:c6:65:ac:8b:bd';
+my $nokiaMod = "/etc/modprobe.d/g_nokia";
+
+print "fixing the usb mac to $mac, instead of random\n";
+system "n900", "-s", "echo 'options g_nokia host_addr=$mac' > $nokiaMod";
