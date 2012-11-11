@@ -156,13 +156,12 @@ sub configure_hildon(){
 }
 
 sub hosts(){
-  if(ask 'Set hostname to wolke-n900 and setup escribe hosts?'){
+  if(ask 'Set hostname to wolke-n900?'){
     system "ssh root@`n900` '".
         "OLD=\$HOSTNAME; ".
         "NEW=wolke-n900; ".
         "echo \$NEW | tee /etc/hostname; ".
         "cat /etc/hosts | sed s/\$OLD/\$NEW/g | tee /etc/hosts; ".
-        "/home/user/bin/pseudo escribe-hosts; ".
     "'";
   }
 }
