@@ -36,7 +36,6 @@ my @utils = (
 #TOP
 'header' => "N900 Utilities:",
   'xx' => 'q' => 'quit',
-  'xx' => 'w' => 'print_restore_instructions',
   'xx' => 'e' => 'execute_all_in_order',
   'xx' => 'r' => 'license',
 );
@@ -54,7 +53,6 @@ sub ask($);
 sub callMagicSub($);
 
 sub get_license_text();
-sub get_instructions_text();
 
 parse_utils();
 
@@ -78,11 +76,6 @@ exit 0;
 
 sub quit(){
   exit 0;
-}
-
-sub print_restore_instructions($){
-  my $novel = get_instructions_text();
-  system "echo \"$novel\" | more";
 }
 
 sub execute_all_in_order(){
@@ -370,11 +363,6 @@ sub print_utils_ui(){
 ###############################
 ###############################
 #E%text%
-
-sub get_instructions_text(){
-"
-";
-}
 
 sub get_license_text(){
 "   Restore utility for the Nokia N900.
