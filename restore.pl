@@ -45,7 +45,6 @@ my @utils = (
   '16' => 'p' => 'sync_claws_mail',
 #BOTTOM
 'header' => "Copy Files/Settings:",
-  '17' => 'f' => 'default_cpu_limits',
   '23' => ';' => 'remember',
 );
 
@@ -134,15 +133,6 @@ sub sync_claws_mail(){
 }
 
 #####
-
-sub default_cpu_limits(){
-  if(ask "default cpu limits and voltages?"){
-    system "ssh root@`n900` '" .
-     "udo cpu def; " .
-     "kernel-config default; " .
-     "'";
-  }
-}
 
 sub remember(){
   print "
