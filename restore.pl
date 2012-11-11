@@ -39,9 +39,6 @@ my @utils = (
   'xx' => 'w' => 'print_restore_instructions',
   'xx' => 'e' => 'execute_all_in_order',
   'xx' => 'r' => 'license',
-'header' => "",
-'header' => "Routine Maintenance:",
-  '16' => 'p' => 'sync_claws_mail',
 #BOTTOM
 'header' => "Copy Files/Settings:",
   '23' => ';' => 'remember',
@@ -109,19 +106,6 @@ sub execute_all_in_order(){
 sub license(){
   system "clear";
   print get_license_text();
-}
-
-sub sync_claws_mail(){
-  if(ask 'sync claws-mail to MyDocs, and forcibly replace ~/.claws-mail?'){
-    system "ssh root@`n900` mkdir -p /home/user/MyDocs/claws-mail";
-    system "rsync -av \$HOME/.claws-mail/ root@`n900`:/home/user/MyDocs/claws-mail";
-    system "ssh root@`n900` '"
-      . "rm /home/user/.claws-mail; "
-      . "rm -rf /home/user/.claws-mail; "
-      . "ln -s MyDocs/claws-mail /home/user/.claws-mail; "
-      . "chown user.users -R /home/user/MyDocs/claws-mail; "
-      . "'";
-  }
 }
 
 #####
