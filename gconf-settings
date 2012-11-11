@@ -21,6 +21,8 @@ my %gconf = (
   "$desktop/ui_can_rotate"             => ["false", "bool"],
   "$desktop/desktop_orientation_lock"  => ["true", "bool"],
 
+  "$xterm/background" => ["black"],
+  "$xterm/foreground" => ["green"],
   "$xterm/keys" => listString [termKeys 'keys'],
   "$xterm/key_labels" => listString [termKeys 'labels'],
 

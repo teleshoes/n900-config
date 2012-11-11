@@ -46,7 +46,6 @@ my @utils = (
 #BOTTOM
 'header' => "Copy Files/Settings:",
   '17' => 'f' => 'default_cpu_limits',
-  '18' => 'g' => 'xterm_color',
   '20' => 'j' => 'configure_hildon',
   '22' => 'l' => 'hosts',
   '23' => ';' => 'remember',
@@ -150,19 +149,6 @@ sub default_cpu_limits(){
      "udo cpu def; " .
      "kernel-config default; " .
      "'";
-  }
-}
-
-sub xterm_color(){
-  if(ask 'Set xterm colors to green-on-black?'){
-    my $bg = 'black';
-    my $fg = 'green';
-    my $bg_key = '/apps/osso/xterm/background';
-    my $fg_key = '/apps/osso/xterm/foreground';
-    system "ssh root@`n900` '" .
-      "gconftool-2 -s -t string \"$bg_key\" \"$bg\"; " .
-      "gconftool-2 -s -t string \"$fg_key\" \"$fg\"; " .
-      "'";
   }
 }
 
