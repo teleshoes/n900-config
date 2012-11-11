@@ -46,14 +46,7 @@ my @utils = (
 #BOTTOM
 'header' => "Copy Files/Settings:",
   '17' => 'f' => 'default_cpu_limits',
-  '20' => 'j' => 'configure_hildon',
   '23' => ';' => 'remember',
-'header' => "EMERGENCY RECOVERY:",
-  '01' => 'z' => 'reflash',
-  '02' => 'x' => 'ssh_setup',
-  '11' => 'c' => 'format_mydocs_ext3',
-  '12' => 'v' => 'reboot_phone',
-  '14' => 'b' => 'restore_backup',
 );
 
 ###############################
@@ -151,9 +144,6 @@ sub default_cpu_limits(){
   }
 }
 
-sub configure_hildon(){
-}
-
 sub remember(){
   print "
 This is a list of unexposed stuff to manually configure:
@@ -167,42 +157,6 @@ This is a list of unexposed stuff to manually configure:
 3) manually change the background once if you cant programmatically
 4) Settings -> Text Input -> Auto-capitalization off
 ";
-}
-
-sub reflash(){
-  print '(see instructions; do steps 1-3 first)';
-  if(ask 'Reflash and completely wipe phone?'){
-    system './utils/reflash.pl';
-    print "If youre doing the full install,\n";
-    print "turn the phone on and setup rootsh,\n";
-    print "and connect the phone to the local network before continuing\n";
-  }
-}
-
-sub ssh_setup(){
-  if(ask 'Setup SSH keys?'){
-    system './utils/keygen.pl';
-  }
-}
-
-sub format_mydocs_ext3(){
-  if(ask 'UTTERLY DESTROY MyDocs (photos!) and format ext3?'){
-    system "./utils/format_emmc_ext3.pl";
-  }
-}
-
-sub reboot_phone(){
-  if(ask 'reboot phone?'){
-    system "ssh root@`n900` 'dbus-send --system --print-reply " .
-     "--dest=com.nokia.dsme " .
-     "/com/nokia/dsme com.nokia.dsme.request.req_reboot &' &";
-  }
-}
-
-sub restore_backup(){
-  if(ask 'Restore some things from the latest microSD card backup?'){
-    system "./utils/backup_restore.pl";
-  }
 }
 
 ###############################
