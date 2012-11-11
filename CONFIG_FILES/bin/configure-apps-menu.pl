@@ -4,7 +4,7 @@ use warnings;
 
 my @menu = qw(
 rtcom-call-ui rtcom-messaging-ui osso-addressbook fmms xterm
-browser pidgin claws-mail klomp image-viewer
+browser pidgin modest klomp image-viewer
 worldclock mobilehotspot nokia-maps cavestory hildon-control-panel
 
 evince FBReader fennec osso_calculator osso_sketch
