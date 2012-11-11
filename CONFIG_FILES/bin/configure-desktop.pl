@@ -3,23 +3,7 @@ use strict;
 use warnings;
 use Safe;
 
-##########################################
 my $configFile = '/home/user/.desktop-config';
-my $unsafeCode = `cat $configFile`;
-my $compartment = new Safe;
-my @config = $compartment->reval($unsafeCode);
-if(@config != 6){
-  die "Could not read config from $configFile\n";
-}
-print "Loaded profile from $configFile\n\n";
-
-my @desktops = @{$config[0]};
-my @contacts = @{$config[1]};
-my @shortcutGrids = @{$config[2]};
-my @applets = @{$config[3]};
-my @dce_instances = @{$config[4]};
-my @dce_cmds = @{$config[5]};
-##########################################
 
 my $usage = "Usage: $0\n";
 
@@ -32,36 +16,60 @@ sub runcmd($){
   system $cmd;
 }
 
-sub set_desktop_images(@);
+sub parseConfig($);
+
+sub set_desktop_images(\@);
 sub clear_desktop();
-sub config_contacts();
-sub config_applets(@);
-sub config_shortcuts(@);
+sub config_contacts(\@);
+sub config_applets(\@\@\@);
+sub config_shortcuts(\@);
 
 sub get_contact_uids();
 sub set_applets(\@\@\@);
 sub desktop_grid($$$$$$$\@);
 sub add_hildon_shortcuts(\@);
-sub config_desktop_cmd_exec($);
+sub config_desktop_cmd_exec(\@\@$);
 
 sub main(@){
   die $usage if @_ != 0;
 
-  set_desktop_images(@desktops);
+  my $config = parseConfig($configFile);
+
+  set_desktop_images(@{$$config{desktops}});
   print "\n\n\n";
 
   clear_desktop();
 
-  config_contacts();
-  config_applets(@applets);
-  config_shortcuts(@shortcutGrids);
+  config_contacts(@{$$config{contacts}});
+  config_applets(@{$$config{applets}},
+    @{$$config{dceInstances}}, @{$$config{dceCmds}});
+  config_shortcuts(@{$$config{shortcutGrids}});
 
   print "running pkill hildon-desktop (auto-restarts with new positions)\n";
   runcmd "pkill hildon-desktop";
 }
 
-sub set_desktop_images(@){
-  my @imgs = map {"'$_'"} @_;
+sub parseConfig($){
+  my $unsafeCode = `cat $configFile`;
+  my $compartment = new Safe;
+  my @configData = $compartment->reval($unsafeCode);
+  if(@configData != 6){
+    die "Could not read config from $configFile\n";
+  }
+  print "Loaded profile from $configFile\n\n";
+
+  return {
+    desktops =>      $configData[0],
+    contacts =>      $configData[1],
+    shortcutGrids => $configData[2],
+    applets =>       $configData[3],
+    dceInstances =>  $configData[4],
+    dceCmds =>       $configData[5],
+  };
+}
+
+sub set_desktop_images(\@){
+  my @imgs = map {"'$_'"} @{shift()};
   runcmd "pseudo set-desktop-images.pl @imgs";
 }
 
@@ -80,8 +88,9 @@ sub clear_desktop(){
     "echo > /home/user/.config/hildon-desktop/home.plugins";
 }
 
-sub config_contacts(){
+sub config_contacts(\@){
   print "configuring contact desktop shortcuts\n";
+  my @contacts = @{shift()};;
 
   my %uid_by_num = %{get_contact_uids()};
 
@@ -116,13 +125,17 @@ sub config_contacts(){
   set_applets(@keydirs, @views, @positions);
 }
 
-sub config_applets(@){
+sub config_applets(\@\@\@){
+  my @applets = @{shift()};
+  my @dceInstances = @{shift()};
+  my @dceCmds = @{shift()};
+
   my $other_widgets;
   my %appIndexes;
   my @appletNames;
   my @views;
   my @positions;
-  for my $applet(@_){
+  for my $applet(@applets){
     my $view = $$applet[0];
     my $xPos = $$applet[1];
     my $yPos = $$applet[2];
@@ -143,12 +156,13 @@ sub config_applets(@){
     push @positions, "[$xPos,$yPos]";
     $other_widgets .= "[$name-$index]\nX-Desktop-File=$appDir$name\n\n";
   }
-  config_desktop_cmd_exec($other_widgets);
+  config_desktop_cmd_exec(@dceInstances, @dceCmds, $other_widgets);
   set_applets(@appletNames, @views, @positions);
 }
 
-sub config_shortcuts(@){
-  for my $grid(@_){
+sub config_shortcuts(\@){
+  my @grids = @{shift()};
+  for my $grid(@grids){
     my $view = $$grid[0];
     my $rowSize = $$grid[1];
     my $leftPos = $$grid[2];
@@ -292,15 +306,15 @@ sub add_hildon_shortcuts(\@){
   runcmd "gconftool-2 --set --type list --list-type string $key '$shct'";
 }
 
-sub config_desktop_cmd_exec($){
+sub config_desktop_cmd_exec(\@\@$){
   print "\n\n\n";
   print "configuring desktop_cmd_exec and other widgets\n";
 
+  my @instances = @{shift()};
+  my @cmds = @{shift()};
   my $other_widgets = shift;
-  my $version = '0.7';
 
-  my @cmds = @dce_cmds;
-  my @instances = @dce_instances;
+  my $version = '0.7';
 
   my $size = @instances;
 
