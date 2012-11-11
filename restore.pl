@@ -41,7 +41,6 @@ my @utils = (
   'xx' => 'r' => 'license',
 'header' => "",
 'header' => "Routine Maintenance:",
-  '15' => 'y' => 'sync_pidgin',
   'xx' => 'o' => 'backup',
   '16' => 'p' => 'sync_claws_mail',
 #BOTTOM
@@ -124,12 +123,6 @@ sub execute_all_in_order(){
 sub license(){
   system "clear";
   print get_license_text();
-}
-
-sub sync_pidgin(){
-  if(ask 'sync pidgin logs?'){
-    system "./utils/syncPidgin";
-  }
 }
 
 sub backup(){
