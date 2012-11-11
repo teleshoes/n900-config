@@ -2,18 +2,16 @@ A) flash {see flashing/instructions}
 
 B) get rootsh
    connect to internet, open web browser,
-   search 'n900 rootsh downloads'
-   install it
+   search 'n900 rootsh downloads', install it
 
 C) open a terminal
 sudo gainroot
 apt-get install openssh
 
 D) get on local network, or connect usb and sync-and-connect
+   run the utils below
 
-
-
-manual stuff:
+E) do manual stuff:
   1) Phone talking app -> top menu -> Turning Control ->
      Display orientation -> Landscape
   2) Turn off power saving mode on home wifi {P.S.M sux if you wanna ssh}
@@ -23,3 +21,19 @@ manual stuff:
      ALSO: Internet Connections, automatic: CELLULAR, Never, Dont switch to wifi
   3) manually change the background once if you cant programmatically
   4) Settings -> Text Input -> Auto-capitalization off
+
+ssh-config
+set-host
+keygen.pl
+packages.pl
+config-files
+format_emmc_ext3.pl
+### reboot!!
+cpudefaults.sh
+optify
+gconf-settings
+desktop.sh
+appsmenu.sh
+backup_restore.pl
+sync-pidgin
+#insert microsd, mnt, klomp-sync-n900
