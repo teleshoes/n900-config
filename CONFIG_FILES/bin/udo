@@ -2,7 +2,7 @@
 my $user = `whoami`;
 chomp $user;
 if($user eq 'root'){
-  exec "su user /usr/bin/run-standalone.sh $0 @ARGV";
+  exec "su", "user", "/usr/bin/run-standalone.sh", $0, "@ARGV";
 }elsif($user eq 'user'){
   exec "PATH=\$PATH:/root/bin @ARGV";
 }else{
