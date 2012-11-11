@@ -8,11 +8,15 @@ sub listInt($);
 sub listString($);
 
 my $display = '/system/osso/dsm/display';
+my $desktop = '/apps/osso/hildon-desktop';
 my $hotspot = '/apps/mobilehotspot';
 my %gconf = (
   "$display/display_dim_timeout" => [240, 'int'],
   "$display/possible_display_dim_timeouts" =>
     listInt [15, 30, 60, 120, 180, 240],
+
+  "$desktop/ui_can_rotate"             => ["false", "bool"],
+  "$desktop/desktop_orientation_lock"  => ["true", "bool"],
 
   "$hotspot/ssid"            => ["Minerva"],
   "$hotspot/encryption_algo" => ["WEP"],
