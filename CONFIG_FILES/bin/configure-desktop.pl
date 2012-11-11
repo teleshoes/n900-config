@@ -12,7 +12,7 @@ my $unsafeCode = `cat $file`;
 print "Safely evaluating the code slurped from $file\n";
 my $compartment = new Safe;
 my @config = $compartment->reval($unsafeCode);
-if(@config != 5){
+if(@config != 6){
   die "Could not read config from $file\n";
 }
 print "Loaded profile from $file\n\n";
@@ -22,42 +22,7 @@ my @contacts = @{$config[1]};
 my @shortcutGrids = @{$config[2]};
 my @applets = @{$config[3]};
 my @dce_instances = @{$config[4]};
-
-sub klompCmd($){
-  return "udo klomp-cmd @_ 1>dev/null 2>/dev/null &";
-}
-
-my @dce_cmds = (
-  ['klomp_pause'  => '||'            => klompCmd('pause')],
-  ['klomp_next'   => '>|'            => klompCmd('next')],
-  ['klomp_prev'   => '|<'            => klompCmd('prev')],
-  ['klomp_fwd10'  => '>>'            => klompCmd('seek 10')],
-  ['klomp_bwd10'  => '<<'            => klompCmd('seek -10')],
-  ['klomp_fwd60'  => '>>>'           => klompCmd('seek 60')],
-  ['klomp_bwd60'  => '<<<'           => klompCmd('seek -60')],
-  ['klomp_books'  => '[=]'           => klompCmd('playlist books')],
-
-
-  ['cpu_fast'     => 'CPU\\nfast'    => "udo cpu set 500 1000|echo"],
-  ['cpu_slow'     => 'CPU\\nslow'    => "udo cpu set 250 600|echo"],
-  ['cpu_current'  => 'CPU cur freq'  => "udo cpu get cur"],
-  ['cpu_min'      => 'CPU min freq'  => "udo cpu get min"],
-  ['cpu_max'      => 'CPU max freq'  => "udo cpu get max"],
-  ['quick_ip'     => 'quick ip'      => "udo quick_ip"],
-  ['test_sms'     => 'test sms'      => "udo send_sms 6314184821 test"],
-  ['cpu_reset'    => 'reset'         => "udo cpu set|echo"],
-  ['locator'      => 'Locator'       => "udo desktop_cmd_exec_locator"],
-
-  ['uptime'       => 'Uptime:'       => 'uptime|cut -d" " -f4-|sed \'s/\\\\, *load.*//\''],
-  ['battery'      => 'Battery(%):'   => 'hal-device bme | awk -F"[. ]" \'$5 == "is_charging" {chrg = $7}\\;\\s$5 == "percentage" {perc = $7} END if (chrg == "false") {print perc "%"} else {print "Chrg"}\''],
-  ['battery_mah'  => 'Battery(mAh):' => 'hal-device bme | grep battery.reporting | awk -F. \'{print $3}\' | sort | awk \'$1 == "current" { current = $3}\\;\\s$1== "design" {print current "/" $3}\''],
-  ['boot_reason'  => 'Boot Reason:'  => 'cat /proc/bootreason'],
-  ['boot_count'   => 'Boot Count:'   => 'cat /var/lib/dsme/boot_count'],
-  ['external_ip'  => 'External IP:'  => 'wget --timeout=10 -q -O - api.myiptest.com | awk -F "\\\\"" \'{print $4}\''],
-  ['internal_ip'  => 'Internal IP:'  => '/sbin/ifconfig | grep "inet addr" | awk -F: \'{print $2}\' | awk \'{print $1}\''],
-  ['rootfs'       => 'rootfs:'       => 'df | awk \'$1 == "rootfs" {print $5}\''],
-  ['free_rootfs'  => 'Free Rootfs:'  => 'df -h | awk \' $1 == "rootfs" {print $4"B"}\''],
-);
+my @dce_cmds = @{$config[5]};
 
 ##########################################
 sub runcmdget($){
