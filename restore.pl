@@ -187,19 +187,6 @@ sub configure_hildon(){
   if(ask 'Overwrite and reorganize apps menu?'){
     system "ssh root@`n900` pseudo configure-apps-menu.pl";
   }
-  if(ask 'Replace all desktop shortcuts {and desktop-cmd-exec configs}?'){
-    system "ssh root@`n900` pseudo configure-desktop.pl";
-    
-    print "\n\n";
-    print "pkill hildon-desktop (auto-restarts with new positions)? [y/N] ";
-    my $response = <STDIN>;
-    chomp $response;
-    if(lc $response eq 'y'){
-      system "ssh root@`n900` pkill hildon-desktop";
-    }else{
-      print "skipped\n";
-    }
-  }
 }
 
 sub hosts(){
