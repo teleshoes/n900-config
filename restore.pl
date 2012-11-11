@@ -160,11 +160,6 @@ sub install_others(){
 
 
 sub root_symlinks(){
-  if(ask 'replace mobilehotspot.desktop symlink with copy?'){
-    my $src = '/opt/mobilehotspot/resources/mobilehotspot.desktop';
-    my $ln = '/usr/share/applications/hildon/mobilehotspot.desktop';
-    system "ssh root@`n900` 'rm $ln; cp $src $ln'";
-  }
 }
 
 sub default_cpu_limits(){
