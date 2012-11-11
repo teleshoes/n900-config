@@ -47,7 +47,6 @@ my @utils = (
 'header' => "Copy Files/Settings:",
   '17' => 'f' => 'default_cpu_limits',
   '20' => 'j' => 'configure_hildon',
-  '22' => 'l' => 'hosts',
   '23' => ';' => 'remember',
 'header' => "EMERGENCY RECOVERY:",
   '01' => 'z' => 'reflash',
@@ -153,17 +152,6 @@ sub default_cpu_limits(){
 }
 
 sub configure_hildon(){
-}
-
-sub hosts(){
-  if(ask 'Set hostname to wolke-n900?'){
-    system "ssh root@`n900` '".
-        "OLD=\$HOSTNAME; ".
-        "NEW=wolke-n900; ".
-        "echo \$NEW | tee /etc/hostname; ".
-        "cat /etc/hosts | sed s/\$OLD/\$NEW/g | tee /etc/hosts; ".
-    "'";
-  }
 }
 
 sub remember(){
