@@ -22,6 +22,7 @@ my %pkgGroups = (
     swappolube-nogui
 
     mobilehotspot fmms fapn
+    phone-control gstreamer-tools
     pidgin pidgin-maemo-docklet fennec transmission claws-mail
     fbreader evince
     gconf-editor task-swapper
