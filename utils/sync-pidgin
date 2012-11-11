@@ -1,7 +1,46 @@
-#!/bin/bash
-echo 'Pushing logs'
-rsync -avz ~/.purple/logs/ root@`n900`:/home/user/.purple/logs
-echo 'Pulling logs'
-rsync -avz root@`n900`:/home/user/.purple/logs/ ~/.purple/logs
-echo 'chown user all remote logs'
-ssh root@`n900` chown -R user.users /home/user/.purple/logs
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $host = `n900`;
+chomp $host;
+
+my $remoteUserGroup = "user.users";
+my $localUserGroup = "$ENV{USER}" . "." . `id -gn $ENV{USER}`;
+chomp $localUserGroup;
+
+my $localPurpleDir = "$ENV{HOME}/.purple";
+my $remotePurpleDir = "/home/user/.purple";
+
+my $rem = "root\@$host:$remotePurpleDir";
+my $loc = $localPurpleDir;
+
+my @opts = qw(
+  -a  --no-owner --no-group
+  -v  -P
+  -z
+);
+
+sub run(@){
+  print "@_\n";
+  system @_;
+  die "failed" if $? != 0;
+}
+
+system "n900", "-s", "test -e $remotePurpleDir";
+if($? != 0){
+  print "!!no purple at all, syncing purple\n";
+  run "rsync", @opts, "--exclude=logs", "$loc/", $rem;
+  run "n900", "-s", "mkdir $remotePurpleDir/logs";
+  run "n900", "-s", "chown -R $remoteUserGroup $remotePurpleDir/";
+}
+
+print "\n\nlogs REMOTE => LOCAL\n";
+run "rsync", @opts, "$rem/logs/", "$loc/logs";
+print "\n\nlogs LOCAL => REMOTE\n";
+run "rsync", @opts, "$loc/logs/", "$rem/logs";
+
+print "\n\nCHOWN REMOTE\n";
+run "ssh", "root\@$host", "chown -R $remoteUserGroup $remotePurpleDir/logs";
+print "\n\nCHOWN LOCAL\n";
+run "chown", "-R", $localUserGroup, "$localPurpleDir/logs";
