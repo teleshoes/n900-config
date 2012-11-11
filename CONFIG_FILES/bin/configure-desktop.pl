@@ -23,8 +23,10 @@ my @shortcutGrids = @{$config[2]};
 my @applets = @{$config[3]};
 my @dce_instances = @{$config[4]};
 
+my $udoExec = "/usr/local/bin/udo";
+
 sub klompCmd($){
-  return "udo klomp-cmd @_ 1>dev/null 2>/dev/null &";
+  return "$udoExec klomp-cmd @_ 1>dev/null 2>/dev/null &";
 }
 
 my @dce_cmds = (
@@ -38,15 +40,15 @@ my @dce_cmds = (
   ['klomp_books'  => '[=]'           => klompCmd('playlist books')],
 
 
-  ['cpu_fast'     => 'CPU\\nfast'    => 'udo cpu set 500 1000|echo'],
-  ['cpu_slow'     => 'CPU\\nslow'    => 'udo cpu set 250 600|echo'],
-  ['cpu_current'  => 'CPU cur freq'  => 'udo cpu get cur'],
-  ['cpu_min'      => 'CPU min freq'  => 'udo cpu get min'],
-  ['cpu_max'      => 'CPU max freq'  => 'udo cpu get max'],
-  ['quick_ip'     => 'quick ip'      => 'udo quick_ip'],
-  ['test_sms'     => 'test sms'      => 'udo send_sms 6314184821 test'],
-  ['cpu_reset'    => 'reset'         => 'udo cpu set|echo'],
-  ['locator'      => 'Locator'       => 'udo desktop_cmd_exec_locator'],
+  ['cpu_fast'     => 'CPU\\nfast'    => "$udoExec cpu set 500 1000|echo"],
+  ['cpu_slow'     => 'CPU\\nslow'    => "$udoExec cpu set 250 600|echo"],
+  ['cpu_current'  => 'CPU cur freq'  => "$udoExec cpu get cur"],
+  ['cpu_min'      => 'CPU min freq'  => "$udoExec cpu get min"],
+  ['cpu_max'      => 'CPU max freq'  => "$udoExec cpu get max"],
+  ['quick_ip'     => 'quick ip'      => "$udoExec quick_ip"],
+  ['test_sms'     => 'test sms'      => "$udoExec send_sms 6314184821 test"],
+  ['cpu_reset'    => 'reset'         => "$udoExec cpu set|echo"],
+  ['locator'      => 'Locator'       => "$udoExec desktop_cmd_exec_locator"],
 
   ['uptime'       => 'Uptime:'       => 'uptime|cut -d" " -f4-|sed \'s/\\\\, *load.*//\''],
   ['battery'      => 'Battery(%):'   => 'hal-device bme | awk -F"[. ]" \'$5 == "is_charging" {chrg = $7}\\;\\s$5 == "percentage" {perc = $7} END if (chrg == "false") {print perc "%"} else {print "Chrg"}\''],

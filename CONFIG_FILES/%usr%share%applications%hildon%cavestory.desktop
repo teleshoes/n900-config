@@ -2,7 +2,7 @@
 Name=Cave Story
 GenericName=Cave Story
 Comment=Cave Story
-Exec=/usr/bin/osso-xterm '/home/user/bin/udo cavestory'
+Exec=/usr/bin/osso-xterm '/usr/local/bin/udo cavestory'
 Icon=cavestory
 Terminal=false
 Type=Application
