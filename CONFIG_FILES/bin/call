@@ -1,5 +1,0 @@
-#!/bin/bash
-dbus-send --system --type=method_call --print-reply \
-  --dest=com.nokia.csd.Call /com/nokia/csd/call \
-  com.nokia.csd.Call.CreateWith \
-  string:"$1" uint32:0

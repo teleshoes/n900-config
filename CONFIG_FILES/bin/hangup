@@ -1,3 +1,0 @@
-#!/bin/bash
-dbus-send --system --print-reply --dest=com.nokia.csd.Call /com/nokia/csd/call com.nokia.csd.Call.Release
-
