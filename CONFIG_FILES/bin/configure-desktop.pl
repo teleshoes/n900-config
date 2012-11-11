@@ -4,7 +4,7 @@ use warnings;
 use Safe;
 
 my $file = shift;
-$file = '/home/user/profiles/default.pl' if not defined $file;
+$file = '/home/user/.desktop-config' if not defined $file;
 
 print "Obtaining perl code from '$file' for safe evaluation\n";
 my $unsafeCode = `cat $file`;
