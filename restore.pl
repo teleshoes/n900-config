@@ -44,10 +44,7 @@ my @utils = (
   'xx' => 'o' => 'backup',
   '16' => 'p' => 'sync_claws_mail',
 #BOTTOM
-'header' => "Install Packages:",
-  '10' => '6' => 'install_others',
 'header' => "Copy Files/Settings:",
-  '07' => 's' => 'root_symlinks',
   '17' => 'f' => 'default_cpu_limits',
   '18' => 'g' => 'xterm_color',
   '20' => 'j' => 'configure_hildon',
@@ -146,13 +143,6 @@ sub sync_claws_mail(){
 }
 
 #####
-
-sub install_others(){
-}
-
-
-sub root_symlinks(){
-}
 
 sub default_cpu_limits(){
   if(ask "default cpu limits and voltages?"){
