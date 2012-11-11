@@ -42,8 +42,8 @@ my %pkgGroups = (
   )],
 );
 
-my $repoDir = 'repos';
-my $debDir = 'debs-custom';
+my $repoDir = "$ENV{HOME}/Code/n900/repos";
+my $debDir = "$ENV{HOME}/Code/n900/debs-custom";
 my $debDestPrefix = '/opt';
 my $env = '';
 

@@ -22,7 +22,7 @@ sub modS($$){
   }
 }
 
-my $dir = "~/.klomplist-books";
+my $dir = "$ENV{HOME}/.klomplist-books";
 
 my $localCur = modS "$dir/.klompcur", "local";
 my $remoteCur = modS "$dir/.klompcur", "remote";

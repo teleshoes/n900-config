@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-my $src = 'CONFIG_FILES';
+my $src = "$ENV{HOME}/Code/n900/CONFIG_FILES";
 my $dest = '/opt/CONFIG_FILES';
 my $host = `n900`;
 chomp $host;

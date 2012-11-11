@@ -2,6 +2,8 @@
 use strict;
 use warnings;
 
+my $dir = "$ENV{HOME}/Code/n900/flashing";
+
 sub prompt($){
   my $msg = shift;
   print "\n\n$msg [y/N] ";
@@ -20,7 +22,7 @@ if(prompt 'Are you absolutely sure you know what youre doing?'){
   my $response = <STDIN>;
   chomp $response;
   if(lc $response eq 'erase everything'){
-    chdir "flashing";
+    chdir $dir;
     print "seriously killing everything\n";
     print "installing flasher\n";
     system "sudo dpkg --force-architecture -i maemo_flasher-*_i386.deb";
