@@ -52,27 +52,8 @@ sub main(@){
   config_applets(@applets);
   config_shortcuts(@shortcutGrids);
 
-
-  print "\n\n";
-  my $restart = 0;
-
-  if(@ARGV == 1 and $ARGV[0] eq '--restart'){
-    $restart = 1;
-  }else{
-    print "pkill hildon-desktop (auto-restarts with new positions)? [y/N] ";
-    my $response = <STDIN>;
-    chomp $response;
-    if(lc $response eq 'y'){
-      $restart = 1;
-    }else{
-      print "skipped\n";
-    }
-  }
-
-  if($restart){
-    print "running pkill hildon-desktop\n";
-    runcmd "pkill hildon-desktop";
-  }
+  print "running pkill hildon-desktop (auto-restarts with new positions)\n";
+  runcmd "pkill hildon-desktop";
 }
 
 sub set_desktop_images(@){
