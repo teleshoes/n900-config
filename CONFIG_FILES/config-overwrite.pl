@@ -92,11 +92,11 @@ sub overwriteFile($$){
   }
 
   if($destDir =~ /^\/home\/$user/){
-    system "chown -R $user.$group $dest";
-    system "chown $user.$group $destDir";
+    system "chown -Rh $user.$group $dest";
+    system "chown -h $user.$group $destDir";
   }else{
-    system "chown -R root.root $dest";
-    system "chown root.root $destDir";
+    system "chown -Rh root.root $dest";
+    system "chown -h root.root $destDir";
   }
 }
 
