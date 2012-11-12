@@ -31,6 +31,7 @@ format_emmc_ext3.pl
 ### reboot!!
 cpudefaults.sh
 optify
+email-reset
 gconf-settings
 desktop.sh
 appsmenu.sh
