@@ -102,7 +102,7 @@ sub getAccountGconfs($){
   my $storeDir = "/apps/modest/server_accounts/$$acc{name}ID_store";
   my $transDir = "/apps/modest/server_accounts/$$acc{name}ID_transport";
   my @imap = @{$$acc{imap}};
-  my @smtp = @{$$acc{imap}};
+  my @smtp = @{$$acc{smtp}};
   
   return {
     "$accDir/email" => $$acc{email},
