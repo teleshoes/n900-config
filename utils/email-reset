@@ -141,26 +141,3 @@ sub getAccountGconfs($){
 }
 
 &main(@ARGV);
-
-#default_account = LID
-#
-#alarm_id = 161
-#tree_view = false
-#/apps/modest/server_accounts:
-#
-#/apps/modest/widgets:
-# /apps/modest/widgets/modest-msg-paned:
-#  pos = 50
-# /apps/modest/widgets/modest-main-paned:
-#  pos = 30
-# /apps/modest/widgets/modest-msg-view-window:
-#  show_toolbar_fullscreen = true
-#  show_toolbar = true
-# /apps/modest/widgets/modest-edit-msg-window:
-#  show_toolbar_fullscreen = false
-#  show_toolbar = false
-# /apps/modest/widgets/modest-main-window:
-#  show_toolbar_fullscreen = true
-#  show_toolbar = true
-# /apps/modest/widgets/modest-folder-view-window:
-#  tree_view_indentation = 30
