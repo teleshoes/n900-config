@@ -50,8 +50,8 @@ run reflash.pl
 this is more or less equivalent to:
 #cd utils #or wherever you dled to
 #sudo dpkg -i maemo_flasher-*_i386.deb --force-architecture #64-bit is fine
-#sudo flasher-3.5 -F RX-51_*_PR_COMBINED_002_ARM.bin -f
-#sudo flasher-3.5 -F RX-51_*.VANILLA_PR_EMMC_MR0_ARM.bin -R
+#sudo flasher-3.5 -F firmware.bin -f
+#sudo flasher-3.5 -F emmc.bin -R
 
 the Nokia screen will flash white, then the phone will turn off
 
