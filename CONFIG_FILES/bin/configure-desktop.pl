@@ -94,7 +94,7 @@ sub config_contacts(\@){
 
   my %uid_by_num = %{get_contact_uids()};
 
-  my $applets;
+  my $applets = '';
   my (@keydirs, @views, @positions);
   for(my $i=0; $i<@contacts; $i++){
     my $contact = $contacts[$i];
@@ -130,7 +130,7 @@ sub config_applets(\@\@\@){
   my @dceInstances = @{shift()};
   my @dceCmds = @{shift()};
 
-  my $other_widgets;
+  my $other_widgets = '';
   my %appIndexes;
   my @appletNames;
   my @views;
