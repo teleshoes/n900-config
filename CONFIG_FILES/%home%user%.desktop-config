@@ -2,25 +2,25 @@
 
 # use undef or '' to leave the image thats already present
 # use a single element for a preset image set
-my @desktops = ('venere.png');
+my @desktops = ('meatloaf_stephenfry.png');
 
 #  number, desktop, x-pos, y-pos
 #  e.g.: (['5551231234', 2, 656, 56])
 my @contacts = (
-  ['6318975047', 1, 660, 304],
 );
 
 #[desktop, rowsize, leftpos, toppos, itemWidth, itemHeight [items]]
 #items are extensionless desktop filenames in /usr/share/applications/hildon
 # e.g.: 'rtcom-call-ui' => /usr/share/applications/hildon/rtcom-call-ui.desktop
 my @shortcutGrids = (
-  [1, 1, 0, 56, 94, 94, [qw(
+  [1, 2, 0, 384, 94, 94, [qw(
     rtcom-call-ui
     rtcom-messaging-ui
+  )]],
+  [1, 2, 612, 384, 94, 94, [qw(
     browser
     xterm
   )]],
-  [1, 1, 552, 384, 0, 0, [qw(klomp)]]
 );
 
 
@@ -36,9 +36,6 @@ my $appdir = '/usr/share/applications/hildon-home/';
 #the hyphen and index (e.g.: '-0') is appended to the end based
 # on the order in the list
 my @applets = (
-  [1, 100, 368, "system_info", $gcdir, $appdir],
-  [1, 0, 440, "personal-ip-address", $gcdir, $appdir],
-  [1, 572, 304, "bluezwitch", $gcdir, $appdir],
 );
 
 #title, width, height, display-title =>
@@ -49,14 +46,6 @@ my @applets = (
 #       title        width  ht  disp    =>    updates     => desktop x y
 #e.g.: ['rootfs',      '.10',  '1.3', 1 => 1, 1, 1, 1, 0, => 1, 0, 56],
 my @dce_instances = (
-  ['klomp_prev',       '.06',  '1.5', 1 => 1, 0, 0, 0, 0, => 1, 620, 56],
-  ['klomp_next',       '.06',  '1.5', 1 => 1, 0, 0, 0, 0, => 1, 700, 56],
-  ['klomp_bwd10',      '.06',  '1.5', 1 => 1, 0, 0, 0, 0, => 1, 620, 116],
-  ['klomp_fwd10',      '.06',  '1.5', 1 => 1, 0, 0, 0, 0, => 1, 700, 116],
-  ['klomp_bwd60',      '.06',  '1.5', 1 => 1, 0, 0, 0, 0, => 1, 620, 176],
-  ['klomp_fwd60',      '.06',  '1.5', 1 => 1, 0, 0, 0, 0, => 1, 700, 176],
-  ['klomp_pause',      '.06',  '1.5', 1 => 1, 0, 0, 0, 0, => 1, 620, 236],
-  ['klomp_books',      '.06',  '1.5', 1 => 1, 0, 0, 0, 0, => 1, 700, 236],
 );
 
 sub klompCmd($){
