@@ -18,6 +18,7 @@ my @shortcutGrids = (
     rtcom-messaging-ui
   )]],
   [1, 2, 612, 384, 94, 94, [qw(
+    browser
     xterm
   )]],
 );
