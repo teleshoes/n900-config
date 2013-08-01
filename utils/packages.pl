@@ -119,7 +119,6 @@ sub installPackages(){
     my @packages = @{$pkgGroups{$pkgGroup}}; 
     print "Installing group[$pkgGroup]:\n----\n@packages\n----\n";
     runPhone ''
-      . "yes |"
       . " $env apt-get install"
       . " -y --allow-unauthenticated"
       . " @packages";
