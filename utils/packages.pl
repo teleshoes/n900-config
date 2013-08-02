@@ -42,8 +42,9 @@ my %pkgGroups = (
   )],
 );
 
-my $repoDir = "$ENV{HOME}/Code/n900/repos";
-my $debDir = "$ENV{HOME}/Code/n900/debs-custom";
+my $cfgDir = "$ENV{HOME}/Code/n900";
+my $repoDir = "$cfgDir/repos";
+my $debDir = "debs-custom";
 my $debDestPrefix = '/opt';
 my $env = '';
 
@@ -204,12 +205,13 @@ sub isAlreadyInstalled($){
 }
 
 sub installDebs(){
-  my @debs = `cd $debDir; ls */*.deb`;
+  my $localDir = "$cfgDir/$debDir";
+  my @debs = `cd $localDir; ls */*.deb`;
   chomp foreach @debs;
   
-  print "\n\nSyncing $debDestPrefix/$debDir to $debDestPrefix on dest:\n";
+  print "\n\nSyncing $localDir to $debDestPrefix on dest:\n";
   my $host = host();
-  system "rsync $debDir root\@$host:$debDestPrefix -av --progress --delete";
+  system "rsync $localDir root\@$host:$debDestPrefix -av --progress --delete";
 
   my $count = 0;
   print "\n\nChecking installed versions\n";
@@ -218,8 +220,8 @@ sub installDebs(){
     $cmd .= "stop $job\n";
   }
   for my $deb(@debs){
-    my $localDebFile = "$debDir/$deb";
-    my $remoteDebFile = "$debDestPrefix/debs-custom/$deb\n";
+    my $localDebFile = "$localDir/$deb";
+    my $remoteDebFile = "$debDestPrefix/$debDir/$deb\n";
     if(not isAlreadyInstalled($localDebFile)){
       $count++;
       print "...adding $localDebFile\n";
