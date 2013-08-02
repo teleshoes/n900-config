@@ -219,7 +219,7 @@ sub installDebs(){
   }
   for my $deb(@debs){
     my $localDebFile = "$debDir/$deb";
-    my $remoteDebFile = "$debDestPrefix/$debDir/$deb\n";
+    my $remoteDebFile = "$debDestPrefix/debs-custom/$deb\n";
     if(not isAlreadyInstalled($localDebFile)){
       $count++;
       print "...adding $localDebFile\n";
