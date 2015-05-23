@@ -7,9 +7,6 @@ sub backup($);
 my $dir = "$ENV{HOME}/Code/n9";
 
 my %gitRepos = (
-  "1sms"      => "$dir/backup/backup-sms/repo",
-  "2call"     => "$dir/backup/backup-call/repo",
-  "3contacts" => "$dir/backup/backup-contacts/repo",
 );
 
 sub main(@){
@@ -21,23 +18,6 @@ sub main(@){
 
   my %preHeads = map {$_ => getGitHead($gitRepos{$_})} keys %gitRepos;
 
-  backup "dcim-backup";
-  backup "sync-pixmirror";
-  backup "sync-pidgin";
-  backup "sync-mydocs";
-  backup "sync-home";
-  backup "sync-dir fbreader backup";
-  backup "sync-dir klomp backup";
-  backup "sync-dir swype backup";
-  backup "sync-dir emumaster backup";
-  backup "sync-dir logs backup";
-  backup "sync-qtodo";
-  backup "sync-mms";
-  backup "mms-to-sms";
-  backup "fetch-contacts";
-  backup "fetch-comm call";
-  backup "fetch-comm sms";
-  system "klomp-sync user@`n9` --nopresync";
 
   my %postHeads = map {$_ => getGitHead($gitRepos{$_})} keys %gitRepos;
   for my $repo(sort keys %gitRepos){
