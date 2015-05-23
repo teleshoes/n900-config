@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-my $localDCIM = "$ENV{HOME}/Code/n9/backup/DCIM";
+my $localDCIM = "$ENV{HOME}/Code/n900/backup/DCIM";
 my $remoteDCIM = "/home/user/MyDocs/DCIM";
 
 my @filetypes = qw(jpg jpeg mp4);
@@ -17,7 +17,7 @@ sub main(@){
   die "$localDCIM does not exist\n" if not -d $localDCIM;
   chdir $localDCIM;
   print "Getting md5sums of files in root of remote DCIM\n";
-  my @remoteMd5sums = `n9 -s md5sum $remoteDCIM/*.* 2>/dev/null`;
+  my @remoteMd5sums = `n900 -s md5sum $remoteDCIM/*.* 2>/dev/null`;
 
   print "===all:\n" . join "", @remoteMd5sums;
   print "===\n\n";
@@ -47,7 +47,7 @@ sub main(@){
     chomp $now;
     my $dir = "$localDCIM/backup_$now";
     system "mkdir -p $dir";
-    system "rsync -avP root@`n9`:$remoteDCIM/*.* $dir/";
+    system "rsync -avP root@`n900`:$remoteDCIM/*.* $dir/";
     die "failed rsync backup\n" if $? != 0;
 
     print "updating local md5sums again and re-reorganizing remote\n";
@@ -56,7 +56,7 @@ sub main(@){
     reorganizeBackedUpRemotes(\@needsBackUp,
       $localByMd5sum, $remoteByMd5sum, $remoteByFile);
   }
-  system "n9", "-s", "chown user.metadata-users -R $remoteDCIM";
+  system "n900", "-s", "chown user.users -R $remoteDCIM";
 }
 
 sub reorganizeBackedUpRemotes($$$$){
@@ -91,7 +91,7 @@ sub reorganizeBackedUpRemotes($$$$){
       my $cmd = join '', @$cmdChunk;
       my $count = @$cmdChunk;
       print "\n\n#running $count mv commands\n$cmd";
-      system "n9", "-s", $cmd;
+      system "n900", "-s", $cmd;
       die "failed reorganizing remotes\n" if $? != 0;
     }
   }
