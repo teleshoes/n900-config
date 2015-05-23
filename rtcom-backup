@@ -1,0 +1,18 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $remoteDir = "/home/user/.rtcom-eventlogger";
+my $localDir = "$ENV{HOME}/Code/n900/backup/rtcom";
+
+sub main(@){
+  my $now = `date +%Y-%m-%d_%s`;
+  chomp $now;
+
+  my $src = "$remoteDir/el-v1.db";
+  my $dest = "$localDir/el-v1.db.$now";
+  my $host = `n900 --ip`;
+  system "rsync", "-avP", "user\@$host:$src", $dest;
+}
+
+&main(@ARGV);
