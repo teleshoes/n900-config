@@ -12,6 +12,8 @@ my %gitRepos = (
 sub main(@){
   die "Usage: $0\n" if @_ != 0;
 
+  system "n900", "-t", "192.168.1.6";
+
   print "making sure n900 is ssh-able\n";
   system "n900", "-s", "echo found n900!\n";
   die "failed" if $? != 0;
