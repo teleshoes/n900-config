@@ -1,0 +1,162 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my $localDCIM = "$ENV{HOME}/Code/n9/backup/DCIM";
+my $remoteDCIM = "/home/user/MyDocs/DCIM";
+
+my @filetypes = qw(jpg jpeg mp4);
+
+sub reorganizeBackedUpRemotes($$$$);
+sub md5sumMaps(\@);
+sub runMd5sum($);
+sub updateMd5sums();
+sub wrapQuotes($);
+
+sub main(@){
+  die "$localDCIM does not exist\n" if not -d $localDCIM;
+  chdir $localDCIM;
+  print "Getting md5sums of files in root of remote DCIM\n";
+  my @remoteMd5sums = `n9 -s md5sum $remoteDCIM/*.* 2>/dev/null`;
+
+  print "===all:\n" . join "", @remoteMd5sums;
+  print "===\n\n";
+
+  my $localByMd5sum = updateMd5sums;
+
+  my ($remoteByMd5sum, $remoteByFile) = md5sumMaps @remoteMd5sums;
+
+  my (@backedUp, @needsBackUp);
+  for my $md5sum(keys %$remoteByMd5sum){
+    my $file = $$remoteByMd5sum{$md5sum};
+    if(defined $$localByMd5sum{$md5sum}){
+      push @backedUp, $file;
+    }else{
+      push @needsBackUp, $file;
+    }
+  }
+
+  reorganizeBackedUpRemotes(\@backedUp,
+    $localByMd5sum, $remoteByMd5sum, $remoteByFile);
+
+  print "\n\n===NEEDS BACKUP:\n" . join "\n", sort @needsBackUp;
+  print "===\n\n";
+
+  if(@needsBackUp > 0){
+    my $now = `date +%Y-%m-%d_%s`;
+    chomp $now;
+    my $dir = "$localDCIM/backup_$now";
+    system "mkdir -p $dir";
+    system "rsync -avP root@`n9`:$remoteDCIM/*.* $dir/";
+    die "failed rsync backup\n" if $? != 0;
+
+    print "updating local md5sums again and re-reorganizing remote\n";
+    $localByMd5sum = updateMd5sums;
+
+    reorganizeBackedUpRemotes(\@needsBackUp,
+      $localByMd5sum, $remoteByMd5sum, $remoteByFile);
+  }
+  system "n9", "-s", "chown user.metadata-users -R $remoteDCIM";
+}
+
+sub reorganizeBackedUpRemotes($$$$){
+  my @backedUpFiles = @{shift()};
+  my $localByMd5sum = shift;
+  my $remoteByMd5sum = shift;
+  my $remoteByFile = shift;
+
+  my @reorganizeCmds;
+  for my $file(sort @backedUpFiles){
+    my $md5sum = $$remoteByFile{$file};
+    my $localFile = $$localByMd5sum{$md5sum};
+    if(not defined $localFile){
+      print "\n\n\n\nSERIOUS ERROR: local backup doesnt exist: $file!\n";
+      next;
+    }
+    my $newRemoteFile = "$remoteDCIM/$localFile";
+    my $dir = $newRemoteFile;
+    $dir =~ s/\/[^\/]*$//;
+    $dir = wrapQuotes $dir;
+    $file = wrapQuotes $file;
+    $newRemoteFile = wrapQuotes $newRemoteFile;
+    push @reorganizeCmds, "mkdir -p $dir; mv -n $file $newRemoteFile;\n";
+  }
+  my $total = @reorganizeCmds;
+  print "\n\nReorganizing $total remote files to match local\n";
+  if(@reorganizeCmds > 0){
+
+    my @cmdChunks;
+    push @cmdChunks, [ splice @reorganizeCmds, 0, 100 ] while @reorganizeCmds;
+    for my $cmdChunk(@cmdChunks){
+      my $cmd = join '', @$cmdChunk;
+      my $count = @$cmdChunk;
+      print "\n\n#running $count mv commands\n$cmd";
+      system "n9", "-s", $cmd;
+      die "failed reorganizing remotes\n" if $? != 0;
+    }
+  }
+}
+
+sub md5sumMaps(\@){
+  my %byMd5sum;
+  my %byFile;
+  my @md5sumLines = @{shift()};
+  for my $line(@md5sumLines){
+    if($line =~ /^([0-9a-f]{32})  (.+)\n$/){
+      $byFile{$2} = $1;
+      $byMd5sum{$1} = $2;
+    }
+  }
+  return (\%byMd5sum, \%byFile);
+}
+
+sub runMd5sum($){
+  my $file = shift;
+  $file = wrapQuotes $file;
+  my $md5sum = `md5sum $file`;
+  die "failed generating md5sum for $file\n" if $? != 0;
+  return $md5sum;
+}
+
+sub wrapQuotes($){
+  my $s = shift;
+  $s =~ s/'/'\\''/g;
+  $s = "'$s'";
+  return $s;
+}
+
+sub updateMd5sums(){
+  my @lines = `cat $localDCIM/md5sums`;
+  my ($byMd5sum, $byFile) = md5sumMaps @lines;
+
+  my $find = "find -false";
+  $find .= " -or -iname '*.$_'" foreach @filetypes;
+  my @files = `$find`;
+  chomp $_ foreach @files;
+  @files = grep {not defined $$byFile{$_}} @files;
+
+  print "md5summing local files\n";
+  @lines = map {runMd5sum $_} @files;
+  print @lines;
+
+  my ($extraByMd5sum, $extraByFile) = md5sumMaps @lines;
+  my %newByMd5sum = (%$byMd5sum, %$extraByMd5sum);
+  my %newByFile = (%$byFile, %$extraByFile);
+
+  my $out;
+  for my $file(sort keys %newByFile){
+    if(-e "$localDCIM/$file"){
+      $out .= "$newByFile{$file}  $file\n";
+    }else{
+      print "removing md5sum for $file\n";
+    }
+  }
+
+  open FH, "> $localDCIM/md5sums";
+  print FH $out;
+  close FH;
+
+  return \%newByMd5sum;
+}
+
+&main(@ARGV);
