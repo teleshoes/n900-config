@@ -57,6 +57,7 @@ my @dce_instances = (
   ['klomp_fwd60',      '.06',  '1.5', 1 => 1, 0, 0, 0, 0, => 1, 700, 176],
   ['klomp_pause',      '.06',  '1.5', 1 => 1, 0, 0, 0, 0, => 1, 620, 236],
   ['klomp_books',      '.06',  '1.5', 1 => 1, 0, 0, 0, 0, => 1, 700, 236],
+  ['qtemail',          '.20',  '1.5', 1 => 1, 1, 1, 3, 0, => 1, 100, 300],
 );
 
 sub klompCmd($){
@@ -64,6 +65,8 @@ sub klompCmd($){
 }
 
 my @dce_cmds = (
+  ['qtemail'      => '@'             => 'cat /home/user/.cache/email/status-line'],
+
   ['klomp_pause'  => '||'            => klompCmd('pause')],
   ['klomp_next'   => '>|'            => klompCmd('next')],
   ['klomp_prev'   => '|<'            => klompCmd('prev')],
